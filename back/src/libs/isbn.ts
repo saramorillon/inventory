@@ -17,7 +17,7 @@ export async function isbnSearch(isbn: string): Promise<IApiResult | undefined> 
   for (const api of apis) {
     try {
       const result = await api.search(isbn)
-      if (book?.title || book?.authors) book = merge(book, result)
+      if (result) book = merge(book, result)
       if (book?.title && book?.authors) break
     } catch (error) {
       logger.error('isbn_search_error', { api: api.source, error })

@@ -50,7 +50,7 @@ function createOrUpdate(id: number | undefined, body: Schema['body']) {
   return prisma.author.upsert({
     where: unique,
     create: { ...data, books: { connect: books } },
-    update: { ...data, ...(books && { books: { set: books } }) },
+    update: { ...data, ...(books?.length && { books: { set: books } }) },
     include: { books: true },
   })
 }

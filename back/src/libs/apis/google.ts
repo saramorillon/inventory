@@ -22,7 +22,7 @@ export class GoogleApi implements IApi {
   async search(isbn: string): Promise<IApiResult | null> {
     const response = await axios.get<Response>(this.url, { params: { q: `isbn:${isbn}` } })
     const { title, subtitle, authors } = response.data.items?.[0]?.volumeInfo || {}
-    if (!title) return null
+    if (!title && !authors?.length) return null
     const fullTitle = subtitle ? `${title} - ${subtitle}` : title
     return { isbn, title: fullTitle, authors: uniq(authors || []).join(' | '), source: this.source }
   }

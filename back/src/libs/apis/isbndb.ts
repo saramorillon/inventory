@@ -20,6 +20,7 @@ export class IsbnDbApi implements IApi {
   async search(isbn: string): Promise<IApiResult | null> {
     const response = await axios.get<Response>(`${this.url}/${isbn}`, { headers: { Authorization: this.token } })
     const { title, title_long, authors } = response.data.book || {}
+    if (!title && !authors?.length) return null
     return { isbn, title: title_long || title, authors: uniq(authors || []).join(' | '), source: this.source }
   }
 }

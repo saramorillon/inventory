@@ -20,7 +20,7 @@ export class OpenLibrary implements IApi {
       params: { bibkeys: `ISBN:${isbn}`, format: 'json', jscmd: 'data' },
     })
     const { title, subtitle, authors } = response.data[`ISBN:${isbn}`] || {}
-    if (!title) return null
+    if (!title && !authors.length) return null
     const fullTitle = subtitle ? `${title} - ${subtitle}` : title
     return {
       isbn,

@@ -27,7 +27,7 @@ export class WorlCatApi implements IApi {
     const response = await axios.get<Response>(this.url, { params: { isbn } })
     const json: Response = await parseStringPromise(response.data)
     const { title, author } = json.classify.work?.[0]?.$ || json.classify.works?.[0].work?.[0]?.$ || {}
-    if (!title || !author) return null
+    if (!title && !author) return null
     return { isbn, title, authors: author, source: this.source }
   }
 }
