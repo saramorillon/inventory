@@ -43,7 +43,6 @@ interface BookRecord {
   id?: string
   serial: string
   title: string
-  subtitle: string
   source: string
   createdAt: string
   updatedAt: string
@@ -54,7 +53,6 @@ async function saveRecord(record: BookRecord) {
   const book: Omit<Book, 'id'> = {
     serial: record.serial,
     title: record.title,
-    subtitle: record.subtitle || null,
     source: record.source,
     createdAt: parseISO(record.createdAt),
     updatedAt: parseISO(record.updatedAt),

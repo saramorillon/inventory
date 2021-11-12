@@ -19,18 +19,17 @@ export function Form({ draft }: IDraftFormProps): JSX.Element {
   const source = useMemo(() => draft.source, [draft])
   const [serial, setSerial] = useText(draft.serial)
   const [title, setTitle] = useText(draft.title)
-  const [subtitle, setSubtitle] = useText('')
   const [authors, setAuthors] = useState<IAuthor[]>([])
 
   const onSubmit = useCallback(
     (e: FormEvent) => {
       e.preventDefault()
-      putBook({ serial, title, subtitle, authors, source }).then(({ id }) => {
+      putBook({ serial, title, authors, source }).then(({ id }) => {
         history.push(`/book/${id}`)
         deleteDraft(draft)
       })
     },
-    [serial, title, subtitle, authors, source, history, draft]
+    [serial, title, authors, source, history, draft]
   )
 
   const onAuthorAdd = useCallback((author: Partial<IAuthor>) => {
@@ -57,11 +56,6 @@ export function Form({ draft }: IDraftFormProps): JSX.Element {
         <FormGroup>
           <Label for="title">Title</Label>
           <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
-        </FormGroup>
-
-        <FormGroup>
-          <Label for="subtitle">Subtitle</Label>
-          <Input id="subtitle" value={subtitle} onChange={(e) => setSubtitle(e.target.value)} />
         </FormGroup>
 
         <FormGroup>

@@ -49,7 +49,6 @@ function toCsv(book: Book): Record<string, string> {
     serial: book.serial,
     source: book.source,
     title: book.title,
-    subtitle: book.subtitle || '',
     createdAt: book.createdAt.toISOString(),
     updatedAt: book.updatedAt.toISOString(),
   }

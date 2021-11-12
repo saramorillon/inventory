@@ -27,16 +27,15 @@ export function Form({ book, refresh }: IBookFormProps): JSX.Element {
   const [open, setOpen] = useState(false)
   const [serial, setSerial] = useText(book?.serial)
   const [title, setTitle] = useText(book?.title)
-  const [subtitle, setSubtitle] = useText(book?.subtitle || undefined)
   const [authors, setAuthors, allAuthors, { loading: loadingAuthors }] = useMultiSelect(getAuthors, book?.authors)
   const { onDelete, onSave } = useForm({ refresh, saveData, deleteData, path })
 
   const onSubmit = useCallback(
     (e: FormEvent) => {
       e.preventDefault()
-      onSave({ ...book, serial, title, subtitle, authors, source: book?.source || '' })
+      onSave({ ...book, serial, title, authors, source: book?.source || '' })
     },
-    [serial, title, subtitle, authors, book, onSave]
+    [serial, title, authors, book, onSave]
   )
 
   return (
@@ -60,11 +59,6 @@ export function Form({ book, refresh }: IBookFormProps): JSX.Element {
         <FormGroup>
           <Label for="title">Title</Label>
           <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-        </FormGroup>
-
-        <FormGroup>
-          <Label for="subtitle">Subtitle</Label>
-          <Input id="subtitle" value={subtitle} onChange={(e) => setSubtitle(e.target.value)} />
         </FormGroup>
 
         <FormGroup>

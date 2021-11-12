@@ -12,7 +12,6 @@ interface Schema extends ValidatedRequestSchema {
   body: {
     serial: string
     title: string
-    subtitle?: string | null
     source: string
     authors?: { id: number }[]
   }
@@ -26,7 +25,6 @@ export const putBook = {
     body: Joi.object<Schema['body']>({
       serial: Joi.string().required(),
       title: Joi.string().optional(),
-      subtitle: Joi.string().optional().allow('').allow(null),
       source: Joi.string().required(),
       authors: Joi.array().items(Joi.object({ id: Joi.number() }).unknown(true)),
     }).unknown(true),
@@ -34,11 +32,11 @@ export const putBook = {
 
   route: async function (req: ValidatedRequest<Schema>, res: Response): Promise<void> {
     const { id } = req.params
-    const { serial, title, subtitle, source } = req.body
+    const { serial, title, source } = req.body
 
     try {
       const authors = (req.body.authors || []).map((author) => ({ id: author.id }))
-      const volume = await createOrUpdate(id, { serial, title, subtitle, source, authors })
+      const volume = await createOrUpdate(id, { serial, title, source, authors })
       logger.info('put_book_success', { body: req.body })
       res.json(volume)
     } catch (error) {

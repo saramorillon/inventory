@@ -39,7 +39,7 @@ function authorHook(key: string, value: unknown) {
 }
 
 function bookHook(key: string, value: unknown) {
-  if (key === 'title' || key === 'subtitle') return sanitize(String(value || ''))
+  if (key === 'title') return sanitize(String(value || ''))
   return value
 }
 

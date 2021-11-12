@@ -5,7 +5,6 @@ import { Button, ButtonGroup, Form as BSForm, FormGroup, Input, Label } from 're
 import { useMultiSelect, useText } from '../../../../hooks/useFields'
 import { IFormProps, useForm } from '../../../../hooks/useForm'
 import { IAuthor } from '../../../../models/Author'
-import { fullTitle } from '../../../../models/Book'
 import { deleteAuthor, putAuthor } from '../../../../services/authors'
 import { getBooks } from '../../../../services/books'
 import { Merge } from './Merge'
@@ -52,14 +51,7 @@ export function Form({ author, refresh }: IAuthorFormProps): JSX.Element {
         <FormGroup>
           <Label for="authors">Books</Label>
           {!loading && (
-            <Typeahead
-              id="authors"
-              multiple
-              onChange={setBooks}
-              options={allBooks}
-              selected={books}
-              labelKey={fullTitle}
-            />
+            <Typeahead id="authors" multiple onChange={setBooks} options={allBooks} selected={books} labelKey="title" />
           )}
         </FormGroup>
 
