@@ -1,0 +1,15 @@
+{
+  "include": ["src", "tests", "migrations"],
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "downlevelIteration": true,
+    "typeRoots": ["types", "./node_modules/@types"]
+  }
+}

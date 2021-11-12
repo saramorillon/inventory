@@ -1,0 +1,52 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Author {
+  id        Int      @id @default(autoincrement())
+  firstName String?
+  lastName  String
+  books     Book[]   @relation("author_to_book")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([firstName, lastName])
+  @@map("author")
+}
+
+model Book {
+  id        Int      @id @default(autoincrement())
+  serial    String   @unique
+  authors   Author[] @relation("author_to_book")
+  title     String
+  subtitle  String?
+  source    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("book")
+}
+
+model Draft {
+  serial  String  @id
+  title   String?
+  authors String?
+  source  String
+
+  @@map("draft")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user")
+}
