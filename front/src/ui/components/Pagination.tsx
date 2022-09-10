@@ -1,16 +1,22 @@
 import { IPagination } from '@saramorillon/hooks'
-import React from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 
 interface IPaginationProps {
   maxPage: number
   pagination: IPagination
+  limit: number
+  setLimit: Dispatch<SetStateAction<number>>
 }
 
-export function Pagination({ maxPage, pagination }: IPaginationProps) {
-  const { page, first, previous, next, last, canPrevious, canNext } = pagination
+export function Pagination({ maxPage, pagination, limit, setLimit }: IPaginationProps) {
+  const { page, first, previous, next, last, canPrevious, canNext, goTo } = pagination
+
+  useEffect(() => {
+    goTo(1)
+  }, [limit, goTo])
 
   return (
-    <div className="center">
+    <div className="right-align mt1">
       <button disabled={!canPrevious} onClick={first} aria-label="First">
         ⟪
       </button>
@@ -26,6 +32,12 @@ export function Pagination({ maxPage, pagination }: IPaginationProps) {
       <button disabled={!canNext} onClick={last} aria-label="Last">
         ⟫
       </button>
+      <select value={limit} onChange={(e) => setLimit(Number(e.target.value))}>
+        <option value={10}>10 rows</option>
+        <option value={20}>20 rows</option>
+        <option value={50}>50 rows</option>
+        <option value={100}>100 rows</option>
+      </select>
     </div>
   )
 }

@@ -4,12 +4,10 @@ import React, { useCallback, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useFilters } from '../../hooks/useFilters'
 import { useHeader } from '../../hooks/useHeader'
-import { useTable } from '../../hooks/useTable'
 import { fullName } from '../../models/Author'
 import { BookFilter, filterBook, IBook } from '../../models/Book'
 import { getBooks } from '../../services/books'
 import { Actions } from '../components/Actions'
-import { Pagination } from '../components/Pagination'
 import { Scanner } from '../components/Scanner'
 import { DataTable, IColumn } from '../components/Table'
 
@@ -58,14 +56,11 @@ export function Books(): JSX.Element {
     [filters.authors, filters.serial, filters.title, filters.updatedAt, onChange]
   )
 
-  const { rows, maxPage, pagination } = useTable(columns, books, filter, 10)
-
   return (
     <>
       <Actions add={() => navigate('/book')} refresh={refresh} download={refresh} />
       <Scanner refresh={refresh} />
-      <DataTable loading={loading} columns={columns} rows={rows} />
-      <Pagination maxPage={maxPage} pagination={pagination} />
+      <DataTable loading={loading} columns={columns} data={books} filter={filter} />
     </>
   )
 }

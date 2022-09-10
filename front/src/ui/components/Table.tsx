@@ -1,5 +1,7 @@
-import React, { ReactNode, TdHTMLAttributes } from 'react'
+import { usePagination } from '@saramorillon/hooks'
+import React, { ReactNode, TdHTMLAttributes, useMemo, useState } from 'react'
 import { Error, Loading, NotFound } from './Helpers'
+import { Pagination } from './Pagination'
 
 export interface IColumn<T> {
   header: ReactNode
@@ -10,59 +12,72 @@ export interface IColumn<T> {
 
 interface ITableProps<T> {
   columns: IColumn<T>[]
-  rows: T[]
+  data: T[]
   loading: boolean
   error?: unknown
+  filter: (data: T) => boolean
 }
 
-export function DataTable<T>({ columns, rows, loading, error }: ITableProps<T>): JSX.Element {
+export function DataTable<T>({ columns, data, loading, error, filter }: ITableProps<T>): JSX.Element {
+  const [limit, setLimit] = useState(10)
+  const filteredRows = useMemo(() => data.filter(filter), [data, filter])
+
+  const maxPage = useMemo(() => Math.ceil(filteredRows.length / limit), [filteredRows, limit])
+  const pagination = usePagination(maxPage)
+  const { page } = pagination
+
+  const rows = useMemo(() => filteredRows.slice((page - 1) * limit, page * limit), [filteredRows, page, limit])
+
   return (
-    <table>
-      <thead>
-        <tr>
-          {columns.map((column, key) => (
-            <th key={key}>{column.header}</th>
-          ))}
-        </tr>
-        {columns.some((column) => column.filter) && (
+    <>
+      <table>
+        <thead>
           <tr>
             {columns.map((column, key) => (
-              <th key={key}>{column.filter}</th>
+              <th key={key}>{column.header}</th>
             ))}
           </tr>
-        )}
-      </thead>
-      <tbody>
-        {loading ? (
-          <tr>
-            <td colSpan={columns.length}>
-              <Loading message="Loading data" />
-            </td>
-          </tr>
-        ) : error ? (
-          <tr>
-            <td colSpan={columns.length}>
-              <Error message="Error while loading data" />
-            </td>
-          </tr>
-        ) : !rows.length ? (
-          <tr>
-            <td colSpan={columns.length}>
-              <NotFound message="No data for now" />
-            </td>
-          </tr>
-        ) : (
-          rows.map((row, key1) => (
-            <tr key={key1}>
-              {columns.map((column, key2) => (
-                <td key={key2} {...column.props}>
-                  {column.cell(row)}
-                </td>
+          {columns.some((column) => column.filter) && (
+            <tr>
+              {columns.map((column, key) => (
+                <th key={key}>{column.filter}</th>
               ))}
             </tr>
-          ))
-        )}
-      </tbody>
-    </table>
+          )}
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length}>
+                <Loading message="Loading data" />
+              </td>
+            </tr>
+          ) : error ? (
+            <tr>
+              <td colSpan={columns.length}>
+                <Error message="Error while loading data" />
+              </td>
+            </tr>
+          ) : !rows.length ? (
+            <tr>
+              <td colSpan={columns.length}>
+                <NotFound message="No data for now" />
+              </td>
+            </tr>
+          ) : (
+            rows.map((row, key1) => (
+              <tr key={key1}>
+                {columns.map((column, key2) => (
+                  <td key={key2} {...column.props}>
+                    {column.cell(row)}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+      <Pagination maxPage={maxPage} pagination={pagination} limit={limit} setLimit={setLimit} />
+    </>
   )
 }

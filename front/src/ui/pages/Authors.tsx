@@ -4,11 +4,9 @@ import React, { useCallback, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useFilters } from '../../hooks/useFilters'
 import { useHeader } from '../../hooks/useHeader'
-import { useTable } from '../../hooks/useTable'
 import { AuthorFilter, filterAuthor, fullName, IAuthor } from '../../models/Author'
 import { getAuthors } from '../../services/authors'
 import { Actions } from '../components/Actions'
-import { Pagination } from '../components/Pagination'
 import { DataTable, IColumn } from '../components/Table'
 
 export function Authors(): JSX.Element {
@@ -57,13 +55,10 @@ export function Authors(): JSX.Element {
     [filters.firstName, filters.fullName, filters.id, filters.lastName, filters.updatedAt, onChange]
   )
 
-  const { rows, maxPage, pagination } = useTable(columns, authors, filter, 10)
-
   return (
     <>
       <Actions add={() => navigate('/author')} refresh={refresh} download={refresh} />
-      <DataTable loading={loading} columns={columns} rows={rows} />
-      <Pagination maxPage={maxPage} pagination={pagination} />
+      <DataTable loading={loading} columns={columns} data={authors} filter={filter} />
     </>
   )
 }
