@@ -29,6 +29,6 @@ export const settings: ISettings = {
     saveUninitialized: false,
     store: new FileStore({ path: env.SESSION_DIR, ttl: 604800000 }),
     name: 'sid',
-    cookie: { domain: env.COOKIE_DOMAIN, httpOnly: false, secure: false },
+    cookie: { domain: env.COOKIE_DOMAIN, httpOnly: false, secure: false, sameSite: 'strict' },
   },
 }

@@ -3,7 +3,11 @@
   "version": "1.0.3",
   "license": "MIT",
   "author": {
-    "name": "Sara Morillon"
+    "name": "Sara Morillon",
+    "url": "https://saramorillon.com/"
+  },
+  "repository": {
+    "url": "https://github.com/saramorillon/mini-board"
   },
   "scripts": {
     "prestart": "prisma migrate deploy",

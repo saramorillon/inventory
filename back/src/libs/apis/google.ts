@@ -1,6 +1,5 @@
 import axios from 'axios'
-import uniq from 'lodash.uniq'
-import { IApi, IApiResult } from './Api'
+import { IApi, IApiResult, sanitize } from './Api'
 
 type Response = {
   items?: [
@@ -23,7 +22,12 @@ export class GoogleApi implements IApi {
     const response = await axios.get<Response>(this.url, { params: { q: `isbn:${isbn}` } })
     const { title, subtitle, authors } = response.data.items?.[0]?.volumeInfo || {}
     if (!title && !authors?.length) return null
-    const fullTitle = subtitle ? `${title} - ${subtitle}` : title
-    return { isbn, title: fullTitle, authors: uniq(authors || []).join(' | '), source: this.source }
+    const fullTitle = (subtitle ? `${title} - ${subtitle}` : title) ?? ''
+    return {
+      isbn,
+      title: fullTitle,
+      authors: (authors || []).flatMap(sanitize),
+      source: this.source,
+    }
   }
 }

@@ -1,28 +1,25 @@
 import express from 'express'
+import { getApp } from './controllers/app/getApp'
 import { deleteAuthor } from './controllers/authors/deleteAuthor'
 import { getAuthor } from './controllers/authors/getAuthor'
 import { getAuthors } from './controllers/authors/getAuthors'
-import { mergeAuthors } from './controllers/authors/mergeAuthors'
+import { postAuthor } from './controllers/authors/postAuthor'
 import { putAuthor } from './controllers/authors/putAuthor'
-import { validator } from './middleware/validator'
-import { getBooks } from './controllers/books/getBooks'
+import { deleteBook } from './controllers/books/deleteBook'
 import { getBook } from './controllers/books/getBook'
+import { getBooks } from './controllers/books/getBooks'
+import { postBook } from './controllers/books/postBook'
 import { putBook } from './controllers/books/putBook'
-import { postLogin } from './controllers/session/postLogin'
-import { hasSession } from './middleware/session'
 import { getLogout } from './controllers/session/getLogout'
 import { getSession } from './controllers/session/getSession'
-import { deleteBook } from './controllers/books/deleteBook'
-import { putDraft } from './controllers/draft/putDraft'
-import { deleteDraft } from './controllers/draft/deleteDraft'
-import { compareBook } from './controllers/books/compareBook'
-import { getDrafts } from './controllers/draft/getDrafts'
-import { getDraft } from './controllers/draft/getDraft'
-import { uploadBooks } from './controllers/books/uploadBooks'
+import { postLogin } from './controllers/session/postLogin'
+import { hasSession } from './middleware/session'
+import { validator } from './middleware/validator'
 
 export const router = express.Router()
 
 router.post('/login', postLogin)
+router.get('/app', getApp)
 
 router.use(hasSession())
 
@@ -31,18 +28,12 @@ router.get('/session', getSession)
 
 router.get('/authors', validator(getAuthors.schema), getAuthors.route)
 router.get('/authors/:id', validator(getAuthor.schema), getAuthor.route)
-router.put('/authors/:id?', validator(putAuthor.schema), putAuthor.route)
-router.delete('/authors/:id?', validator(deleteAuthor.schema), deleteAuthor.route)
-router.post('/authors/merge', validator(mergeAuthors.schema), mergeAuthors.route)
+router.post('/authors', validator(postAuthor.schema), postAuthor.route)
+router.put('/authors/:id', validator(putAuthor.schema), putAuthor.route)
+router.delete('/authors/:id', validator(deleteAuthor.schema), deleteAuthor.route)
 
 router.get('/books', validator(getBooks.schema), getBooks.route)
-router.get('/books/compare', validator(compareBook.schema), compareBook.route)
 router.get('/books/:id', validator(getBook.schema), getBook.route)
-router.post('/books', uploadBooks.route)
-router.put('/books/:id?', validator(putBook.schema), putBook.route)
+router.post('/books', validator(postBook.schema), postBook.route)
+router.put('/books/:id', validator(putBook.schema), putBook.route)
 router.delete('/books/:id', validator(deleteBook.schema), deleteBook.route)
-
-router.get('/drafts', getDrafts.route)
-router.get('/drafts/:serial', validator(getDraft.schema), getDraft.route)
-router.put('/drafts/:serial', validator(putDraft.schema), putDraft.route)
-router.delete('/drafts/:serial', validator(deleteDraft.schema), deleteDraft.route)

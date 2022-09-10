@@ -1,6 +1,5 @@
 import axios from 'axios'
-import uniq from 'lodash.uniq'
-import { IApi, IApiResult } from './Api'
+import { IApi, IApiResult, sanitize } from './Api'
 
 type Response = {
   [key: string]: {
@@ -25,9 +24,7 @@ export class OpenLibrary implements IApi {
     return {
       isbn,
       title: fullTitle,
-      authors: uniq(authors || [])
-        .map((author) => author.name)
-        .join(' | '),
+      authors: (authors || []).map((author) => author.name).flatMap(sanitize),
       source: this.source,
     }
   }

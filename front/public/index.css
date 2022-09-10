@@ -1,0 +1,11 @@
+.icon {
+  vertical-align: middle;
+  margin-top: -0.25em;
+  width: 20px;
+  height: 20px;
+}
+
+:root {
+  font-size: 14px;
+  --font-size: 1rem;
+}

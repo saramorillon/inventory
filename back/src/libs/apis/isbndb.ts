@@ -1,7 +1,6 @@
 import axios from 'axios'
-import uniq from 'lodash.uniq'
 import { settings } from '../../settings'
-import { IApi, IApiResult } from './Api'
+import { IApi, IApiResult, sanitize } from './Api'
 
 type Response = {
   book?: {
@@ -21,6 +20,11 @@ export class IsbnDbApi implements IApi {
     const response = await axios.get<Response>(`${this.url}/${isbn}`, { headers: { Authorization: this.token } })
     const { title, title_long, authors } = response.data.book || {}
     if (!title && !authors?.length) return null
-    return { isbn, title: title_long || title, authors: uniq(authors || []).join(' | '), source: this.source }
+    return {
+      isbn,
+      title: title_long ?? title ?? '',
+      authors: (authors || []).flatMap(sanitize),
+      source: this.source,
+    }
   }
 }

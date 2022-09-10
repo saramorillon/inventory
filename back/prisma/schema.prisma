@@ -31,15 +31,6 @@ model Book {
   @@map("book")
 }
 
-model Draft {
-  serial  String  @id
-  title   String?
-  authors String?
-  source  String
-
-  @@map("draft")
-}
-
 model User {
   id        Int      @id @default(autoincrement())
   username  String   @unique

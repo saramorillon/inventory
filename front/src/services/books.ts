@@ -1,34 +1,28 @@
 import { IBook } from '../models/Book'
-import { ICompare } from '../models/Compare'
-import { Axios } from './Axios'
+import { request } from './wrapper'
 
-export async function getBooks(params?: Record<string, unknown>): Promise<IBook[]> {
-  return Axios.get('/api/books', { params })
+export function getBooks(params?: Record<string, unknown>): Promise<IBook[]> {
+  return request<IBook[]>({ url: '/api/books', params })
 }
 
-export async function getBook(id?: number): Promise<IBook | undefined> {
-  if (!id) return
-  return Axios.get(`/api/books/${id}`)
+export function getBook(id?: number): Promise<IBook | null> {
+  if (!id) return Promise.resolve(null)
+  return request<IBook | null>({ url: `/api/books/${id}` })
 }
 
-export async function putBook(book: Partial<IBook>): Promise<IBook> {
-  return Axios.put(`/api/books/${book.id || ''}`, book)
+export function saveBook(book: IBook): Promise<IBook> {
+  if (!book.id) return request<IBook>({ method: 'POST', url: '/api/books', data: book })
+  return request<IBook>({ method: 'PUT', url: `/api/books/${book.id}`, data: book })
 }
 
 export async function deleteBook(book: IBook): Promise<void> {
-  return Axios.delete(`/api/books/${book.id}`)
+  await request({ method: 'DELETE', url: `/api/books/${book.id}` })
 }
 
 export async function refreshBook(book: IBook): Promise<void> {
-  return Axios.put('/api/books', book, { params: { refresh: true } })
+  await request({ method: 'PUT', url: '/api/books', params: { refresh: true }, data: book })
 }
 
-export async function uploadBooks(file: File): Promise<void> {
-  const data = new FormData()
-  data.append('file', file, file.name)
-  return Axios.post('/api/books', data)
-}
-
-export async function compareBooks(serial?: string): Promise<ICompare[]> {
-  return Axios.get('/api/books/compare', { params: { serial } })
+export async function scanBook(serial: string): Promise<void> {
+  await request({ method: 'POST', url: `/api/books`, data: { serial } })
 }

@@ -1,33 +1,24 @@
 import { IAuthor } from '../models/Author'
-import { Axios } from './Axios'
+import { request } from './wrapper'
 
-export async function getAuthors(params?: Record<string, unknown>): Promise<IAuthor[]> {
-  return Axios.get('/api/authors', { params })
+export function getAuthors(params?: Record<string, unknown>): Promise<IAuthor[]> {
+  return request<IAuthor[]>({ url: '/api/authors', params })
 }
 
-export async function getAuthor(id?: number): Promise<IAuthor | undefined> {
-  if (!id) return
-  return Axios.get(`/api/authors/${id}`)
+export function getAuthor(id?: number): Promise<IAuthor | null> {
+  if (!id) return Promise.resolve(null)
+  return request<IAuthor | null>({ url: `/api/authors/${id}` })
 }
 
-export async function putAuthor(author: Partial<IAuthor>): Promise<IAuthor> {
-  return Axios.put(`/api/authors/${author.id || ''}`, author)
+export function saveAuthor(author: IAuthor): Promise<IAuthor> {
+  if (author.id) return request<IAuthor>({ method: 'POST', url: '/api/authors', data: author })
+  return request<IAuthor>({ method: 'PUT', url: `/api/authors/${author.id}`, data: author })
 }
 
 export async function deleteAuthor(author: IAuthor): Promise<void> {
-  return Axios.delete(`/api/authors/${author.id}`)
+  await request({ method: 'DELETE', url: `/api/authors/${author.id}` })
 }
 
 export async function refreshAuthor(author: IAuthor): Promise<void> {
-  return Axios.put('/api/authors', author, { params: { refresh: true } })
-}
-
-export async function uploadAuthors(file: File): Promise<void> {
-  const data = new FormData()
-  data.append('file', file, file.name)
-  return Axios.post('/api/authors', data)
-}
-
-export async function mergeAuthors(authors: IAuthor[]): Promise<number> {
-  return Axios.post('/api/authors/merge', { authors })
+  await request({ method: 'PUT', url: '/api/authors', params: { refresh: true }, data: author })
 }

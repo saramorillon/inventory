@@ -7,8 +7,8 @@ export function act(fn: (...args: unknown[]) => unknown): void {
   })
 }
 
-export async function wait(): Promise<void> {
-  return _act(async () => new Promise((resolve) => setTimeout(resolve)))
+export function wait(): Promise<void> {
+  return _act(() => new Promise((resolve) => setTimeout(resolve)))
 }
 
 export async function renderAsync(comp: ReactElement, options?: Omit<RenderOptions, 'queries'>): Promise<RenderResult> {

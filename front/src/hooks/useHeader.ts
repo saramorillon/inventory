@@ -8,5 +8,5 @@ export function useHeader(title: string, subtitle?: string): void {
     document.title = `Inventory - ${title}`
     setTitle(title)
     setSubtitle(subtitle)
-  }, [])
+  }, [title, subtitle, setTitle, setSubtitle])
 }
