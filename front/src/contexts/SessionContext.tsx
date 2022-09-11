@@ -1,5 +1,5 @@
 import { useFetch } from '@saramorillon/hooks'
-import React, { createContext, PropsWithChildren, useContext } from 'react'
+import React, { createContext, PropsWithChildren } from 'react'
 import { ISession } from '../models/Session'
 import { getSession } from '../services/session'
 import { LoadContainer } from '../ui/components/LoadContainer'
@@ -14,12 +14,4 @@ export function SessionProvider({ children }: PropsWithChildren<unknown>): JSX.E
       <LoadContainer loading={loading}>{children}</LoadContainer>
     </SessionContext.Provider>
   )
-}
-
-export function useSession(): ISession {
-  const session = useContext(SessionContext)
-  if (!session) {
-    throw new Error('No session found')
-  }
-  return session
 }

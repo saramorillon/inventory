@@ -18,7 +18,3 @@ export function saveAuthor(author: IAuthor): Promise<IAuthor> {
 export async function deleteAuthor(author: IAuthor): Promise<void> {
   await request({ method: 'DELETE', url: `/api/authors/${author.id}` })
 }
-
-export async function refreshAuthor(author: IAuthor): Promise<void> {
-  await request({ method: 'PUT', url: '/api/authors', params: { refresh: true }, data: author })
-}

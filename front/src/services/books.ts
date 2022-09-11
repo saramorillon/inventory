@@ -19,10 +19,6 @@ export async function deleteBook(book: IBook): Promise<void> {
   await request({ method: 'DELETE', url: `/api/books/${book.id}` })
 }
 
-export async function refreshBook(book: IBook): Promise<void> {
-  await request({ method: 'PUT', url: '/api/books', params: { refresh: true }, data: book })
-}
-
-export async function scanBook(serial: string): Promise<void> {
-  await request({ method: 'POST', url: `/api/books`, data: { serial } })
+export function scanBook(serial: string): Promise<boolean> {
+  return request<boolean>({ method: 'POST', url: `/api/books`, data: { serial } })
 }
