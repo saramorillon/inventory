@@ -9,7 +9,7 @@ import { logger } from './logger'
 const apis: IApi[] = [new IsbnDbApi(), new GoogleApi(), new OpenLibrary(), new WorlCatApi()]
 
 export function isIsbn(identifier: string): boolean {
-  return /97(8|9)\d{10}/.test(identifier)
+  return /^97(8|9)\d{10}$/.test(identifier)
 }
 
 export async function isbnSearch(isbn: string): Promise<IApiResult | undefined> {

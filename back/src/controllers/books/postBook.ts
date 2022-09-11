@@ -37,10 +37,12 @@ export const postBook = {
           if (!result) throw new Error('ISBN not found in API')
           await saveBook(result)
           logger.info('scan_success', { serial })
-          res.sendStatus(204)
+          res.send(true)
         } else {
-          throw new Error('serial should be an ISBN')
+          res.send(false)
         }
+      } else {
+        throw new Error('serial should be an ISBN')
       }
     } catch (error) {
       logger.error('scan_error', { serial, error })
