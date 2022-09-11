@@ -5,8 +5,9 @@ import session from 'express-session'
 import { createServer } from 'http'
 import passport from 'passport'
 import { Strategy } from 'passport-local'
-import { logger } from './libs/logger'
+import { appLogger } from './libs/logger'
 import { deserializeUser, localStrategy, serializeUser } from './libs/passport'
+import { logger } from './middleware/logger'
 import { router } from './router'
 import { settings } from './settings'
 import { SocketService } from './socket/socket'
@@ -22,11 +23,12 @@ app.use(cors({ credentials: true, origin: 'http://localhost:4000' }))
 app.use(session(settings.session))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(logger)
 app.use('/api', router)
 
 const server = createServer(app)
 SocketService.init(server)
 
 server.listen(settings.port, () => {
-  logger.info('app_start', { port: settings.port })
+  appLogger.info('app_start', { port: settings.port })
 })

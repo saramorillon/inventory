@@ -11,8 +11,8 @@ export function getAuthor(id?: number): Promise<IAuthor | null> {
 }
 
 export function saveAuthor(author: IAuthor): Promise<IAuthor> {
-  if (author.id) return request<IAuthor>({ method: 'POST', url: '/api/authors', data: author })
-  return request<IAuthor>({ method: 'PUT', url: `/api/authors/${author.id}`, data: author })
+  if (author.id) return request<IAuthor>({ method: 'PUT', url: `/api/authors/${author.id}`, data: author })
+  return request<IAuthor>({ method: 'POST', url: '/api/authors', data: author })
 }
 
 export async function deleteAuthor(author: IAuthor): Promise<void> {

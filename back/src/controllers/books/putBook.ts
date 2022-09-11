@@ -1,52 +1,33 @@
-import { Response } from 'express'
-import { ValidatedRequest, ValidatedRequestSchema } from 'express-joi-validation'
-import Joi from 'joi'
-import { parseError } from '../../libs/error'
-import { logger } from '../../libs/logger'
+import { Request, Response } from 'express'
+import { z } from 'zod'
 import { prisma } from '../../prisma/client'
 
-interface Schema extends ValidatedRequestSchema {
-  params: {
-    id?: number
-  }
-  body: {
-    serial: string
-    title: string
-    source: string
-    authors?: { id: number }[]
+const schema = {
+  params: z.object({
+    id: z.string().transform(Number),
+  }),
+  body: z.object({
+    serial: z.string(),
+    title: z.string(),
+    source: z.string(),
+    authors: z.array(z.object({ id: z.number() })),
+  }),
+}
+
+export async function putBook(req: Request, res: Response): Promise<void> {
+  const { success, failure } = req.logger.start('put_book')
+  try {
+    const { id } = schema.params.parse(req.params)
+    const body = schema.body.parse(req.body)
+    const volume = await createOrUpdate(id, body)
+    success()
+    res.json(volume)
+  } catch (error) {
+    res.status(500).json(failure(error))
   }
 }
 
-export const putBook = {
-  schema: {
-    params: Joi.object<Schema['params']>({
-      id: Joi.number().optional(),
-    }),
-    body: Joi.object<Schema['body']>({
-      serial: Joi.string().required(),
-      title: Joi.string().optional(),
-      source: Joi.string().required(),
-      authors: Joi.array().items(Joi.object({ id: Joi.number() }).unknown(true)),
-    }).unknown(true),
-  },
-
-  route: async function (req: ValidatedRequest<Schema>, res: Response): Promise<void> {
-    const { id } = req.params
-    const { serial, title, source } = req.body
-
-    try {
-      const authors = (req.body.authors || []).map((author) => ({ id: author.id }))
-      const volume = await createOrUpdate(id, { serial, title, source, authors })
-      logger.info('put_book_success', { body: req.body })
-      res.json(volume)
-    } catch (error) {
-      logger.error('put_book_error', { body: req.body, error })
-      res.status(500).json(parseError(error))
-    }
-  },
-}
-
-async function createOrUpdate(id: number | undefined, body: Schema['body']) {
+async function createOrUpdate(id: number, body: z.infer<typeof schema.body>) {
   const { authors, ...data } = body
   const unique = id ? { id } : { serial: body.serial }
   return prisma.book.upsert({

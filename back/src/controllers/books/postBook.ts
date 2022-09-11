@@ -1,54 +1,36 @@
-import { Response } from 'express'
-import { ValidatedRequest, ValidatedRequestSchema } from 'express-joi-validation'
-import Joi from 'joi'
+import { Request, Response } from 'express'
+import { z } from 'zod'
 import { IApiResult } from '../../libs/apis/Api'
-import { parseError } from '../../libs/error'
 import { isbnSearch, isIsbn } from '../../libs/isbn'
-import { logger } from '../../libs/logger'
 import { prisma } from '../../prisma/client'
 
-interface Schema extends ValidatedRequestSchema {
-  params: {
-    id?: number
-  }
-  body: {
-    serial: string
-    title: string
-    source: string
-    authors?: { id: number }[]
-  }
+const schema = {
+  body: z.object({
+    serial: z.string(),
+  }),
 }
 
-export const postBook = {
-  schema: {
-    body: Joi.object<Schema['body']>({
-      serial: Joi.string().required(),
-    }).unknown(true),
-  },
-
-  route: async function (req: ValidatedRequest<Schema>, res: Response): Promise<void> {
-    const { serial } = req.body
-
-    try {
-      if (isIsbn(serial)) {
-        const book = await prisma.book.findUnique({ where: { serial } })
-        if (!book) {
-          const result = await isbnSearch(serial)
-          if (!result) throw new Error('ISBN not found in API')
-          await saveBook(result)
-          logger.info('scan_success', { serial })
-          res.send(true)
-        } else {
-          res.send(false)
-        }
+export async function postBook(req: Request, res: Response): Promise<void> {
+  const { success, failure } = req.logger.start('scan_book')
+  try {
+    const { serial } = schema.body.parse(req.body)
+    if (isIsbn(serial)) {
+      const book = await prisma.book.findUnique({ where: { serial } })
+      if (!book) {
+        const result = await isbnSearch(serial)
+        if (!result) throw new Error('ISBN not found in API')
+        await saveBook(result)
+        res.send(true)
       } else {
-        throw new Error('serial should be an ISBN')
+        res.send(false)
       }
-    } catch (error) {
-      logger.error('scan_error', { serial, error })
-      res.status(500).json(parseError(error))
+      success()
+    } else {
+      res.status(500).json(failure(new Error('serial should be an ISBN')))
     }
-  },
+  } catch (error) {
+    res.status(500).json(failure(error))
+  }
 }
 
 export async function saveBook(result: IApiResult): Promise<void> {

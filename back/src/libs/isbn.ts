@@ -4,7 +4,7 @@ import { GoogleApi } from './apis/google'
 import { IsbnDbApi } from './apis/isbndb'
 import { OpenLibrary } from './apis/openlibrary'
 import { WorlCatApi } from './apis/worldcat'
-import { logger } from './logger'
+import { appLogger } from './logger'
 
 const apis: IApi[] = [new IsbnDbApi(), new GoogleApi(), new OpenLibrary(), new WorlCatApi()]
 
@@ -20,7 +20,7 @@ export async function isbnSearch(isbn: string): Promise<IApiResult | undefined> 
       if (result) book = merge(book, result)
       if (book?.title && book?.authors) break
     } catch (error) {
-      logger.error('isbn_search_error', { api: api.source, error })
+      appLogger.error('isbn_search_error', { api: api.source, error })
     }
   }
   return book

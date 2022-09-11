@@ -1,33 +1,21 @@
-import { Response } from 'express'
-import { ValidatedRequest, ValidatedRequestSchema } from 'express-joi-validation'
-import Joi from 'joi'
-import { parseError } from '../../libs/error'
-import { logger } from '../../libs/logger'
+import { Request, Response } from 'express'
+import { z } from 'zod'
 import { prisma } from '../../prisma/client'
 
-interface Schema extends ValidatedRequestSchema {
-  params: {
-    id?: number
-  }
+const schema = {
+  params: z.object({
+    id: z.string().transform(Number),
+  }),
 }
 
-export const getAuthor = {
-  schema: {
-    params: Joi.object<Schema['params']>({
-      id: Joi.number().required(),
-    }),
-  },
-
-  route: async function (req: ValidatedRequest<Schema>, res: Response): Promise<void> {
-    const { id } = req.params
-
-    try {
-      const author = await prisma.author.findUnique({ where: { id }, include: { books: true } })
-      logger.info('get_author_success', { id })
-      res.json(author)
-    } catch (error) {
-      logger.error('get_author_error', { id, error })
-      res.status(500).json(parseError(error))
-    }
-  },
+export async function getAuthor(req: Request, res: Response): Promise<void> {
+  const { success, failure } = req.logger.start('get_author')
+  try {
+    const { id } = schema.params.parse(req.params)
+    const author = await prisma.author.findUnique({ where: { id }, include: { books: true } })
+    success()
+    res.json(author)
+  } catch (error) {
+    res.status(500).json(failure(error))
+  }
 }

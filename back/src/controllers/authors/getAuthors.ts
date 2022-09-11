@@ -1,46 +1,33 @@
-import { Response } from 'express'
-import { ValidatedRequest, ValidatedRequestSchema } from 'express-joi-validation'
-import Joi from 'joi'
-import { parseError } from '../../libs/error'
+import { Author } from '@prisma/client'
+import { Request, Response } from 'express'
+import { z } from 'zod'
 import { exportData } from '../../libs/export'
-import { logger } from '../../libs/logger'
 import { prisma } from '../../prisma/client'
-import { Author } from '.prisma/client'
 
-interface Schema extends ValidatedRequestSchema {
-  query: {
-    lazy?: boolean
-    format?: 'csv'
-  }
+const schema = {
+  query: z.object({
+    lazy: z.boolean().optional(),
+    format: z.enum(['csv']).optional(),
+  }),
 }
 
-export const getAuthors = {
-  schema: {
-    query: Joi.object<Schema['query']>({
-      lazy: Joi.bool().optional(),
-      format: Joi.string().valid('csv').optional(),
-    }).unknown(true),
-  },
-
-  route: async function (req: ValidatedRequest<Schema>, res: Response): Promise<void> {
-    const { lazy, format } = req.query
-
-    try {
-      const authors = await prisma.author.findMany({
-        include: { books: !lazy && format !== 'csv' },
-        orderBy: { lastName: 'asc' },
-      })
-      if (format === 'csv') {
-        exportData('authors', authors.map(toCsv), res)
-      } else {
-        res.json(authors)
-      }
-      logger.info('get_authors_success', { format })
-    } catch (error) {
-      logger.error('get_authors_error', { format, error })
-      res.status(500).json(parseError(error))
+export async function getAuthors(req: Request, res: Response): Promise<void> {
+  const { success, failure } = req.logger.start('get_authors')
+  try {
+    const { lazy, format } = schema.query.parse(req.query)
+    const authors = await prisma.author.findMany({
+      include: { books: !lazy && format !== 'csv' },
+      orderBy: { lastName: 'asc' },
+    })
+    if (format === 'csv') {
+      exportData('books', authors.map(toCsv), res)
+    } else {
+      res.json(authors)
     }
-  },
+    success()
+  } catch (error) {
+    res.status(500).json(failure(error))
+  }
 }
 
 function toCsv(author: Author): Record<string, string> {

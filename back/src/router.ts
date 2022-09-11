@@ -14,7 +14,6 @@ import { getLogout } from './controllers/session/getLogout'
 import { getSession } from './controllers/session/getSession'
 import { postLogin } from './controllers/session/postLogin'
 import { hasSession } from './middleware/session'
-import { validator } from './middleware/validator'
 
 export const router = express.Router()
 
@@ -26,14 +25,14 @@ router.use(hasSession())
 router.get('/logout', getLogout)
 router.get('/session', getSession)
 
-router.get('/authors', validator(getAuthors.schema), getAuthors.route)
-router.get('/authors/:id', validator(getAuthor.schema), getAuthor.route)
-router.post('/authors', validator(postAuthor.schema), postAuthor.route)
-router.put('/authors/:id', validator(putAuthor.schema), putAuthor.route)
-router.delete('/authors/:id', validator(deleteAuthor.schema), deleteAuthor.route)
+router.get('/authors', getAuthors)
+router.get('/authors/:id', getAuthor)
+router.post('/authors', postAuthor)
+router.put('/authors/:id', putAuthor)
+router.delete('/authors/:id', deleteAuthor)
 
-router.get('/books', validator(getBooks.schema), getBooks.route)
-router.get('/books/:id', validator(getBook.schema), getBook.route)
-router.post('/books', validator(postBook.schema), postBook.route)
-router.put('/books/:id', validator(putBook.schema), putBook.route)
-router.delete('/books/:id', validator(deleteBook.schema), deleteBook.route)
+router.get('/books', getBooks)
+router.get('/books/:id', getBook)
+router.post('/books', postBook)
+router.put('/books/:id', putBook)
+router.delete('/books/:id', deleteBook)

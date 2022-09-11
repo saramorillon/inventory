@@ -1,42 +1,45 @@
-import path from 'path'
 import { types } from 'util'
-import { createLogger, format, transports } from 'winston'
-import { name } from '../../package.json'
 
-const dirname = path.join(__dirname, '..', '..', 'logs')
-
-const errorFormat = format((info) => {
-  return { ...info, ...parseError(info.error) }
-})
-
-function fileFormat() {
-  return format.combine(errorFormat(), format.timestamp(), format.json())
+interface IAction {
+  success: () => void
+  failure: (error: unknown) => { message: string; stack?: string }
 }
 
-function consoleFormat() {
-  return format.combine(errorFormat(), format.timestamp(), format.colorize(), format.simple())
-}
+export class Logger {
+  constructor(private meta?: Record<string, unknown>) {}
 
-function fileTransport() {
-  return new transports.File({ format: fileFormat(), dirname, filename: name, maxsize: 5242880, maxFiles: 5 })
-}
-
-function consoleTransport() {
-  return new transports.Console({ format: consoleFormat() })
-}
-
-export const logger = createLogger({
-  level: 'info',
-  transports: [fileTransport(), consoleTransport()],
-  silent: process.env.NODE_ENV === 'test',
-})
-
-function parseError(error?: unknown): { error: unknown } {
-  if (types.isNativeError(error)) {
-    const result: Record<string, unknown> = {}
-    result.message = error.message
-    result.stack = error.stack
-    return { error: result }
+  log(level: 'info' | 'error', message: string, meta?: Record<string, unknown>): void {
+    const timestamp = new Date().toISOString()
+    console[level](JSON.stringify({ ...this.meta, ...meta, level, timestamp, message }))
   }
-  return { error }
+
+  info(message: string, meta?: Record<string, unknown>): void {
+    this.log('info', message, meta)
+  }
+
+  error(message: string, error: unknown, meta?: Record<string, unknown>): void {
+    this.log('error', message, { ...meta, error: this.parseError(error) })
+  }
+
+  start(message: string, meta?: Record<string, unknown>): IAction {
+    this.log('info', message, meta)
+
+    return {
+      success: () => this.log('info', message + '_success', meta),
+      failure: (e) => {
+        const error = this.parseError(e)
+        this.log('error', message + '_failure', { ...meta, error })
+        return error
+      },
+    }
+  }
+
+  parseError(error: unknown): { message: string; stack?: string } {
+    if (types.isNativeError(error)) {
+      return { message: error.message, stack: error.stack }
+    }
+    return { message: String(error) }
+  }
 }
+
+export const appLogger = new Logger()
