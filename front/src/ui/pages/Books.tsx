@@ -1,6 +1,6 @@
 import { useFetch } from '@saramorillon/hooks'
 import { format, parseISO } from 'date-fns'
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
 import { authors, IBook } from '../../models/Book'
@@ -40,8 +40,7 @@ const columns: IColumn<IBook>[] = [
 export function Books(): JSX.Element {
   const navigate = useNavigate()
   useHeader('Books', 'Scan an ISBN to add a volume to your library')
-  const call = useCallback(() => getBooks(), [])
-  const [books, { loading }, refresh] = useFetch(call, [])
+  const [books, { loading }, refresh] = useFetch(getBooks, [])
 
   return (
     <>

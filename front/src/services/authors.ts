@@ -1,8 +1,8 @@
 import { IAuthor } from '../models/Author'
 import { request } from './wrapper'
 
-export function getAuthors(params?: Record<string, unknown>): Promise<IAuthor[]> {
-  return request<IAuthor[]>({ url: '/api/authors', params })
+export function getAuthors(): Promise<IAuthor[]> {
+  return request<IAuthor[]>({ url: '/api/authors' })
 }
 
 export function getAuthor(id?: number): Promise<IAuthor | null> {

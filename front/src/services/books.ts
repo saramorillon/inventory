@@ -1,8 +1,8 @@
 import { IBook } from '../models/Book'
 import { request } from './wrapper'
 
-export function getBooks(params?: Record<string, unknown>): Promise<IBook[]> {
-  return request<IBook[]>({ url: '/api/books', params })
+export function getBooks(): Promise<IBook[]> {
+  return request<IBook[]>({ url: '/api/books' })
 }
 
 export function getBook(id?: number): Promise<IBook | null> {

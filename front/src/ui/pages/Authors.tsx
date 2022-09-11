@@ -1,6 +1,6 @@
 import { useFetch } from '@saramorillon/hooks'
 import { format, parseISO } from 'date-fns'
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
 import { fullName, IAuthor } from '../../models/Author'
@@ -44,8 +44,7 @@ const columns: IColumn<IAuthor>[] = [
 export function Authors(): JSX.Element {
   const navigate = useNavigate()
   useHeader('Authors')
-  const call = useCallback(() => getAuthors(), [])
-  const [authors, { loading }, refresh] = useFetch(call, [])
+  const [authors, { loading }, refresh] = useFetch(getAuthors, [])
 
   return (
     <>
