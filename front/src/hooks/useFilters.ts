@@ -1,11 +1,17 @@
 import { useCallback, useMemo, useState } from 'react'
 
-export function useFilters<T>(initialValue: T): [T, <K extends keyof T>(name: K, value: T[K]) => void] {
-  const [filters, setFilters] = useState<T>(initialValue)
+type Filter<T> = ((data1: T) => boolean) | undefined
 
-  const onChange = useCallback(<K extends keyof T>(name: K, value: T[K]) => {
-    setFilters((filters) => ({ ...filters, [name]: value }))
+export function useFilters<T>(): [Filter<T>[], (index: number, fn: (data1: T) => boolean) => void] {
+  const [filters, setFilters] = useState<Filter<T>[]>([])
+
+  const onFilter = useCallback((index: number, fn?: (data1: T) => boolean) => {
+    setFilters((filters) => {
+      const clone = [...filters]
+      clone[index] = fn
+      return clone
+    })
   }, [])
 
-  return useMemo(() => [filters, onChange], [filters, onChange])
+  return useMemo(() => [filters, onFilter], [filters, onFilter])
 }
