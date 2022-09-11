@@ -1,6 +1,5 @@
-import { json } from 'body-parser'
 import cors from 'cors'
-import express from 'express'
+import express, { json } from 'express'
 import session from 'express-session'
 import { createServer } from 'http'
 import passport from 'passport'
