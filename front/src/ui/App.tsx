@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { HeaderProvider } from '../contexts/HeaderContext'
 import { SessionProvider } from '../contexts/SessionContext'
 import { PrivateOutlet, PublicOutlet } from './components/Outlet'
 import { Author } from './pages/Author'
@@ -10,23 +11,25 @@ import { Books } from './pages/Books'
 export function App(): JSX.Element | null {
   return (
     <SessionProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<PublicOutlet />} />
+      <HeaderProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<PublicOutlet />} />
 
-          <Route element={<PrivateOutlet />}>
-            <Route path="/books" element={<Books />} />
-            <Route path="/book" element={<Book />} />
-            <Route path="/book/:id" element={<Book />} />
+            <Route element={<PrivateOutlet />}>
+              <Route path="/books" element={<Books />} />
+              <Route path="/book" element={<Book />} />
+              <Route path="/book/:id" element={<Book />} />
 
-            <Route path="/authors" element={<Authors />} />
-            <Route path="/author" element={<Author />} />
-            <Route path="/author/:id" element={<Author />} />
-          </Route>
+              <Route path="/authors" element={<Authors />} />
+              <Route path="/author" element={<Author />} />
+              <Route path="/author/:id" element={<Author />} />
+            </Route>
 
-          <Route path="*" element={<Navigate to="/books" replace />} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="*" element={<Navigate to="/books" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </HeaderProvider>
     </SessionProvider>
   )
 }
