@@ -1,4 +1,4 @@
-import { IconLogout, IconSettings } from '@tabler/icons'
+import { IconLogout } from '@tabler/icons'
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { HeaderContext } from '../../contexts/HeaderContext'
@@ -18,11 +18,7 @@ export function Header(): JSX.Element {
 
         <Link to="/authors">Authors</Link>
 
-        <Link to={'/users'} className="ml-auto">
-          <IconSettings /> Admin
-        </Link>
-
-        <button onClick={logout}>
+        <button onClick={logout} className="ml-auto">
           <IconLogout /> Log out
         </button>
       </nav>
