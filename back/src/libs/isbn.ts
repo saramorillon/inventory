@@ -25,16 +25,3 @@ export async function isbnSearch(isbn: string): Promise<IApiResult | undefined> 
   }
   return book
 }
-
-export async function isbnCompare(isbn: string): Promise<IApiResult[]> {
-  const books: IApiResult[] = []
-  for (const api of apis) {
-    try {
-      const result = await api.search(isbn)
-      if (result) books.push(result)
-    } catch (error) {
-      logger.error('isbn_search_error', { api: api.source, error })
-    }
-  }
-  return books
-}
