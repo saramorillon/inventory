@@ -17,10 +17,10 @@ export async function putAuthor(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('post_author')
   try {
     const { id } = schema.params.parse(req.params)
-    const { books, ...data } = schema.body.parse(req.body)
+    const { firstName, lastName, books } = schema.body.parse(req.body)
     const author = await prisma.author.update({
       where: { id },
-      data: { ...data, books: { set: books } },
+      data: { firstName, lastName: lastName.toUpperCase(), books: { set: books } },
       include: { books: true },
     })
     success()
