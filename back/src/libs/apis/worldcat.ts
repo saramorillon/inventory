@@ -24,14 +24,19 @@ export class WorlCatApi implements IApi {
   url = 'http://classify.oclc.org/classify2/Classify'
 
   async search(isbn: string): Promise<IApiResult | null> {
-    const response = await axios.get<Response>(this.url, { params: { isbn } })
-    const json: Response = await parseStringPromise(response.data)
-    const { title, author } = json.classify.work?.[0]?.$ || json.classify.works?.[0].work?.[0]?.$ || {}
-    return {
-      isbn,
-      title: title ?? '',
-      authors: sanitize(author),
-      source: this.source,
+    try {
+      const response = await axios.get<Response>(this.url, { params: { isbn } })
+      const json: Response = await parseStringPromise(response.data)
+      const { title, author } = json.classify.work?.[0]?.$ || json.classify.works?.[0].work?.[0]?.$ || {}
+      if (!title) return null
+      return {
+        isbn,
+        title,
+        authors: sanitize(author),
+        source: this.source,
+      }
+    } catch (error) {
+      return null
     }
   }
 }

@@ -17,22 +17,15 @@ export async function putAuthor(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('post_author')
   try {
     const { id } = schema.params.parse(req.params)
-    const body = schema.body.parse(req.body)
-    const author = await createOrUpdate(id, body)
+    const { books, ...data } = schema.body.parse(req.body)
+    const author = await prisma.author.update({
+      where: { id },
+      data: { ...data, books: { set: books } },
+      include: { books: true },
+    })
     success()
     res.json(author)
   } catch (error) {
     res.status(500).json(failure(error))
   }
-}
-
-function createOrUpdate(id: number, body: z.infer<typeof schema.body>) {
-  const { books, ...firstName_lastName } = body
-  const unique = id ? { id } : { firstName_lastName }
-  return prisma.author.upsert({
-    where: unique,
-    create: { ...firstName_lastName, books: { connect: books } },
-    update: { ...firstName_lastName, ...(books?.length && { books: { set: books } }) },
-    include: { books: true },
-  })
 }

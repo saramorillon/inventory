@@ -22,10 +22,9 @@ export function localStrategy(
   done: (error: unknown, user?: User) => void
 ): Promise<void> {
   return prisma.user
-    .findUnique({ where: { username } })
+    .findFirst({ where: { username, password: sha224(password).toString() } })
     .then((user) => {
-      if (!user) done(new Error(`Unknown user ${username}`))
-      else if (user.password !== sha224(password).toString()) done(new Error(`Invalid password for ${username}`))
+      if (!user) done(new Error('User not found'))
       else done(null, user)
     })
     .catch(done)

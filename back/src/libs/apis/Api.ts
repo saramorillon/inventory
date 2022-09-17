@@ -14,5 +14,8 @@ export interface IApiResult {
 
 export function sanitize(name?: string): string[] {
   if (!name) return []
-  return name.replace(/[^a-z-]/gi, ' ').split(/ +/)
+  return name
+    .replace(/[^a-z-]/gi, ' ')
+    .trim()
+    .split(/ +/)
 }

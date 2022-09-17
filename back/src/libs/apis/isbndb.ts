@@ -17,14 +17,19 @@ export class IsbnDbApi implements IApi {
   token = settings.isbnToken
 
   async search(isbn: string): Promise<IApiResult | null> {
-    const response = await axios.get<Response>(`${this.url}/${isbn}`, { headers: { Authorization: this.token } })
-    const { title, title_long, authors } = response.data.book || {}
-    if (!title && !authors?.length) return null
-    return {
-      isbn,
-      title: title_long ?? title ?? '',
-      authors: (authors || []).flatMap(sanitize),
-      source: this.source,
+    try {
+      const response = await axios.get<Response>(`${this.url}/${isbn}`, { headers: { Authorization: this.token } })
+      const { title, title_long, authors } = response.data.book || {}
+      const fullTitle = title_long ?? title
+      if (!fullTitle) return null
+      return {
+        isbn,
+        title: fullTitle,
+        authors: (authors || []).flatMap(sanitize),
+        source: this.source,
+      }
+    } catch (error) {
+      return null
     }
   }
 }

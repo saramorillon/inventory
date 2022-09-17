@@ -19,15 +19,19 @@ export class GoogleApi implements IApi {
   url = 'https://www.googleapis.com/books/v1/volumes'
 
   async search(isbn: string): Promise<IApiResult | null> {
-    const response = await axios.get<Response>(this.url, { params: { q: `isbn:${isbn}` } })
-    const { title, subtitle, authors } = response.data.items?.[0]?.volumeInfo || {}
-    if (!title && !authors?.length) return null
-    const fullTitle = (subtitle ? `${title} - ${subtitle}` : title) ?? ''
-    return {
-      isbn,
-      title: fullTitle,
-      authors: (authors || []).flatMap(sanitize),
-      source: this.source,
+    try {
+      const response = await axios.get<Response>(this.url, { params: { q: `isbn:${isbn}` } })
+      const { title, subtitle, authors } = response.data.items?.[0]?.volumeInfo || {}
+      if (!title) return null
+      const fullTitle = subtitle ? `${title} - ${subtitle}` : title
+      return {
+        isbn,
+        title: fullTitle,
+        authors: (authors || []).flatMap(sanitize),
+        source: this.source,
+      }
+    } catch (error) {
+      return null
     }
   }
 }

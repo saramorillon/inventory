@@ -22,13 +22,13 @@ export class Logger {
   }
 
   start(message: string, meta?: Record<string, unknown>): IAction {
-    this.log('info', message, meta)
+    this.info(message, meta)
 
     return {
-      success: () => this.log('info', message + '_success', meta),
+      success: () => this.info(message + '_success', meta),
       failure: (e) => {
         const error = this.parseError(e)
-        this.log('error', message + '_failure', { ...meta, error })
+        this.error(message + '_failure', { ...meta, error })
         return error
       },
     }

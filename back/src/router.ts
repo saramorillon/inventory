@@ -1,4 +1,4 @@
-import express from 'express'
+import { Router } from 'express'
 import { getApp } from './controllers/app/getApp'
 import { deleteAuthor } from './controllers/authors/deleteAuthor'
 import { getAuthor } from './controllers/authors/getAuthor'
@@ -15,24 +15,28 @@ import { getSession } from './controllers/session/getSession'
 import { postLogin } from './controllers/session/postLogin'
 import { hasSession } from './middleware/session'
 
-export const router = express.Router()
+export function router(): Router {
+  const router = Router()
 
-router.post('/login', postLogin)
-router.get('/app', getApp)
+  router.post('/login', postLogin)
+  router.get('/app', getApp)
 
-router.use(hasSession())
+  router.use(hasSession)
 
-router.get('/logout', getLogout)
-router.get('/session', getSession)
+  router.get('/logout', getLogout)
+  router.get('/session', getSession)
 
-router.get('/authors', getAuthors)
-router.get('/authors/:id', getAuthor)
-router.post('/authors', postAuthor)
-router.put('/authors/:id', putAuthor)
-router.delete('/authors/:id', deleteAuthor)
+  router.get('/authors', getAuthors)
+  router.get('/authors/:id', getAuthor)
+  router.post('/authors', postAuthor)
+  router.put('/authors/:id', putAuthor)
+  router.delete('/authors/:id', deleteAuthor)
 
-router.get('/books', getBooks)
-router.get('/books/:id', getBook)
-router.post('/books', postBook)
-router.put('/books/:id', putBook)
-router.delete('/books/:id', deleteBook)
+  router.get('/books', getBooks)
+  router.get('/books/:id', getBook)
+  router.post('/books', postBook)
+  router.put('/books/:id', putBook)
+  router.delete('/books/:id', deleteBook)
+
+  return router
+}

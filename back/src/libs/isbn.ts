@@ -4,24 +4,15 @@ import { GoogleApi } from './apis/google'
 import { IsbnDbApi } from './apis/isbndb'
 import { OpenLibrary } from './apis/openlibrary'
 import { WorlCatApi } from './apis/worldcat'
-import { appLogger } from './logger'
 
 const apis: IApi[] = [new IsbnDbApi(), new GoogleApi(), new OpenLibrary(), new WorlCatApi()]
-
-export function isIsbn(identifier: string): boolean {
-  return /^97(8|9)\d{10}$/.test(identifier)
-}
 
 export async function isbnSearch(isbn: string): Promise<IApiResult | undefined> {
   let book: IApiResult | undefined
   for (const api of apis) {
-    try {
-      const result = await api.search(isbn)
-      if (result) book = merge(book, result)
-      if (book?.title && book?.authors) break
-    } catch (error) {
-      appLogger.error('isbn_search_error', { api: api.source, error })
-    }
+    const result = await api.search(isbn)
+    book = merge(book, result)
+    if (book?.title && book?.authors.length) break
   }
   return book
 }
