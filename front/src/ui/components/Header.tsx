@@ -1,12 +1,9 @@
 import { IconLogout } from '@tabler/icons'
-import React, { useContext } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { HeaderContext } from '../../contexts/HeaderContext'
 import { logout } from '../../services/session'
 
 export function Header(): JSX.Element {
-  const { title, subtitle } = useContext(HeaderContext)
-
   return (
     <>
       <nav aria-label="Main">
@@ -22,11 +19,7 @@ export function Header(): JSX.Element {
           <IconLogout /> Log out
         </button>
       </nav>
-
-      <header>
-        <h1>{title}</h1>
-        <p>{subtitle}</p>
-      </header>
+      <header></header>
     </>
   )
 }

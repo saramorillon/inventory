@@ -4,7 +4,7 @@ import React, { useCallback, useEffect } from 'react'
 import { useHeader } from '../../hooks/useHeader'
 import { useIdParam } from '../../hooks/useIdParam'
 import { useNavigate } from '../../hooks/useNavigate'
-import { IAuthor } from '../../models/Author'
+import { fullName, IAuthor } from '../../models/Author'
 import { deleteAuthor, getAuthor, saveAuthor } from '../../services/authors'
 import { getBooks } from '../../services/books'
 import { Error, Loader } from '../components/Helpers'
@@ -17,10 +17,10 @@ const empty: IAuthor = {
 }
 
 export function Author(): JSX.Element {
-  useHeader('Author')
   const id = useIdParam()
   const call = useCallback(() => getAuthor(id), [id])
   const [author, { loading, error }, refresh] = useFetch(call, null)
+  useHeader('Author', fullName(author))
   const navigate = useNavigate(refresh)
 
   const onSave = useCallback(

@@ -9,6 +9,6 @@ export type IAuthor = {
   updatedAt?: string
 }
 
-export function fullName(author: Partial<IAuthor>): string {
-  return [author.firstName, author.lastName].filter(Boolean).join(' ')
+export function fullName(author?: Partial<IAuthor> | null): string {
+  return [author?.firstName, author?.lastName].filter(Boolean).join(' ')
 }

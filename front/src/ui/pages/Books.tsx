@@ -39,8 +39,8 @@ const columns: IColumn<IBook>[] = [
 
 export function Books(): JSX.Element {
   const navigate = useNavigate()
-  useHeader('Books', 'Scan an ISBN to add a volume to your library')
   const [books, { loading }, refresh] = useFetch(getBooks, [])
+  useHeader(`Books (${books.length})`, 'Scan an ISBN to add a volume to your library')
 
   return (
     <>

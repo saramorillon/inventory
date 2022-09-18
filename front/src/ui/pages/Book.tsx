@@ -20,10 +20,10 @@ const empty: IBook = {
 }
 
 export function Book(): JSX.Element {
-  useHeader('Book')
   const id = useIdParam()
   const call = useCallback(() => getBook(id), [id])
   const [book, { loading, error }, refresh] = useFetch(call, null)
+  useHeader('Book', book?.title)
   const navigate = useNavigate(refresh)
 
   const onSave = useCallback((values: IBook) => saveBook(values).then(({ id }) => navigate(`/book/${id}`)), [navigate])

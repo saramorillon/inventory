@@ -43,8 +43,8 @@ const columns: IColumn<IAuthor>[] = [
 
 export function Authors(): JSX.Element {
   const navigate = useNavigate()
-  useHeader('Authors')
   const [authors, { loading }, refresh] = useFetch(getAuthors, [])
+  useHeader(`Authors (${authors.length})`)
 
   return (
     <>
