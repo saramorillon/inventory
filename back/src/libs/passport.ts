@@ -21,7 +21,6 @@ export function localStrategy(
   password: string,
   done: (error: unknown, user?: User) => void
 ): Promise<void> {
-  console.log('coucou')
   return prisma.user
     .findFirst({ where: { username, password: sha224(password).toString() } })
     .then((user) => {

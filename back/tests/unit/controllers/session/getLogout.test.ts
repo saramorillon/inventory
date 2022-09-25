@@ -16,6 +16,6 @@ describe('getLogout', () => {
     req.logout = jest.fn()
     const { res } = getMockRes()
     getLogout(req, res)
-    expect(res.redirect).toHaveBeenCalledWith('/')
+    expect(res.redirect).toHaveBeenCalledWith('/login')
   })
 })
