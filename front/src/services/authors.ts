@@ -1,20 +1,21 @@
 import { IAuthor } from '../models/Author'
-import { request } from './wrapper'
+import { Axios } from './Axios'
 
-export function getAuthors(): Promise<IAuthor[]> {
-  return request<IAuthor[]>({ url: '/api/authors' })
+export async function getAuthors(): Promise<IAuthor[]> {
+  const { data } = await Axios.get<IAuthor[]>('/api/authors')
+  return data
 }
 
-export function getAuthor(id?: number): Promise<IAuthor | null> {
-  if (!id) return Promise.resolve(null)
-  return request<IAuthor | null>({ url: `/api/authors/${id}` })
+export async function getAuthor(id: string): Promise<IAuthor | null> {
+  const { data } = await Axios.get<IAuthor>(`/api/authors/${id}`)
+  return data
 }
 
-export function saveAuthor(author: IAuthor): Promise<IAuthor> {
-  if (author.id) return request<IAuthor>({ method: 'PUT', url: `/api/authors/${author.id}`, data: author })
-  return request<IAuthor>({ method: 'POST', url: '/api/authors', data: author })
+export async function saveAuthor(author: IAuthor): Promise<IAuthor> {
+  const { data } = await Axios.put<IAuthor>(`/api/authors/${author.id}`, author)
+  return data
 }
 
 export async function deleteAuthor(author: IAuthor): Promise<void> {
-  await request({ method: 'DELETE', url: `/api/authors/${author.id}` })
+  await Axios.delete(`/api/authors/${author.id}`)
 }

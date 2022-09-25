@@ -1,6 +1,7 @@
 import { IApp } from '../models/App'
-import { request } from './wrapper'
+import { Axios } from './Axios'
 
-export function getApp(): Promise<IApp | null> {
-  return request<IApp | null>({ url: '/api/app' })
+export async function getApp(): Promise<IApp> {
+  const { data } = await Axios.get<IApp>('/api/app')
+  return data
 }

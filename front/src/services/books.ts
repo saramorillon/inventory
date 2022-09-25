@@ -1,30 +1,26 @@
-import axios from 'axios'
 import { IBook } from '../models/Book'
-import { request } from './wrapper'
+import { Axios } from './Axios'
 
-export function getBooks(): Promise<IBook[]> {
-  return request<IBook[]>({ url: '/api/books' })
+export async function getBooks(): Promise<IBook[]> {
+  const { data } = await Axios.get<IBook[]>('/api/books')
+  return data
 }
 
-export function getBook(id?: number): Promise<IBook | null> {
-  if (!id) return Promise.resolve(null)
-  return request<IBook | null>({ url: `/api/books/${id}` })
+export async function getBook(id: string): Promise<IBook | null> {
+  const { data } = await Axios.get<IBook>(`/api/books/${id}`)
+  return data
 }
 
-export function saveBook(book: IBook): Promise<IBook> {
-  return request<IBook>({ method: 'PUT', url: `/api/books/${book.id}`, data: book })
+export async function saveBook(book: IBook): Promise<IBook> {
+  const { data } = await Axios.put<IBook>(`/api/books/${book.id}`, book)
+  return data
+}
+
+export async function scanBook(serial: string): Promise<boolean> {
+  const { status } = await Axios.post<IBook[]>('/api/books', { serial })
+  return status === 201
 }
 
 export async function deleteBook(book: IBook): Promise<void> {
-  await request({ method: 'DELETE', url: `/api/books/${book.id}` })
-}
-
-export function scanBook(serial: string): Promise<boolean> {
-  return axios
-    .request({ method: 'POST', url: `/api/books`, data: { serial }, withCredentials: true })
-    .then((res) => res.status === 201)
-    .catch((error) => {
-      console.error(error)
-      throw error
-    })
+  await Axios.delete(`/api/books/${book.id}`)
 }

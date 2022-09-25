@@ -1,11 +1,11 @@
 import { useFetch } from '@saramorillon/hooks'
+import { IconRefresh } from '@tabler/icons'
 import { format, parseISO } from 'date-fns'
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
 import { authors, IBook } from '../../models/Book'
 import { getBooks } from '../../services/books'
-import { Actions } from '../components/Actions'
 import { Scanner } from '../components/Scanner'
 import { DataTable, IColumn } from '../components/Table'
 
@@ -38,15 +38,18 @@ const columns: IColumn<IBook>[] = [
 ]
 
 export function Books(): JSX.Element {
-  const navigate = useNavigate()
-  const [books, { loading }, refresh] = useFetch(getBooks, [])
+  const [books, { loading, error }, refresh] = useFetch(getBooks, [])
   useHeader(`Books (${books.length})`, 'Scan an ISBN to add a volume to your library')
 
   return (
     <>
-      <Actions add={() => navigate('/book')} refresh={refresh} download={refresh} />
+      <div className="right mb2">
+        <button data-variant="outlined" className="mr1" onClick={refresh}>
+          <IconRefresh size={16} />
+        </button>
+      </div>
       <Scanner refresh={refresh} />
-      <DataTable loading={loading} columns={columns} data={books} />
+      <DataTable loading={loading} error={error} columns={columns} data={books} />
     </>
   )
 }

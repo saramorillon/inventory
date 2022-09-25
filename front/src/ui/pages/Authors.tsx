@@ -1,11 +1,11 @@
 import { useFetch } from '@saramorillon/hooks'
+import { IconRefresh } from '@tabler/icons'
 import { format, parseISO } from 'date-fns'
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
 import { fullName, IAuthor } from '../../models/Author'
 import { getAuthors } from '../../services/authors'
-import { Actions } from '../components/Actions'
 import { DataTable, IColumn } from '../components/Table'
 
 const columns: IColumn<IAuthor>[] = [
@@ -42,14 +42,17 @@ const columns: IColumn<IAuthor>[] = [
 ]
 
 export function Authors(): JSX.Element {
-  const navigate = useNavigate()
-  const [authors, { loading }, refresh] = useFetch(getAuthors, [])
+  const [authors, { loading, error }, refresh] = useFetch(getAuthors, [])
   useHeader(`Authors (${authors.length})`)
 
   return (
     <>
-      <Actions add={() => navigate('/author')} refresh={refresh} download={refresh} />
-      <DataTable loading={loading} columns={columns} data={authors} />
+      <div className="right mb2">
+        <button data-variant="outlined" className="mr1" onClick={refresh}>
+          <IconRefresh size={16} />
+        </button>
+      </div>
+      <DataTable loading={loading} error={error} columns={columns} data={authors} />
     </>
   )
 }

@@ -1,41 +1,43 @@
 import { useFetch, useForm } from '@saramorillon/hooks'
 import { IconDeviceFloppy, IconTrash } from '@tabler/icons'
 import React, { useCallback, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
-import { useIdParam } from '../../hooks/useIdParam'
-import { useNavigate } from '../../hooks/useNavigate'
 import { fullName, IAuthor } from '../../models/Author'
 import { deleteAuthor, getAuthor, saveAuthor } from '../../services/authors'
 import { getBooks } from '../../services/books'
-import { Error, Loader } from '../components/Helpers'
+import { Error, Loader, NotFound } from '../components/Helpers'
 import { TypeAhead } from '../components/Typeahead'
 
-const empty: IAuthor = {
-  id: 0,
-  firstName: '',
-  lastName: '',
-}
-
 export function Author(): JSX.Element {
-  const id = useIdParam()
+  const { id } = useParams<'id'>()
   const call = useCallback(() => getAuthor(id), [id])
   const [author, { loading, error }, refresh] = useFetch(call, null)
-  useHeader('Author', fullName(author))
-  const navigate = useNavigate(refresh)
-
-  const onSave = useCallback(
-    (values: IAuthor) => saveAuthor(values).then(({ id }) => navigate(`/author/${id}`)),
-    [navigate]
-  )
-  const onDelete = useCallback((server: IAuthor) => deleteAuthor(server).then(() => navigate('/authors')), [navigate])
-  const { onSubmit, onReset, onChange, values } = useForm(onSave, author || empty)
-  const [books, { loading: booksLoading }] = useFetch(getBooks, [])
-
-  useEffect(onReset, [onReset])
 
   if (loading) return <Loader />
 
   if (error) return <Error message="Error while loading author" />
+
+  if (!id || !author) return <NotFound message="Author not found" />
+
+  return <Form author={author} refresh={refresh} />
+}
+
+interface IFormProps {
+  author: IAuthor
+  refresh: () => void
+}
+
+function Form({ author, refresh }: IFormProps) {
+  const navigate = useNavigate()
+  useHeader('Author', fullName(author))
+
+  const onSave = useCallback((values: IAuthor) => saveAuthor(values).then(refresh), [navigate])
+  const onDelete = useCallback((server: IAuthor) => deleteAuthor(server).then(() => navigate('/authors')), [navigate])
+  const { onSubmit, onReset, onChange, values } = useForm(onSave, author)
+  const [books, { loading: booksLoading }] = useFetch(getBooks, [])
+
+  useEffect(onReset, [onReset])
 
   return (
     <form onSubmit={onSubmit}>
@@ -67,11 +69,9 @@ export function Author(): JSX.Element {
           <IconDeviceFloppy size={16} /> Save
         </button>
 
-        {author && (
-          <button data-variant="outlined" className="mr1" onClick={() => onDelete(author)} type="button">
-            <IconTrash size={16} /> Delete
-          </button>
-        )}
+        <button data-variant="outlined" className="mr1" onClick={() => onDelete(author)} type="button">
+          <IconTrash size={16} /> Delete
+        </button>
       </div>
     </form>
   )
