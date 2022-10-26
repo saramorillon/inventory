@@ -22,11 +22,11 @@ interface _IFilterProps<T> {
 function _Filter<T>({ onFilter, index, filter }: _IFilterProps<T>) {
   const [value, setValue] = useState('')
 
-  const f = useCallback((data: T) => filter(data, value), [filter, value])
+  const fn = useCallback((data: T) => filter(data, value), [filter, value])
 
   useEffect(() => {
-    onFilter(index, f)
-  }, [f, filter, index, onFilter, value])
+    onFilter(index, fn)
+  }, [fn, index, onFilter])
 
   return <input value={value} onChange={(e) => setValue(e.target.value)} />
 }

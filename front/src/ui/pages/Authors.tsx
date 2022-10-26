@@ -48,7 +48,7 @@ export function Authors(): JSX.Element {
   return (
     <>
       <div className="right mb2">
-        <button data-variant="outlined" className="mr1" onClick={refresh}>
+        <button data-variant="outlined" title="Refresh" className="mr1" onClick={refresh}>
           <IconRefresh size={16} />
         </button>
       </div>

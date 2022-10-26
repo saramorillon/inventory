@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 
-type Sort<T> = {
+export type Sort<T> = {
   index: number
   fn: (data1: T, data2: T) => number
 }

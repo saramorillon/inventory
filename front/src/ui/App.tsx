@@ -19,7 +19,6 @@ export function App(): JSX.Element | null {
             <Route path="/book/:id" element={<Book />} />
 
             <Route path="/authors" element={<Authors />} />
-            <Route path="/author" element={<Author />} />
             <Route path="/author/:id" element={<Author />} />
           </Route>
 

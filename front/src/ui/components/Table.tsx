@@ -1,7 +1,5 @@
-import { usePagination } from '@saramorillon/hooks'
-import React, { ReactNode, TdHTMLAttributes, useMemo, useState } from 'react'
-import { useFilters } from '../../hooks/useFilters'
-import { useSorts } from '../../hooks/useSorts'
+import React, { ReactNode, TdHTMLAttributes, useState } from 'react'
+import { useTable } from '../../hooks/useTable'
 import { Filter } from './Filter'
 import { Error, Loading, NotFound } from './Helpers'
 import { Pagination } from './Pagination'
@@ -18,36 +16,13 @@ export interface IColumn<T> {
 interface ITableProps<T> {
   columns: IColumn<T>[]
   data: T[]
-  loading: boolean
+  loading?: boolean
   error?: unknown
 }
 
 export function DataTable<T>({ columns, data, loading, error }: ITableProps<T>): JSX.Element {
   const [limit, setLimit] = useState(10)
-  const [sorts, onSort] = useSorts<T>()
-  const [filters, onFilter] = useFilters<T>()
-
-  const sortedRows = useMemo(
-    () =>
-      [...data].sort((a, b) => {
-        for (const sort of sorts) {
-          const result = sort.fn(a, b)
-          if (result != 0) return result
-        }
-        return 0
-      }),
-    [data, sorts]
-  )
-  const filteredRows = useMemo(
-    () => sortedRows.filter((data: T) => filters.every((filter) => !filter || filter(data))),
-    [sortedRows, filters]
-  )
-
-  const maxPage = useMemo(() => Math.ceil(filteredRows.length / limit), [filteredRows, limit])
-  const pagination = usePagination(maxPage)
-  const { page } = pagination
-
-  const rows = useMemo(() => filteredRows.slice((page - 1) * limit, page * limit), [filteredRows, page, limit])
+  const { rows, maxPage, pagination, onSort, onFilter } = useTable(data, limit)
 
   return (
     <>
@@ -56,7 +31,7 @@ export function DataTable<T>({ columns, data, loading, error }: ITableProps<T>):
           <tr>
             {columns.map((column, index) => (
               <th key={index}>
-                {column.header()} <Sort onSort={onSort} index={index} column={column} />
+                {column.header()} {column.sort && <Sort onSort={onSort} index={index} column={column} />}
               </th>
             ))}
           </tr>

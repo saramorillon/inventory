@@ -1,9 +1,5 @@
 import { IconSearch, IconX } from '@tabler/icons'
-import React, { HTMLAttributes } from 'react'
-
-export function Loader(props: HTMLAttributes<HTMLDivElement>): JSX.Element {
-  return <div aria-label="Loading..." aria-busy {...props} />
-}
+import React from 'react'
 
 export function Loading({ message }: { message: string }): JSX.Element {
   return (

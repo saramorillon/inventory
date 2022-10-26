@@ -1,11 +1,3 @@
 {
-  "extends": [
-    "@saramorillon/eslint-config-typescript",
-    "@saramorillon/eslint-config-typescript/react",
-    "@saramorillon/eslint-config-typescript/jest",
-    "@saramorillon/eslint-config-typescript/jest-react"
-  ],
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  }
+  "extends": ["plugin:@saramorillon/front"]
 }

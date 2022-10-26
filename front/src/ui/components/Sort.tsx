@@ -23,20 +23,20 @@ interface _ISortIconsProps<T> {
 function _Sort<T>({ onSort, index, sort }: _ISortIconsProps<T>) {
   const [dir, setDir] = useState<0 | 1 | -1>(0)
 
-  const f = useCallback((data1: T, data2: T) => sort(data1, data2) * dir, [dir, sort])
+  const fn = useCallback((data1: T, data2: T) => sort(data1, data2) * dir, [dir, sort])
 
   useEffect(() => {
-    onSort(index, f)
-  }, [sort, index, onSort, dir, f])
+    onSort(index, fn)
+  }, [fn, index, onSort])
 
   return (
     <small style={{ cursor: 'pointer' }}>
       {!dir ? (
-        <IconArrowsSort onClick={() => setDir(1)} />
+        <IconArrowsSort aria-label="Sort asc" onClick={() => setDir(1)} />
       ) : dir === 1 ? (
-        <IconSortAscending onClick={() => setDir(-1)} />
+        <IconSortAscending aria-label="Sort desc" onClick={() => setDir(-1)} />
       ) : (
-        <IconSortDescending onClick={() => setDir(0)} />
+        <IconSortDescending aria-label="Unsort" onClick={() => setDir(0)} />
       )}
     </small>
   )

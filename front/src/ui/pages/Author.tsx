@@ -1,12 +1,12 @@
 import { useFetch, useForm } from '@saramorillon/hooks'
 import { IconDeviceFloppy, IconTrash } from '@tabler/icons'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
 import { fullName, IAuthor } from '../../models/Author'
 import { deleteAuthor, getAuthor, saveAuthor } from '../../services/authors'
 import { getBooks } from '../../services/books'
-import { Error, Loader, NotFound } from '../components/Helpers'
+import { Error, Loading, NotFound } from '../components/Helpers'
 import { TypeAhead } from '../components/Typeahead'
 
 export function Author(): JSX.Element {
@@ -14,11 +14,11 @@ export function Author(): JSX.Element {
   const call = useCallback(() => getAuthor(id), [id])
   const [author, { loading, error }, refresh] = useFetch(call, null)
 
-  if (loading) return <Loader />
+  if (loading) return <Loading message="Loading author" />
 
   if (error) return <Error message="Error while loading author" />
 
-  if (!id || !author) return <NotFound message="Author not found" />
+  if (!author) return <NotFound message="Author not found" />
 
   return <Form author={author} refresh={refresh} />
 }
@@ -32,12 +32,10 @@ function Form({ author, refresh }: IFormProps) {
   const navigate = useNavigate()
   useHeader('Author', fullName(author))
 
-  const onSave = useCallback((values: IAuthor) => saveAuthor(values).then(refresh), [navigate])
+  const onSave = useCallback((values: IAuthor) => saveAuthor(values).then(refresh), [refresh])
   const onDelete = useCallback((server: IAuthor) => deleteAuthor(server).then(() => navigate('/authors')), [navigate])
-  const { onSubmit, onReset, onChange, values } = useForm(onSave, author)
-  const [books, { loading: booksLoading }] = useFetch(getBooks, [])
-
-  useEffect(onReset, [onReset])
+  const { onSubmit, onChange, values } = useForm(onSave, author)
+  const [books, { loading }] = useFetch(getBooks, [])
 
   return (
     <form onSubmit={onSubmit}>
@@ -53,7 +51,7 @@ function Form({ author, refresh }: IFormProps) {
 
       <label>
         Books ({values.books?.length})
-        {!booksLoading && (
+        {!loading && (
           <TypeAhead
             values={values.books || []}
             onChange={(books) => onChange('books', books)}

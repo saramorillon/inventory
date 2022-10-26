@@ -1,10 +1,11 @@
-module.exports = {
+export default {
   preset: 'ts-jest',
   clearMocks: true,
   resetMocks: true,
   restoreMocks: true,
-  modulePathIgnorePatterns: ['<rootDir>/dist/'],
   testEnvironment: 'jsdom',
+  modulePathIgnorePatterns: ['dist'],
+  coveragePathIgnorePatterns: ['mocks'],
   testMatch: ['<rootDir>/tests/**/*.test.ts*'],
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.tsx'],
 }

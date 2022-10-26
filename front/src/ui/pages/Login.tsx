@@ -20,18 +20,12 @@ export function Login(): JSX.Element {
         <form onSubmit={onSubmit}>
           <label>
             Username *
-            <input name="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+            <input value={username} onChange={(e) => setUsername(e.target.value)} required />
           </label>
 
           <label>
             Password *
-            <input
-              name="passord"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </label>
 
           <button data-variant="primary">Log in</button>

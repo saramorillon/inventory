@@ -1,5 +1,5 @@
 {
-  "include": ["src", "tests", "vite.config.ts"],
+  "include": ["src", "tests", "vite.config.ts", "jest.config.ts"],
   "compilerOptions": {
     "lib": ["ES2021", "dom"],
     "module": "commonjs",

@@ -9,11 +9,11 @@ interface IPaginationProps {
 }
 
 export function Pagination({ maxPage, pagination, limit, setLimit }: IPaginationProps) {
-  const { page, first, previous, next, last, canPrevious, canNext, goTo } = pagination
+  const { page, first, previous, next, last, canPrevious, canNext } = pagination
 
   useEffect(() => {
-    goTo(1)
-  }, [limit, goTo])
+    first()
+  }, [limit, first])
 
   return (
     <div className="right-align mt1">

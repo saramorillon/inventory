@@ -6,9 +6,9 @@ interface IScannerProps {
   refresh: () => void
 }
 
-const error = new Audio('/Buzzer1.ogg')
-const success = new Audio('/Decision2.ogg')
-const existing = new Audio('/Item1.ogg')
+export const error = new Audio('/Buzzer1.ogg')
+export const success = new Audio('/Decision2.ogg')
+export const existing = new Audio('/Item1.ogg')
 
 export function Scanner({ refresh }: IScannerProps): JSX.Element {
   const [value, setValue] = useState('')
@@ -25,7 +25,7 @@ export function Scanner({ refresh }: IScannerProps): JSX.Element {
   )
 
   return (
-    <form onSubmit={onSubmit}>
+    <form name="scanner" onSubmit={onSubmit}>
       <input type="text" placeholder="ISBN" value={value} onChange={(e) => setValue(e.target.value)} />
       <button type="submit">
         <IconSearch size={14} />
