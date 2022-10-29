@@ -50,10 +50,10 @@ function Form({ author, refresh }: IFormProps) {
       </label>
 
       <label>
-        Books ({values.books?.length})
+        Books ({values.books.length})
         {!loading && (
           <TypeAhead
-            values={values.books || []}
+            values={values.books}
             onChange={(books) => onChange('books', books)}
             options={books}
             getLabel={(book) => book.title}

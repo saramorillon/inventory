@@ -12,7 +12,7 @@ describe('Author', () => {
   beforeEach(() => {
     mock(saveAuthor).mockResolvedValue(undefined)
     mock(deleteAuthor).mockResolvedValue(undefined)
-    mock(getAuthor).mockResolvedValue(mockAuthor({ books: [mockBook()] }))
+    mock(getAuthor).mockResolvedValue(mockAuthor())
     mock(getBooks).mockResolvedValue([mockBook()])
   })
 
@@ -40,12 +40,16 @@ describe('Author', () => {
     render(<Author />)
     await wait()
     expect(screen.getByDisplayValue('firstName')).toBeInTheDocument()
+    fireEvent.change(screen.getByDisplayValue('firstName'), { target: { value: 'firstName2' } })
+    expect(screen.getByDisplayValue('firstName2')).toBeInTheDocument()
   })
 
   it('should render author last name', async () => {
     render(<Author />)
     await wait()
     expect(screen.getByDisplayValue('lastName')).toBeInTheDocument()
+    fireEvent.change(screen.getByDisplayValue('lastName'), { target: { value: 'lastName2' } })
+    expect(screen.getByDisplayValue('lastName2')).toBeInTheDocument()
   })
 
   it('should render author books', async () => {
@@ -53,6 +57,8 @@ describe('Author', () => {
     await wait()
     expect(screen.getByText('Books (1)')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'title' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'title' }))
+    expect(screen.getByRole('option', { name: 'title', hidden: true })).toBeInTheDocument()
   })
 
   it('should save author when clicking on save button', async () => {
@@ -60,7 +66,7 @@ describe('Author', () => {
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'Save' }))
     await wait()
-    expect(saveAuthor).toHaveBeenCalledWith(mockAuthor({ books: [mockBook()] }))
+    expect(saveAuthor).toHaveBeenCalledWith(mockAuthor())
   })
 
   it('should refresh after saving author', async () => {
@@ -77,7 +83,7 @@ describe('Author', () => {
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
     await wait()
-    expect(deleteAuthor).toHaveBeenCalledWith(mockAuthor({ books: [mockBook()] }))
+    expect(deleteAuthor).toHaveBeenCalledWith(mockAuthor())
   })
 
   it('should for to authors page after delete', async () => {

@@ -4,12 +4,12 @@ export type IBook = {
   id: number
   serial: string
   title: string
-  authors?: IAuthor[]
+  authors: IAuthor[]
   source: string
-  createdAt?: string
-  updatedAt?: string
+  createdAt: string
+  updatedAt: string
 }
 
 export function authors(book: IBook) {
-  return (book.authors ?? []).map(fullName).join(', ')
+  return book.authors.map(fullName).join(', ')
 }

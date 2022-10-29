@@ -8,7 +8,7 @@ import { fullName, IAuthor } from '../../models/Author'
 import { getAuthors } from '../../services/authors'
 import { DataTable, IColumn } from '../components/Table'
 
-const columns: IColumn<IAuthor>[] = [
+export const columns: IColumn<IAuthor>[] = [
   {
     header: () => 'ID',
     cell: (author) => author.id,
@@ -35,9 +35,9 @@ const columns: IColumn<IAuthor>[] = [
   },
   {
     header: () => 'Last update',
-    cell: (author) => (author.updatedAt ? format(parseISO(author.updatedAt), 'PPpp') : ''),
-    filter: (author, filter) => Boolean(author.updatedAt?.toLowerCase().includes(filter)),
-    sort: (author1, author2) => (author1.updatedAt ?? '').localeCompare(author2.updatedAt ?? ''),
+    cell: (author) => format(parseISO(author.updatedAt), 'PPpp'),
+    filter: (author, filter) => author.updatedAt.toLowerCase().includes(filter),
+    sort: (author1, author2) => author1.updatedAt.localeCompare(author2.updatedAt),
   },
 ]
 

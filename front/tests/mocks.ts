@@ -27,21 +27,41 @@ export function restoreLocation(): void {
   Object.defineProperty(window, 'location', { value: location, writable: false })
 }
 
-export function mockAuthor(author?: Partial<IAuthor>): IAuthor {
+function mockAuthorEmpty() {
   return {
     id: 1,
     firstName: 'firstName',
     lastName: 'lastName',
+    books: [],
+    createdAt: '2022-01-01T00:00:00.000Z',
+    updatedAt: '2022-01-01T00:00:00.000Z',
+  }
+}
+
+function mockBookEmpty() {
+  return {
+    id: 1,
+    serial: 'serial',
+    source: 'source',
+    title: 'title',
+    authors: [],
+    createdAt: '2022-01-01T00:00:00.000Z',
+    updatedAt: '2022-01-01T00:00:00.000Z',
+  }
+}
+
+export function mockAuthor(author?: Partial<IAuthor>): IAuthor {
+  return {
+    ...mockAuthorEmpty(),
+    books: [mockBookEmpty()],
     ...author,
   }
 }
 
 export function mockBook(book?: Partial<IBook>): IBook {
   return {
-    id: 1,
-    serial: 'serial',
-    source: 'source',
-    title: 'title',
+    ...mockBookEmpty(),
+    authors: [mockAuthorEmpty()],
     ...book,
   }
 }

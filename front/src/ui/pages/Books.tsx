@@ -9,7 +9,7 @@ import { getBooks } from '../../services/books'
 import { Scanner } from '../components/Scanner'
 import { DataTable, IColumn } from '../components/Table'
 
-const columns: IColumn<IBook>[] = [
+export const columns: IColumn<IBook>[] = [
   {
     header: () => 'Serial',
     cell: (book) => book.serial,
@@ -31,9 +31,9 @@ const columns: IColumn<IBook>[] = [
   },
   {
     header: () => 'Last update',
-    cell: (book) => (book.updatedAt ? format(parseISO(book.updatedAt), 'PPpp') : ''),
-    filter: (book, filter) => Boolean(book.updatedAt?.toLowerCase().includes(filter)),
-    sort: (book1, book2) => (book1.updatedAt ?? '').localeCompare(book2.updatedAt ?? ''),
+    cell: (book) => format(parseISO(book.updatedAt), 'PPpp'),
+    filter: (book, filter) => book.updatedAt.toLowerCase().includes(filter),
+    sort: (book1, book2) => book1.updatedAt.localeCompare(book2.updatedAt),
   },
 ]
 

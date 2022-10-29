@@ -48,7 +48,7 @@ function Form({ book, refresh }: IFormProps) {
           <div className="flex-auto mr2">
             <label>
               Source
-              <input id="source" value={book.source || 'manual'} required disabled />
+              <input id="source" value={book.source} required disabled />
             </label>
 
             <label>
@@ -66,10 +66,10 @@ function Form({ book, refresh }: IFormProps) {
         </label>
 
         <label>
-          Authors ({values.authors?.length})
+          Authors ({values.authors.length})
           {!loading && (
             <TypeAhead
-              values={values.authors || []}
+              values={values.authors}
               onChange={(authors) => onChange('authors', authors)}
               options={authors}
               getLabel={fullName}

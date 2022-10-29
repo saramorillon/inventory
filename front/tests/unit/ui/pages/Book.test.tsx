@@ -15,7 +15,7 @@ describe('Book', () => {
     mock(useBarcode).mockReturnValue({})
     mock(saveBook).mockResolvedValue(undefined)
     mock(deleteBook).mockResolvedValue(undefined)
-    mock(getBook).mockResolvedValue(mockBook({ authors: [mockAuthor()] }))
+    mock(getBook).mockResolvedValue(mockBook())
     mock(getAuthors).mockResolvedValue([mockAuthor()])
   })
 
@@ -49,12 +49,16 @@ describe('Book', () => {
     render(<Book />)
     await wait()
     expect(screen.getByDisplayValue('serial')).toBeInTheDocument()
+    fireEvent.change(screen.getByDisplayValue('serial'), { target: { value: 'serial2' } })
+    expect(screen.getByDisplayValue('serial2')).toBeInTheDocument()
   })
 
   it('should render book title', async () => {
     render(<Book />)
     await wait()
     expect(screen.getByDisplayValue('title')).toBeInTheDocument()
+    fireEvent.change(screen.getByDisplayValue('title'), { target: { value: 'title2' } })
+    expect(screen.getByDisplayValue('title2')).toBeInTheDocument()
   })
 
   it('should render book bar code', async () => {
@@ -68,6 +72,8 @@ describe('Book', () => {
     await wait()
     expect(screen.getByText('Authors (1)')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'firstName lastName' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'firstName lastName' }))
+    expect(screen.getByRole('option', { name: 'firstName lastName', hidden: true })).toBeInTheDocument()
   })
 
   it('should save book when clicking on save button', async () => {
@@ -75,7 +81,7 @@ describe('Book', () => {
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'Save' }))
     await wait()
-    expect(saveBook).toHaveBeenCalledWith(mockBook({ authors: [mockAuthor()] }))
+    expect(saveBook).toHaveBeenCalledWith(mockBook())
   })
 
   it('should refresh after saving book', async () => {
@@ -92,7 +98,7 @@ describe('Book', () => {
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
     await wait()
-    expect(deleteBook).toHaveBeenCalledWith(mockBook({ authors: [mockAuthor()] }))
+    expect(deleteBook).toHaveBeenCalledWith(mockBook())
   })
 
   it('should for to books page after delete', async () => {
