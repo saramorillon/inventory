@@ -18,11 +18,11 @@ COPY src ./src
 # Build
 COPY tsconfig.json .
 COPY tsconfig.build.json .
-COPY poi.config.js .
+COPY vite.config.ts .
 RUN yarn build
 
 RUN yarn install --force --production --ignore-scripts --prefer-offline
-RUN rm -rf poi.config.js tsconfig.json src
+RUN rm -rf vite.config.ts tsconfig.json tsconfig.build.json src
 
 # Create logs directory
 RUN mkdir /app/logs

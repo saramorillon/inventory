@@ -20,7 +20,7 @@ COPY tsconfig.build.json .
 RUN yarn build
 
 RUN yarn install --force --production --ignore-scripts --prefer-offline
-RUN rm -rf tsconfig.json src
+RUN rm -rf tsconfig.json tsconfig.build.json src
 
 # Create data directory
 RUN mkdir /app/dist/sessions
