@@ -34,11 +34,11 @@ function Form({ author, refresh }: IFormProps) {
 
   const onSave = useCallback((values: IAuthor) => saveAuthor(values).then(refresh), [refresh])
   const onDelete = useCallback((server: IAuthor) => deleteAuthor(server).then(() => navigate('/authors')), [navigate])
-  const { onSubmit, onChange, values } = useForm(onSave, author)
+  const { values, onChange, submit } = useForm(onSave, author)
   const [books, { loading }] = useFetch(getBooks, [])
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={submit}>
       <label>
         First name
         <input value={values.firstName} onChange={(e) => onChange('firstName', e.target.value)} />

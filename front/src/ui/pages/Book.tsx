@@ -38,12 +38,12 @@ function Form({ book, refresh }: IFormProps) {
 
   const onSave = useCallback((values: IBook) => saveBook(values).then(refresh), [refresh])
   const onDelete = useCallback((server: IBook) => deleteBook(server).then(() => navigate('/books')), [navigate])
-  const { onSubmit, onChange, values } = useForm(onSave, book)
+  const { values, onChange, submit } = useForm(onSave, book)
   const [authors, { loading }] = useFetch(getAuthors, [])
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={submit}>
         <div className="flex items-center">
           <div className="flex-auto mr2">
             <label>

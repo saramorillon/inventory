@@ -32,13 +32,13 @@ describe('Login', () => {
     restoreLocation()
   })
 
-  it('should log error in console if login fails', async () => {
+  it('should show error in console if login fails', async () => {
     mock(login).mockRejectedValue(new Error())
     render(<Login />)
     fireEvent.change(screen.getByLabelText('Username *'), { target: { value: 'username' } })
     fireEvent.change(screen.getByLabelText('Password *'), { target: { value: 'password' } })
     fireEvent.click(screen.getByRole('button', { name: 'Log in' }))
     await wait()
-    expect(console.error).toHaveBeenCalledWith(new Error())
+    expect(screen.getByText('Invalid credentials')).toBeInTheDocument()
   })
 })

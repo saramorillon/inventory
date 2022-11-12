@@ -20,7 +20,7 @@ export function NotFound({ message }: { message: string }): JSX.Element {
 export function Error({ message }: { message: string }): JSX.Element {
   return (
     <div className="center">
-      <IconX /> {message}
+      <IconX color="red" /> {message}
     </div>
   )
 }

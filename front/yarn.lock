@@ -842,10 +842,10 @@
     eslint-plugin-react-hooks "*"
     eslint-plugin-testing-library "*"
 
-"@saramorillon/hooks@^2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@saramorillon/hooks/-/hooks-2.6.0.tgz#27f88bdfe35ba00ec9c264a85f55a6fda45f5e72"
-  integrity sha512-HuXvrEY4lM+OJmhJ5Ua40MblcjuoOL403T/pteBAJFD8BQWH7Tle4P4W6UJuZ6tKKR5GNjekTpSCEFqTsyh5oA==
+"@saramorillon/hooks@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@saramorillon/hooks/-/hooks-2.7.0.tgz#3ddf40d5d448619e43a63db43b03ee193f12f9f6"
+  integrity sha512-K3RUFEI5N3QeF3qgjCs6s0zyVBdhv7jYZQ/7EWmdsuS5JH/38ZSw88P10/d/wNW/OHmA/jn84sL+gU2EZ/DBXA==
 
 "@sinclair/typebox@^0.24.1":
   version "0.24.28"
