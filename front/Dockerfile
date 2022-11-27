@@ -12,6 +12,7 @@ COPY package.json .
 RUN yarn install --production=false
 
 # Copy sources
+COPY index.html ./index.html
 COPY public ./public
 COPY src ./src
 
