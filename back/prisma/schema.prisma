@@ -9,7 +9,7 @@ generator client {
 
 model Author {
   id        Int      @id @default(autoincrement())
-  firstName String?
+  firstName String   @default("")
   lastName  String
   books     Book[]   @relation("author_to_book")
   createdAt DateTime @default(now())
