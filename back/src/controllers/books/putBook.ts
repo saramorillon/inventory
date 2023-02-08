@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 import { prisma } from '../../prisma/client'
+import { capitalize } from '../../utils/capitalize'
 
 const schema = {
   params: z.object({
@@ -18,10 +19,10 @@ export async function putBook(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('put_book')
   try {
     const { id } = schema.params.parse(req.params)
-    const { authors, ...data } = schema.body.parse(req.body)
+    const { authors, title, ...data } = schema.body.parse(req.body)
     const book = await prisma.book.update({
       where: { id },
-      data: { ...data, authors: { set: authors } },
+      data: { ...data, title: capitalize(title), authors: { set: authors } },
       include: { authors: true },
     })
     success()

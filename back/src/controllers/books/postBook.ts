@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 import { isbnSearch } from '../../libs/isbn'
 import { prisma } from '../../prisma/client'
+import { capitalize } from '../../utils/capitalize'
 
 const schema = {
   body: z.object({
@@ -27,7 +28,9 @@ export async function postBook(req: Request, res: Response): Promise<void> {
     }
     const { title, authors, source } = result
     const author = await getAuthor(authors)
-    await prisma.book.create({ data: { serial, title, source, authors: { connect: [{ id: author.id }] } } })
+    await prisma.book.create({
+      data: { serial, title: capitalize(title), source, authors: { connect: [{ id: author.id }] } },
+    })
     res.sendStatus(201)
     success()
   } catch (error) {

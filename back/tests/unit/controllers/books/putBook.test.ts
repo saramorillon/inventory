@@ -37,7 +37,7 @@ describe('putBook', () => {
     await putBook(req, res)
     expect(prisma.book.update).toHaveBeenCalledWith({
       where: { id: 1 },
-      data: { serial: 'serial', title: 'title', source: 'source', authors: { set: [{ id: 1 }] } },
+      data: { serial: 'serial', title: 'Title', source: 'source', authors: { set: [{ id: 1 }] } },
       include: { authors: true },
     })
   })

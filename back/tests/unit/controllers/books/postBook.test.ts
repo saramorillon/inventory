@@ -88,7 +88,7 @@ describe('postBook', () => {
     const { res } = getMockRes()
     await postBook(req, res)
     expect(prisma.book.create).toHaveBeenCalledWith({
-      data: { authors: { connect: [{ id: 1 }] }, serial: '9780123456789', source: 'source', title: 'title' },
+      data: { authors: { connect: [{ id: 1 }] }, serial: '9780123456789', source: 'source', title: 'Title' },
     })
   })
 
