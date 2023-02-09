@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { getAuthors } from '../../../../src/services/authors'
 import { Authors, columns } from '../../../../src/ui/pages/Authors'
-import { mock, mockAuthor, wait } from '../../../mocks'
+import { mock, mockAuthor, mockNavigate, wait } from '../../../mocks'
 
 jest.mock('../../../../src/services/authors')
 
@@ -59,6 +59,15 @@ describe('Authors', () => {
     render(<Authors />)
     await wait()
     expect(screen.getByText('Jan 1, 2022, 1:00:00 AM')).toBeInTheDocument()
+  })
+
+  it('should navigate to author page when clicking on create button', async () => {
+    const navigate = mockNavigate()
+    render(<Authors />)
+    await wait()
+    fireEvent.click(screen.getByRole('button', { name: 'Create' }))
+    await wait()
+    expect(navigate).toHaveBeenCalledWith('/author')
   })
 
   it('should refresh table when clicking on refresh button', async () => {

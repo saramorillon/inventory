@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
+import { useParams } from 'react-router-dom'
 import { deleteAuthor, getAuthor, saveAuthor } from '../../../../src/services/authors'
 import { getBooks } from '../../../../src/services/books'
 import { Author } from '../../../../src/ui/pages/Author'
@@ -10,7 +11,8 @@ jest.mock('../../../../src/services/books')
 
 describe('Author', () => {
   beforeEach(() => {
-    mock(saveAuthor).mockResolvedValue(undefined)
+    mock(useParams).mockReturnValue({ id: '1' })
+    mock(saveAuthor).mockResolvedValue(mockAuthor())
     mock(deleteAuthor).mockResolvedValue(undefined)
     mock(getAuthor).mockResolvedValue(mockAuthor())
     mock(getBooks).mockResolvedValue([mockBook()])
@@ -29,11 +31,19 @@ describe('Author', () => {
     expect(screen.getByText('Error while loading author')).toBeInTheDocument()
   })
 
-  it('should render a not found message if the author is not found', async () => {
+  it('should render a not found message if id is not empty and the author is not found', async () => {
     mock(getAuthor).mockResolvedValue(null)
     render(<Author />)
     await wait()
     expect(screen.getByText('Author not found')).toBeInTheDocument()
+  })
+
+  it('should not render a not found message if id is empty and the author is not found', async () => {
+    mock(useParams).mockReturnValue({ id: '' })
+    mock(getAuthor).mockResolvedValue(null)
+    render(<Author />)
+    await wait()
+    expect(screen.queryByText('Author not found')).not.toBeInTheDocument()
   })
 
   it('should render author first name', async () => {
@@ -69,13 +79,32 @@ describe('Author', () => {
     expect(saveAuthor).toHaveBeenCalledWith(mockAuthor())
   })
 
-  it('should refresh after saving author', async () => {
+  it('should refresh after updating author', async () => {
     render(<Author />)
     await wait()
     expect(getAuthor).toHaveBeenCalledTimes(1)
     fireEvent.click(screen.getByRole('button', { name: 'Save' }))
     await wait()
     expect(getAuthor).toHaveBeenCalledTimes(2)
+  })
+
+  it('should redirect to author page after creating author', async () => {
+    mock(useParams).mockReturnValue({ id: '' })
+    mock(getAuthor).mockResolvedValue(null)
+    const navigate = mockNavigate()
+    render(<Author />)
+    await wait()
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }))
+    await wait()
+    expect(navigate).toHaveBeenCalledWith('/author/1')
+  })
+
+  it('should not render delete delete button is author is empty', async () => {
+    mock(useParams).mockReturnValue({ id: '' })
+    mock(getAuthor).mockResolvedValue(null)
+    render(<Author />)
+    await wait()
+    expect(screen.queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()
   })
 
   it('should delete author when clicking on delete button', async () => {

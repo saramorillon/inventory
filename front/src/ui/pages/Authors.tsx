@@ -1,8 +1,8 @@
 import { useFetch } from '@saramorillon/hooks'
-import { IconRefresh } from '@tabler/icons'
+import { IconPlus, IconRefresh } from '@tabler/icons'
 import { format, parseISO } from 'date-fns'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
 import { fullName, IAuthor } from '../../models/Author'
 import { getAuthors } from '../../services/authors'
@@ -42,12 +42,16 @@ export const columns: IColumn<IAuthor>[] = [
 ]
 
 export function Authors(): JSX.Element {
+  const navigate = useNavigate()
   const [authors, { loading, error }, refresh] = useFetch(getAuthors, [])
   useHeader(`Authors (${authors.length})`)
 
   return (
     <>
       <div className="right mb2">
+        <button data-variant="outlined" title="Create" className="mr1" onClick={() => navigate('/author')}>
+          <IconPlus size={16} />
+        </button>
         <button data-variant="outlined" title="Refresh" className="mr1" onClick={refresh}>
           <IconRefresh size={16} />
         </button>

@@ -3,6 +3,7 @@ import { getApp } from '../../src/controllers/app/getApp'
 import { deleteAuthor } from '../../src/controllers/authors/deleteAuthor'
 import { getAuthor } from '../../src/controllers/authors/getAuthor'
 import { getAuthors } from '../../src/controllers/authors/getAuthors'
+import { postAuthor } from '../../src/controllers/authors/postAuthor'
 import { putAuthor } from '../../src/controllers/authors/putAuthor'
 import { deleteBook } from '../../src/controllers/books/deleteBook'
 import { getBook } from '../../src/controllers/books/getBook'
@@ -36,6 +37,7 @@ describe('router', () => {
     expect(routerMock.get).toHaveBeenCalledWith('/session', getSession)
     expect(routerMock.get).toHaveBeenCalledWith('/authors', getAuthors)
     expect(routerMock.get).toHaveBeenCalledWith('/authors/:id', getAuthor)
+    expect(routerMock.post).toHaveBeenCalledWith('/authors', postAuthor)
     expect(routerMock.put).toHaveBeenCalledWith('/authors/:id', putAuthor)
     expect(routerMock.delete).toHaveBeenCalledWith('/authors/:id', deleteAuthor)
     expect(routerMock.get).toHaveBeenCalledWith('/books', getBooks)

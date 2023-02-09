@@ -18,23 +18,42 @@ export function Author(): JSX.Element {
 
   if (error) return <Error message="Error while loading author" />
 
-  if (!author) return <NotFound message="Author not found" />
+  if (id && !author) return <NotFound message="Author not found" />
 
   return <Form author={author} refresh={refresh} />
 }
 
+const empty: IAuthor = {
+  id: 0,
+  firstName: '',
+  lastName: '',
+  books: [],
+  createdAt: '',
+  updatedAt: '',
+}
+
 interface IFormProps {
-  author: IAuthor
+  author: IAuthor | null
   refresh: () => void
 }
 
 function Form({ author, refresh }: IFormProps) {
   const navigate = useNavigate()
-  useHeader('Author', fullName(author))
+  useHeader('Author', author ? fullName(author) : 'New author')
 
-  const onSave = useCallback((values: IAuthor) => saveAuthor(values).then(refresh), [refresh])
+  const onSave = useCallback(
+    (values: IAuthor) =>
+      saveAuthor(values).then((data) => {
+        if (author) {
+          refresh()
+        } else {
+          navigate(`/author/${data.id}`)
+        }
+      }),
+    [navigate, refresh, author]
+  )
   const onDelete = useCallback((server: IAuthor) => deleteAuthor(server).then(() => navigate('/authors')), [navigate])
-  const { values, onChange, submit } = useForm(onSave, author)
+  const { values, onChange, submit } = useForm(onSave, author ?? empty)
   const [books, { loading }] = useFetch(getBooks, [])
 
   return (
@@ -67,9 +86,11 @@ function Form({ author, refresh }: IFormProps) {
           <IconDeviceFloppy size={16} /> Save
         </button>
 
-        <button data-variant="outlined" className="mr1" onClick={() => onDelete(author)} type="button">
-          <IconTrash size={16} /> Delete
-        </button>
+        {author && (
+          <button data-variant="outlined" className="mr1" onClick={() => onDelete(author)} type="button">
+            <IconTrash size={16} /> Delete
+          </button>
+        )}
       </div>
     </form>
   )
