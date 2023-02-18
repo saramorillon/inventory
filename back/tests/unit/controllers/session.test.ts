@@ -1,7 +1,7 @@
-import { getMockRes } from '@jest-mock/express'
+import { getMockReq, getMockRes } from '@jest-mock/express'
 import passport from 'passport'
-import { postLogin } from '../../../../src/controllers/session/postLogin'
-import { getMockReq, mockUser } from '../../../mocks'
+import { getLogout, getSession, postLogin } from '../../../src/controllers/session'
+import { mockUser } from '../../mocks'
 
 describe('postLogin', () => {
   let spy: jest.SpyInstance
@@ -66,5 +66,33 @@ describe('postLogin', () => {
     const { res, next } = getMockRes()
     postLogin(req, res, next)
     expect(res.sendStatus).toHaveBeenCalledWith(204)
+  })
+})
+
+describe('getSession', () => {
+  it('should return session user', () => {
+    const req = getMockReq()
+    req.user = mockUser()
+    const { res } = getMockRes()
+    getSession(req, res)
+    expect(res.json).toHaveBeenCalledWith(mockUser())
+  })
+})
+
+describe('getLogout', () => {
+  it('should log out', () => {
+    const req = getMockReq()
+    req.logout = jest.fn()
+    const { res } = getMockRes()
+    getLogout(req, res)
+    expect(req.logout).toHaveBeenCalled()
+  })
+
+  it('should redirect to home', () => {
+    const req = getMockReq()
+    req.logout = jest.fn()
+    const { res } = getMockRes()
+    getLogout(req, res)
+    expect(res.redirect).toHaveBeenCalledWith('/login')
   })
 })

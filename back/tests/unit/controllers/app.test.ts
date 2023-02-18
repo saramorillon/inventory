@@ -1,7 +1,7 @@
 import { getMockReq, getMockRes } from '@jest-mock/express'
-import { getApp } from '../../../../src/controllers/app/getApp'
+import { getApp } from '../../../src/controllers/app'
 
-jest.mock('../../../../package.json', () => ({
+jest.mock('../../../package.json', () => ({
   name: 'name',
   version: 'version',
   repository: 'repository',
