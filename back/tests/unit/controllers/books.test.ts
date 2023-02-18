@@ -49,17 +49,7 @@ describe('postBook', () => {
     const { res } = getMockRes()
     await postBook(req, res)
     expect(res.json).toHaveBeenCalledWith({
-      message: `[
-    {
-      "code": "invalid_type",
-      "expected": "string",
-      "received": "undefined",
-      "path": [
-        "serial"
-      ],
-      "message": "Required"
-    }
-  ]`,
+      message: 'serial: Required',
       stack: expect.any(String),
     })
   })
@@ -148,17 +138,7 @@ describe('getBook', () => {
     const { res } = getMockRes()
     await getBook(req, res)
     expect(res.json).toHaveBeenCalledWith({
-      message: `[
-    {
-      "code": "invalid_type",
-      "expected": "string",
-      "received": "undefined",
-      "path": [
-        "id"
-      ],
-      "message": "Required"
-    }
-  ]`,
+      message: 'id: Required',
       stack: expect.any(String),
     })
   })
@@ -197,17 +177,7 @@ describe('putBook', () => {
     const { res } = getMockRes()
     await putBook(req, res)
     expect(res.json).toHaveBeenCalledWith({
-      message: `[
-    {
-      "code": "invalid_type",
-      "expected": "string",
-      "received": "undefined",
-      "path": [
-        "id"
-      ],
-      "message": "Required"
-    }
-  ]`,
+      message: 'id: Required',
       stack: expect.any(String),
     })
   })
@@ -259,17 +229,7 @@ describe('deleteBook', () => {
     const { res } = getMockRes()
     await deleteBook(req, res)
     expect(res.json).toHaveBeenCalledWith({
-      message: `[
-    {
-      "code": "invalid_type",
-      "expected": "string",
-      "received": "undefined",
-      "path": [
-        "id"
-      ],
-      "message": "Required"
-    }
-  ]`,
+      message: 'id: Required',
       stack: expect.any(String),
     })
   })

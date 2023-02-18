@@ -1,4 +1,5 @@
 import mockdate from 'mockdate'
+import { z } from 'zod'
 import { Logger } from '../../../src/libs/logger'
 
 mockdate.set('2022-01-01T00:00:00.000Z')
@@ -61,6 +62,16 @@ describe('start', () => {
 })
 
 describe('parseError', () => {
+  it('should return formatted error if error is a zod validation error', () => {
+    const schema = z.object({ id: z.string() })
+    const result = schema.safeParse({ id: 1 })
+    const error = result.success ? false : new Logger().parseError(result.error)
+    expect(error).toEqual({
+      message: 'id: Expected string, received number',
+      stack: expect.stringContaining('Expected string, received number'),
+    })
+  })
+
   it('should return message and stack if error is native', () => {
     const error = new Logger().parseError(new Error('500'))
     expect(error).toEqual({ message: '500', stack: expect.stringContaining('Error: 500') })

@@ -42,35 +42,7 @@ describe('postAuthor', () => {
     const { res } = getMockRes()
     await postAuthor(req, res)
     expect(res.json).toHaveBeenCalledWith({
-      message: `[
-    {
-      "code": "invalid_type",
-      "expected": "string",
-      "received": "undefined",
-      "path": [
-        "firstName"
-      ],
-      "message": "Required"
-    },
-    {
-      "code": "invalid_type",
-      "expected": "string",
-      "received": "undefined",
-      "path": [
-        "lastName"
-      ],
-      "message": "Required"
-    },
-    {
-      "code": "invalid_type",
-      "expected": "array",
-      "received": "undefined",
-      "path": [
-        "books"
-      ],
-      "message": "Required"
-    }
-  ]`,
+      message: 'firstName: Required\nlastName: Required\nbooks: Required',
       stack: expect.any(String),
     })
   })
@@ -118,17 +90,7 @@ describe('getAuthor', () => {
     const { res } = getMockRes()
     await getAuthor(req, res)
     expect(res.json).toHaveBeenCalledWith({
-      message: `[
-    {
-      "code": "invalid_type",
-      "expected": "string",
-      "received": "undefined",
-      "path": [
-        "id"
-      ],
-      "message": "Required"
-    }
-  ]`,
+      message: 'id: Required',
       stack: expect.any(String),
     })
   })
@@ -167,17 +129,7 @@ describe('putAuthor', () => {
     const { res } = getMockRes()
     await putAuthor(req, res)
     expect(res.json).toHaveBeenCalledWith({
-      message: `[
-    {
-      "code": "invalid_type",
-      "expected": "string",
-      "received": "undefined",
-      "path": [
-        "id"
-      ],
-      "message": "Required"
-    }
-  ]`,
+      message: 'id: Required',
       stack: expect.any(String),
     })
   })
@@ -229,17 +181,7 @@ describe('deleteAuthor', () => {
     const { res } = getMockRes()
     await deleteAuthor(req, res)
     expect(res.json).toHaveBeenCalledWith({
-      message: `[
-    {
-      "code": "invalid_type",
-      "expected": "string",
-      "received": "undefined",
-      "path": [
-        "id"
-      ],
-      "message": "Required"
-    }
-  ]`,
+      message: 'id: Required',
       stack: expect.any(String),
     })
   })

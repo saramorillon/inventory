@@ -1,4 +1,5 @@
 import { types } from 'util'
+import { ZodError } from 'zod'
 
 interface IAction {
   success: () => void
@@ -35,6 +36,12 @@ export class Logger {
   }
 
   parseError(error: unknown): { message: string; stack?: string } {
+    if (error instanceof ZodError) {
+      return {
+        message: error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`).join('\n'),
+        stack: error.stack,
+      }
+    }
     if (types.isNativeError(error)) {
       return { message: error.message, stack: error.stack }
     }
