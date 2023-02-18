@@ -22,7 +22,7 @@ interface _IFilterProps<T> {
 function _Filter<T>({ onFilter, index, filter }: _IFilterProps<T>) {
   const [value, setValue] = useState('')
 
-  const fn = useCallback((data: T) => filter(data, value), [filter, value])
+  const fn = useCallback((data: T) => filter(data, value.toLowerCase()), [filter, value])
 
   useEffect(() => {
     onFilter(index, fn)

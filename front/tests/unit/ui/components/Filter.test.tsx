@@ -22,11 +22,11 @@ describe('Filter', () => {
     expect(onFilter).toHaveBeenCalledWith(0, expect.any(Function))
   })
 
-  it('should apply filter with input value', () => {
+  it('should apply filter with input lowercase value', () => {
     const filter = jest.fn()
     const onFilter = jest.fn().mockImplementation((index, fn) => fn('data'))
     render(<Filter index={0} column={{ ...column, filter }} onFilter={onFilter} />)
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'text' } })
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Text' } })
     expect(filter).toHaveBeenCalledWith('data', 'text')
   })
 })
