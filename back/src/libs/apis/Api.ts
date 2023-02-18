@@ -2,7 +2,7 @@ export interface IApi {
   limit: number
   source: string
   url: string
-  search(isbn: string): Promise<IApiResult | null>
+  search(isbn: string, session?: Express.User): Promise<IApiResult | null>
 }
 
 export interface IApiResult {

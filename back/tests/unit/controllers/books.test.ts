@@ -2,7 +2,7 @@ import { getMockRes } from '@jest-mock/express'
 import { deleteBook, getBook, getBooks, postBook, putBook } from '../../../src/controllers/books'
 import { isbnSearch } from '../../../src/libs/isbn'
 import { prisma } from '../../../src/prisma/client'
-import { getMockReq, mock, mockApiResult, mockAuthor, mockBook } from '../../mocks'
+import { getMockReq, mock, mockApiResult, mockAuthor, mockBook, mockSession } from '../../mocks'
 
 jest.mock('../../../src/libs/isbn')
 
@@ -72,9 +72,10 @@ describe('postBook', () => {
 
   it('should search book', async () => {
     const req = getMockReq({ body: { serial: '9780123456789' } })
+    req.user = mockSession()
     const { res } = getMockRes()
     await postBook(req, res)
-    expect(isbnSearch).toHaveBeenCalledWith('9780123456789')
+    expect(isbnSearch).toHaveBeenCalledWith('9780123456789', mockSession())
   })
 
   it('should send 404 status if isbn is not found', async () => {

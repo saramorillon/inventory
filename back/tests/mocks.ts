@@ -13,11 +13,20 @@ export function getMockReq(...params: Parameters<typeof _getMockReq>): ReturnTyp
   return req
 }
 
+export function mockSession(session: Partial<Express.User> = {}): Express.User {
+  return {
+    username: 'username',
+    isbndbToken: 'token',
+    ...session,
+  }
+}
+
 export function mockUser(): User {
   return {
     id: 1,
     username: 'username',
     password: 'password',
+    isbndbToken: 'token',
     createdAt: new Date('2022-01-01T00:00:00.000Z'),
     updatedAt: new Date('2023-01-01T00:00:00.000Z'),
   }

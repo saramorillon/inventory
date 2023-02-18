@@ -3,7 +3,7 @@ import { IsbnDbApi } from '../../../src/libs/apis/isbndb'
 import { OpenLibrary } from '../../../src/libs/apis/openlibrary'
 import { WorlCatApi } from '../../../src/libs/apis/worldcat'
 import { isbnSearch } from '../../../src/libs/isbn'
-import { mockApiResult } from '../../mocks'
+import { mockApiResult, mockSession } from '../../mocks'
 
 describe('isbnSearch', () => {
   beforeEach(() => {
@@ -14,11 +14,11 @@ describe('isbnSearch', () => {
   })
 
   it('should search in each api', async () => {
-    await isbnSearch('isbn')
-    expect(IsbnDbApi.prototype.search).toHaveBeenCalledWith('isbn')
-    expect(GoogleApi.prototype.search).toHaveBeenCalledWith('isbn')
-    expect(OpenLibrary.prototype.search).toHaveBeenCalledWith('isbn')
-    expect(WorlCatApi.prototype.search).toHaveBeenCalledWith('isbn')
+    await isbnSearch('isbn', mockSession())
+    expect(IsbnDbApi.prototype.search).toHaveBeenCalledWith('isbn', mockSession())
+    expect(GoogleApi.prototype.search).toHaveBeenCalledWith('isbn', mockSession())
+    expect(OpenLibrary.prototype.search).toHaveBeenCalledWith('isbn', mockSession())
+    expect(WorlCatApi.prototype.search).toHaveBeenCalledWith('isbn', mockSession())
   })
 
   it('should merge api results', async () => {

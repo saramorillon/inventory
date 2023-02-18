@@ -5,7 +5,6 @@ import filestore from 'session-file-store'
 const env = cleanEnv(process.env, {
   APP_KEY: str(),
   APP_PORT: num({ default: 80 }),
-  ISBN_TOKEN: str(),
   SESSION_DIR: str(),
   COOKIE_DOMAIN: str(),
 })
@@ -13,7 +12,6 @@ const env = cleanEnv(process.env, {
 interface ISettings {
   port: number
   keys: string[]
-  isbnToken: string
   session: SessionOptions
 }
 
@@ -22,7 +20,6 @@ const FileStore = filestore(session)
 export const settings: ISettings = {
   port: env.APP_PORT,
   keys: [env.APP_KEY],
-  isbnToken: env.ISBN_TOKEN,
   session: {
     secret: [env.APP_KEY],
     resave: false,

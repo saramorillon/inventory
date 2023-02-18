@@ -7,7 +7,7 @@ export function serializeUser(user: Express.User, done: (err: unknown, id?: stri
 
 export function deserializeUser(username: string, done: (err: unknown, user?: Express.User) => void): Promise<void> {
   return prisma.user
-    .findUnique({ where: { username }, select: { username: true } })
+    .findUnique({ where: { username }, select: { username: true, isbndbToken: true } })
     .then((user) => {
       if (user) done(null, user)
       else done(new Error(`Unknown user ${username}`))
@@ -21,7 +21,10 @@ export function localStrategy(
   done: (error: unknown, user?: Express.User) => void
 ): Promise<void> {
   return prisma.user
-    .findFirst({ where: { username, password: sha224(password).toString() }, select: { username: true } })
+    .findFirst({
+      where: { username, password: sha224(password).toString() },
+      select: { username: true, isbndbToken: true },
+    })
     .then((user) => {
       if (!user) done(new Error('User not found'))
       else done(null, user)

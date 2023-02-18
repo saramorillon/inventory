@@ -18,7 +18,7 @@ describe('passport', () => {
       await deserializeUser('username', done)
       expect(prisma.user.findUnique).toHaveBeenCalledWith({
         where: { username: 'username' },
-        select: { username: true },
+        select: { username: true, isbndbToken: true },
       })
       expect(done).toHaveBeenCalledWith(null, mockUser())
     })
@@ -48,9 +48,7 @@ describe('passport', () => {
           username: 'username',
           password: 'ff8ce84ffe1c4bed9fbb98eef44560f152461df0db195a92b7c31f97',
         },
-        select: {
-          username: true,
-        },
+        select: { username: true, isbndbToken: true },
       })
       expect(done).toHaveBeenCalledWith(null, mockUser())
     })

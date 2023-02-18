@@ -7,10 +7,10 @@ import { WorlCatApi } from './apis/worldcat'
 
 const apis: IApi[] = [new IsbnDbApi(), new GoogleApi(), new OpenLibrary(), new WorlCatApi()]
 
-export async function isbnSearch(isbn: string): Promise<IApiResult | undefined> {
+export async function isbnSearch(isbn: string, session?: Express.User): Promise<IApiResult | undefined> {
   let book: IApiResult | undefined
   for (const api of apis) {
-    const result = await api.search(isbn)
+    const result = await api.search(isbn, session)
     book = merge(book, result)
     if (book?.title && book?.authors.length) break
   }
