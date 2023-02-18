@@ -3,7 +3,6 @@ import { getApp } from './controllers/app'
 import { deleteAuthor, getAuthor, getAuthors, postAuthor, putAuthor } from './controllers/authors'
 import { deleteBook, getBook, getBooks, postBook, putBook } from './controllers/books'
 import { getLogout, getSession, postLogin } from './controllers/session'
-
 import { hasSession } from './middleware/session'
 
 export function router(): Router {

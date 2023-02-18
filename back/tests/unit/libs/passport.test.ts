@@ -16,7 +16,10 @@ describe('passport', () => {
       jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(mockUser())
       const done = jest.fn()
       await deserializeUser('username', done)
-      expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { username: 'username' } })
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { username: 'username' },
+        select: { username: true },
+      })
       expect(done).toHaveBeenCalledWith(null, mockUser())
     })
 
@@ -44,6 +47,9 @@ describe('passport', () => {
         where: {
           username: 'username',
           password: 'ff8ce84ffe1c4bed9fbb98eef44560f152461df0db195a92b7c31f97',
+        },
+        select: {
+          username: true,
         },
       })
       expect(done).toHaveBeenCalledWith(null, mockUser())
