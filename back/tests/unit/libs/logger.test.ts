@@ -30,6 +30,14 @@ describe('error', () => {
     logger.error('message', new Error('500'), { prop2: 'value2' })
     expect(logger.log).toHaveBeenCalledWith('error', 'message', { error: 'error', prop2: 'value2' })
   })
+
+  it('should return logged error', () => {
+    const logger = new Logger({ prop1: 'value1' })
+    logger.log = jest.fn()
+    logger.parseError = jest.fn().mockReturnValue('error')
+    const result = logger.error('message', new Error('500'), { prop2: 'value2' })
+    expect(result).toBe('error')
+  })
 })
 
 describe('start', () => {
@@ -57,7 +65,7 @@ describe('start', () => {
     logger.parseError = jest.fn().mockReturnValue('error')
     const { failure } = logger.start('message', { prop2: 'value2' })
     failure(new Error('500'))
-    expect(logger.error).toHaveBeenCalledWith('message_failure', { error: 'error', prop2: 'value2' })
+    expect(logger.error).toHaveBeenCalledWith('message_failure', new Error('500'), { prop2: 'value2' })
   })
 })
 

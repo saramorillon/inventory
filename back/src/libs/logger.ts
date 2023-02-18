@@ -18,8 +18,10 @@ export class Logger {
     this.log('info', message, meta)
   }
 
-  error(message: string, error: unknown, meta?: Record<string, unknown>): void {
-    this.log('error', message, { ...meta, error: this.parseError(error) })
+  error(message: string, error: unknown, meta?: Record<string, unknown>): { message: string; stack?: string } {
+    const e = this.parseError(error)
+    this.log('error', message, { ...meta, error: e })
+    return e
   }
 
   start(message: string, meta?: Record<string, unknown>): IAction {
@@ -27,11 +29,7 @@ export class Logger {
 
     return {
       success: () => this.info(message + '_success', meta),
-      failure: (e) => {
-        const error = this.parseError(e)
-        this.error(message + '_failure', { ...meta, error })
-        return error
-      },
+      failure: (error) => this.error(message + '_failure', error, meta),
     }
   }
 
