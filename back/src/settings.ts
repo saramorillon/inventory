@@ -49,7 +49,7 @@ export const settings: ISettings = {
       directives: {
         defaultSrc: ["'self'"],
         styleSrc: ["'self'", 'https://fonts.googleapis.com', 'https://cdn.jsdelivr.net', 'https://unpkg.com'],
-        fontSrc: ["'self'"],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         scriptSrc: ["'self'"],
       },
     },
