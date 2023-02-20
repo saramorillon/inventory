@@ -1,10 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model User {
+  id          Int      @id @default(autoincrement())
+  username    String   @unique(map: "uq_user_username") @db.VarChar(40)
+  password    String   @db.Char(56)
+  isbndbToken String?  @db.Char(38)
+  createdAt   DateTime @default(now()) @db.DateTime(6)
+  updatedAt   DateTime @updatedAt @db.DateTime(6)
+
+  @@map("user")
 }
 
 model Author {
@@ -29,15 +40,4 @@ model Book {
   updatedAt DateTime @updatedAt
 
   @@map("book")
-}
-
-model User {
-  id          Int      @id @default(autoincrement())
-  username    String   @unique
-  password    String
-  isbndbToken String?  @db.Char(38)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@map("user")
 }

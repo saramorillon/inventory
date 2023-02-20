@@ -1,6 +1,6 @@
 import { getMockRes } from '@jest-mock/express'
 import { deleteAuthor, getAuthor, getAuthors, postAuthor, putAuthor } from '../../../src/controllers/authors'
-import { prisma } from '../../../src/prisma/client'
+import { prisma } from '../../../src/prisma'
 import { getMockReq, mockAuthor } from '../../mocks'
 
 describe('getAuthors', () => {

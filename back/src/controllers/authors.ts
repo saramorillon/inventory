@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
-import { prisma } from '../prisma/client'
+import { prisma } from '../prisma'
+import { parseError } from '../utils/parseError'
 
 const schema = {
   post: z.object({
@@ -24,8 +25,10 @@ export async function getAuthors(req: Request, res: Response): Promise<void> {
     const authors = await prisma.author.findMany({ include: { books: true }, orderBy: { lastName: 'asc' } })
     res.json(authors)
     success()
-  } catch (error) {
-    res.status(500).json(failure(error))
+  } catch (e) {
+    const error = parseError(e)
+    failure(error)
+    res.status(500).json(error)
   }
 }
 
@@ -39,8 +42,10 @@ export async function postAuthor(req: Request, res: Response): Promise<void> {
     })
     success()
     res.json(author)
-  } catch (error) {
-    res.status(500).json(failure(error))
+  } catch (e) {
+    const error = parseError(e)
+    failure(error)
+    res.status(500).json(error)
   }
 }
 
@@ -51,8 +56,10 @@ export async function getAuthor(req: Request, res: Response): Promise<void> {
     const author = await prisma.author.findUnique({ where: { id }, include: { books: true } })
     success()
     res.json(author)
-  } catch (error) {
-    res.status(500).json(failure(error))
+  } catch (e) {
+    const error = parseError(e)
+    failure(error)
+    res.status(500).json(error)
   }
 }
 
@@ -68,8 +75,10 @@ export async function putAuthor(req: Request, res: Response): Promise<void> {
     })
     success()
     res.json(author)
-  } catch (error) {
-    res.status(500).json(failure(error))
+  } catch (e) {
+    const error = parseError(e)
+    failure(error)
+    res.status(500).json(error)
   }
 }
 
@@ -80,7 +89,9 @@ export async function deleteAuthor(req: Request, res: Response): Promise<void> {
     await prisma.author.delete({ where: { id } })
     success()
     res.sendStatus(204)
-  } catch (error) {
-    res.status(500).json(failure(error))
+  } catch (e) {
+    const error = parseError(e)
+    failure(error)
+    res.status(500).json(error)
   }
 }

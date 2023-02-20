@@ -1,14 +1,16 @@
-import { Logger } from '../../src/libs/logger'
+import { Logger } from '@saramorillon/logger'
+import { ISession } from '../../src/models/Session'
 
 declare global {
   namespace Express {
-    interface User {
-      username: string
-      isbndbToken: string | null
-    }
-
     interface Request {
       logger: Logger
     }
+  }
+}
+
+declare module 'express-session' {
+  interface SessionData {
+    user: ISession
   }
 }

@@ -1,19 +1,24 @@
 import { getMockReq as _getMockReq } from '@jest-mock/express'
 import { Author, Book, User } from '@prisma/client'
+import { Logger } from '@saramorillon/logger'
+import { Session } from 'express-session'
 import { IApiResult } from '../src/libs/apis/Api'
-import { Logger } from '../src/libs/logger'
-
-export function mock(fn: unknown): jest.Mock {
-  return fn as jest.Mock
-}
+import { ISession } from '../src/models/Session'
 
 export function getMockReq(...params: Parameters<typeof _getMockReq>): ReturnType<typeof _getMockReq> {
   const req = _getMockReq(...params)
-  req.logger = new Logger()
+  req.session = {} as Session
+  req.logger = new Logger({ silent: true })
   return req
 }
 
-export function mockSession(session: Partial<Express.User> = {}): Express.User {
+export function mockAction(logger: Logger) {
+  const action = { success: jest.fn(), failure: jest.fn() }
+  logger.start = jest.fn().mockReturnValue(action)
+  return action
+}
+
+export function mockSession(session: Partial<ISession> = {}): ISession {
   return {
     username: 'username',
     isbndbToken: 'token',

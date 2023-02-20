@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { Axios } from '../../../src/services/Axios'
 import { getSession, login } from '../../../src/services/session'
-import { mock } from '../../mocks'
 
 jest.mock('../../../src/services/Axios')
 
@@ -19,7 +18,7 @@ describe('getSession', () => {
   })
 
   it('should return null if error', async () => {
-    mock(Axios.get).mockRejectedValue(new Error())
+    jest.mocked(Axios.get).mockRejectedValue(new Error())
     const result = await getSession()
     expect(result).toBeNull()
   })
@@ -28,6 +27,6 @@ describe('getSession', () => {
 describe('login', () => {
   it('should login', async () => {
     await login('username', 'password')
-    expect(Axios.post).toHaveBeenCalledWith('/api/login', { password: 'password', username: 'username' })
+    expect(Axios.post).toHaveBeenCalledWith('/api/login', { username: 'username', password: 'password' })
   })
 })

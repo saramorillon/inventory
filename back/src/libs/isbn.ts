@@ -1,4 +1,5 @@
 import merge from 'lodash.merge'
+import { ISession } from '../models/Session'
 import { IApi, IApiResult } from './apis/Api'
 import { GoogleApi } from './apis/google'
 import { IsbnDbApi } from './apis/isbndb'
@@ -7,10 +8,10 @@ import { WorlCatApi } from './apis/worldcat'
 
 const apis: IApi[] = [new IsbnDbApi(), new GoogleApi(), new OpenLibrary(), new WorlCatApi()]
 
-export async function isbnSearch(isbn: string, session?: Express.User): Promise<IApiResult | undefined> {
+export async function isbnSearch(isbn: string, user?: ISession): Promise<IApiResult | undefined> {
   let book: IApiResult | undefined
   for (const api of apis) {
-    const result = await api.search(isbn, session)
+    const result = await api.search(isbn, user)
     book = merge(book, result)
     if (book?.title && book?.authors.length) break
   }

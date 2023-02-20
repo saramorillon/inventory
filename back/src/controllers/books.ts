@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import { z } from 'zod'
 import { isbnSearch } from '../libs/isbn'
-import { prisma } from '../prisma/client'
+import { prisma } from '../prisma'
 import { capitalize } from '../utils/capitalize'
+import { parseError } from '../utils/parseError'
 
 const schema = {
   post: z.object({
@@ -28,8 +29,10 @@ export async function getBooks(req: Request, res: Response): Promise<void> {
     })
     res.json(books)
     success()
-  } catch (error) {
-    res.status(500).json(failure(error))
+  } catch (e) {
+    const error = parseError(e)
+    failure(error)
+    res.status(500).json(error)
   }
 }
 
@@ -43,7 +46,7 @@ export async function postBook(req: Request, res: Response): Promise<void> {
       success()
       return
     }
-    const result = await isbnSearch(serial, req.user)
+    const result = await isbnSearch(serial, req.session.user)
     if (!result) {
       res.sendStatus(404)
       success()
@@ -56,8 +59,10 @@ export async function postBook(req: Request, res: Response): Promise<void> {
     })
     res.sendStatus(201)
     success()
-  } catch (error) {
-    res.status(500).json(failure(error))
+  } catch (e) {
+    const error = parseError(e)
+    failure(error)
+    res.status(500).json(error)
   }
 }
 
@@ -77,8 +82,10 @@ export async function getBook(req: Request, res: Response): Promise<void> {
     const book = await prisma.book.findUnique({ where: { id }, include: { authors: true } })
     success()
     res.json(book)
-  } catch (error) {
-    res.status(500).json(failure(error))
+  } catch (e) {
+    const error = parseError(e)
+    failure(error)
+    res.status(500).json(error)
   }
 }
 
@@ -94,8 +101,10 @@ export async function putBook(req: Request, res: Response): Promise<void> {
     })
     success()
     res.json(book)
-  } catch (error) {
-    res.status(500).json(failure(error))
+  } catch (e) {
+    const error = parseError(e)
+    failure(error)
+    res.status(500).json(error)
   }
 }
 
@@ -106,7 +115,9 @@ export async function deleteBook(req: Request, res: Response): Promise<void> {
     await prisma.book.delete({ where: { id } })
     success()
     res.sendStatus(204)
-  } catch (error) {
-    res.status(500).json(failure(error))
+  } catch (e) {
+    const error = parseError(e)
+    failure(error)
+    res.status(500).json(error)
   }
 }

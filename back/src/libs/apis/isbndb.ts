@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { ISession } from '../../models/Session'
 import { IApi, IApiResult, sanitize } from './Api'
 
 type Response = {
@@ -14,13 +15,13 @@ export class IsbnDbApi implements IApi {
   source = 'isbndb'
   url = 'https://api2.isbndb.com/book'
 
-  async search(isbn: string, session?: Express.User): Promise<IApiResult | null> {
-    if (!session?.isbndbToken) {
+  async search(isbn: string, user?: ISession): Promise<IApiResult | null> {
+    if (!user?.isbndbToken) {
       return null
     }
     try {
       const response = await axios.get<Response>(`${this.url}/${isbn}`, {
-        headers: { Authorization: session.isbndbToken },
+        headers: { Authorization: user.isbndbToken },
       })
       const { title, title_long, authors } = response.data.book || {}
       const fullTitle = title_long ?? title

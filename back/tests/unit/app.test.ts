@@ -1,98 +1,89 @@
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import express, { json } from 'express'
+import express, { Express, json, static as _static, urlencoded } from 'express'
 import session from 'express-session'
-import passport from 'passport'
-import { Strategy } from 'passport-local'
-import { start } from '../../src/app'
-import { appLogger } from '../../src/libs/logger'
-import { deserializeUser, localStrategy, serializeUser } from '../../src/libs/passport'
-import { logger } from '../../src/middleware/logger'
-import { router } from '../../src/router'
-import { mock } from '../mocks'
+import helmet from 'helmet'
+import { App } from '../../src/app'
+import { render } from '../../src/controllers/render'
+import { logger } from '../../src/middlewares/logger'
+import { routes } from '../../src/routes'
+import { mockAction } from '../mocks'
 
 jest.mock('express')
+jest.mock('cookie-parser')
 jest.mock('cors')
-jest.mock('passport')
 jest.mock('express-session')
-jest.mock('../../src/libs/logger')
-jest.mock('../../src/router')
+jest.mock('helmet')
+jest.mock('../../src/routes')
 
 function mockExpress() {
-  const expressMock = { use: jest.fn(), listen: jest.fn() }
-  mock(express).mockReturnValue(expressMock)
-  return expressMock
+  return {
+    get: jest.fn(),
+    use: jest.fn(),
+    listen: jest.fn().mockImplementation((port, fn) => fn()),
+  } as unknown as Express
 }
 
-describe('start', () => {
+describe('run', () => {
   beforeEach(() => {
-    mockExpress()
-    mock(json).mockReturnValue('json')
-    mock(cors).mockReturnValue('cors')
-    mock(session).mockReturnValue('session')
-    mock(passport.initialize).mockReturnValue('passport.initialize')
-    mock(passport.session).mockReturnValue('passport.session')
-    mock(router).mockReturnValue('router')
+    jest.mocked(express).mockReturnValue(mockExpress())
+    jest.mocked(_static).mockReturnValue('_static' as never)
+    jest.mocked(cookieParser).mockReturnValue('cookieParser' as never)
+    jest.mocked(json).mockReturnValue('json' as never)
+    jest.mocked(urlencoded).mockReturnValue('urlencoded' as never)
+    jest.mocked(cors).mockReturnValue('cors' as never)
+    jest.mocked(session).mockReturnValue('session' as never)
+    jest.mocked(helmet).mockReturnValue('helmet' as never)
+    jest.mocked(routes).mockReturnValue('routes' as never)
   })
 
-  it('should configure passport', () => {
-    start()
-    expect(passport.serializeUser).toHaveBeenCalledWith(serializeUser)
-    expect(passport.deserializeUser).toHaveBeenCalledWith(deserializeUser)
-    expect(passport.use).toHaveBeenCalledWith(new Strategy(localStrategy))
-  })
-
-  it('should create express app', () => {
-    start()
+  it('should create express instance', async () => {
+    const app = new App()
+    await app.run()
     expect(express).toHaveBeenCalled()
   })
 
-  it('should add json middleware', () => {
+  it('should use middlewares in correct order', async () => {
     const expressMock = mockExpress()
-    start()
-    expect(expressMock.use).toHaveBeenCalledWith('json')
+    jest.mocked(express).mockReturnValue(expressMock)
+    const app = new App()
+    await app.run()
+    const { calls } = jest.mocked(expressMock.use).mock
+    expect(calls).toEqual([
+      ['_static'],
+      ['cookieParser'],
+      ['json'],
+      ['urlencoded'],
+      ['cors'],
+      ['session'],
+      [logger],
+      ['helmet'],
+      ['/api', 'routes'],
+    ])
   })
 
-  it('should add cors middleware', () => {
+  it('should default to render route', async () => {
     const expressMock = mockExpress()
-    start()
-    expect(expressMock.use).toHaveBeenCalledWith('cors')
+    jest.mocked(express).mockReturnValue(expressMock)
+    const app = new App()
+    await app.run()
+    expect(expressMock.get).toHaveBeenCalledWith('*', render)
   })
 
-  it('should add session middleware', () => {
-    const expressMock = mockExpress()
-    start()
-    expect(expressMock.use).toHaveBeenCalledWith('session')
+  it('should log when app succesfully starts', async () => {
+    const app = new App()
+    const { success } = mockAction(app['logger'])
+    await app.run()
+    expect(success).toHaveBeenCalled()
   })
 
-  it('should add passport middlewares', () => {
-    const expressMock = mockExpress()
-    start()
-    expect(expressMock.use).toHaveBeenCalledWith('passport.initialize')
-    expect(expressMock.use).toHaveBeenCalledWith('passport.session')
-  })
-
-  it('should add logger middleware', () => {
-    const expressMock = mockExpress()
-    start()
-    expect(expressMock.use).toHaveBeenCalledWith(logger)
-  })
-
-  it('should use router', () => {
-    const expressMock = mockExpress()
-    start()
-    expect(expressMock.use).toHaveBeenCalledWith('/api', 'router')
-  })
-
-  it('should run app', () => {
-    const expressMock = mockExpress()
-    start()
-    expect(expressMock.listen).toHaveBeenCalledWith(3000, expect.any(Function))
-  })
-
-  it('should log on start', () => {
-    const expressMock = mockExpress()
-    expressMock.listen.mockImplementation((_, fn) => fn())
-    start()
-    expect(appLogger.info).toHaveBeenCalledWith('app_start', { port: 3000 })
+  it('should log when app fails to start', async () => {
+    jest.mocked(express).mockImplementation(() => {
+      throw 'error'
+    })
+    const app = new App()
+    const { failure } = mockAction(app['logger'])
+    await app.run()
+    expect(failure).toHaveBeenCalledWith('error')
   })
 })

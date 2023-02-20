@@ -1,3 +1,3 @@
-import { start } from './app'
+import { App } from './app'
 
-start()
+void new App().run()

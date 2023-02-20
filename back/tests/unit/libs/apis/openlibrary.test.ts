@@ -1,12 +1,13 @@
 import axios from 'axios'
 import { OpenLibrary } from '../../../../src/libs/apis/openlibrary'
-import { mock } from '../../../mocks'
 
 jest.mock('axios')
 
 describe('search', () => {
   beforeEach(() => {
-    mock(axios.get).mockResolvedValue({ data: { ['ISBN:isbn']: { title: 'title', authors: [{ name: 'author' }] } } })
+    jest.mocked(axios.get).mockResolvedValue({
+      data: { ['ISBN:isbn']: { title: 'title', authors: [{ name: 'author' }] } },
+    })
   })
 
   it('should search isbn', async () => {
@@ -17,7 +18,7 @@ describe('search', () => {
   })
 
   it('should return null if title is empty', async () => {
-    mock(axios.get).mockResolvedValue({ data: { ['ISBN:isbn']: { authors: [{ name: 'author' }] } } })
+    jest.mocked(axios.get).mockResolvedValue({ data: { ['ISBN:isbn']: { authors: [{ name: 'author' }] } } })
     const result = await new OpenLibrary().search('isbn')
     expect(result).toBeNull()
   })
@@ -33,7 +34,7 @@ describe('search', () => {
   })
 
   it('should return null if error', async () => {
-    mock(axios.get).mockRejectedValue(new Error('500'))
+    jest.mocked(axios.get).mockRejectedValue(new Error('500'))
     const result = await new OpenLibrary().search('isbn')
     expect(result).toBeNull()
   })

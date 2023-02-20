@@ -1,3 +1,3 @@
-export type ISession = {
+export interface ISession {
   username: string
 }

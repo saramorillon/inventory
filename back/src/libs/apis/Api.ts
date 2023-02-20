@@ -1,8 +1,10 @@
+import { ISession } from '../../models/Session'
+
 export interface IApi {
   limit: number
   source: string
   url: string
-  search(isbn: string, session?: Express.User): Promise<IApiResult | null>
+  search(isbn: string, user?: ISession): Promise<IApiResult | null>
 }
 
 export interface IApiResult {

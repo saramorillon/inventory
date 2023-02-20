@@ -1,3 +1,3 @@
 import axios from 'axios'
 
-export const Axios = axios.create({ withCredentials: true, maxRedirects: 1 })
+export const Axios = axios.create({ withCredentials: true })

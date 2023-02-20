@@ -1,12 +1,12 @@
 import axios from 'axios'
 import { IsbnDbApi } from '../../../../src/libs/apis/isbndb'
-import { mock, mockSession } from '../../../mocks'
+import { mockSession } from '../../../mocks'
 
 jest.mock('axios')
 
 describe('search', () => {
   beforeEach(() => {
-    mock(axios.get).mockResolvedValue({ data: { book: { title: 'title', authors: ['author'] } } })
+    jest.mocked(axios.get).mockResolvedValue({ data: { book: { title: 'title', authors: ['author'] } } })
   })
 
   it('should return null if no session', async () => {
@@ -29,7 +29,7 @@ describe('search', () => {
   })
 
   it('should return null if title is empty', async () => {
-    mock(axios.get).mockResolvedValue({ data: { book: { authors: ['author'] } } })
+    jest.mocked(axios.get).mockResolvedValue({ data: { book: { authors: ['author'] } } })
     const result = await new IsbnDbApi().search('isbn', mockSession())
     expect(result).toBeNull()
   })
@@ -45,7 +45,7 @@ describe('search', () => {
   })
 
   it('should return null if error', async () => {
-    mock(axios.get).mockRejectedValue(new Error('500'))
+    jest.mocked(axios.get).mockRejectedValue(new Error('500'))
     const result = await new IsbnDbApi().search('isbn', mockSession())
     expect(result).toBeNull()
   })
