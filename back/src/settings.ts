@@ -47,7 +47,7 @@ export const settings: ISettings = {
     crossOriginEmbedderPolicy: false,
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ["'self'"],
+        defaultSrc: ["'self'", 'https://www.google.com/'],
         styleSrc: ["'self'", 'https://fonts.googleapis.com', 'https://cdn.jsdelivr.net', 'https://unpkg.com'],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         scriptSrc: ["'self'"],
