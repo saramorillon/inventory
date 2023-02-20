@@ -44,11 +44,12 @@ export const settings: ISettings = {
     },
   },
   helmet: {
+    crossOriginEmbedderPolicy: false,
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        styleSrc: ["'self'", 'https://cdn.jsdelivr.net'],
-        fontSrc: ["'self'", 'https://fonts.googleapis.com'],
+        styleSrc: ["'self'", 'https://fonts.googleapis.com', 'https://cdn.jsdelivr.net', 'https://unpkg.com'],
+        fontSrc: ["'self'"],
         scriptSrc: ["'self'"],
       },
     },
