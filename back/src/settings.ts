@@ -47,8 +47,8 @@ export const settings: ISettings = {
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        styleSrc: ["'self'", 'https://fonts.googleapis.com', 'https://unpkg.com', 'https://cdn.jsdelivr.net'],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+        styleSrc: ["'self'", 'https://cdn.jsdelivr.net'],
+        fontSrc: ["'self'", 'https://fonts.googleapis.com'],
         scriptSrc: ["'self'"],
       },
     },
