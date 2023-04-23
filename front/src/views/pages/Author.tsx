@@ -1,7 +1,7 @@
 import { useFetch, useForm } from '@saramorillon/hooks'
 import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons'
 import React, { useCallback } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
 import { useTypeahead } from '../../hooks/useTypeahead'
 import { IAuthor, fullName } from '../../models/Author'
@@ -78,7 +78,7 @@ function Form({ author, refresh }: IFormProps) {
         <div role="combobox">
           {values.books.map((book) => (
             <span role="option" key={book.id}>
-              {book.title}{' '}
+              <Link to={`/book/${book.id}`}>{book.title} </Link>
               <IconX
                 aria-label={`Remove ${book.title}`}
                 style={{ cursor: 'pointer' }}

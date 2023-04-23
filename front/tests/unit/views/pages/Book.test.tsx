@@ -74,7 +74,7 @@ describe('Book', () => {
     render(<Book />)
     await wait()
     expect(screen.getByText('Authors (1)')).toBeInTheDocument()
-    expect(screen.getByText('firstName lastName')).toBeInTheDocument()
+    expect(screen.getByText('firstName lastName')).toHaveAttribute('href', '/author/1')
     fireEvent.click(screen.getByLabelText('Remove firstName lastName'))
     expect(screen.getByRole('option', { name: 'firstName lastName', hidden: true })).toBeInTheDocument()
   })
