@@ -1,16 +1,16 @@
 import { useFetch, useForm } from '@saramorillon/hooks'
-import { IconDeviceFloppy, IconTrash } from '@tabler/icons'
+import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons'
 import { useBarcode } from 'next-barcode'
 import React, { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
 import { useParam } from '../../hooks/useParam'
-import { fullName } from '../../models/Author'
+import { useTypeahead } from '../../hooks/useTypeahead'
+import { IAuthor, fullName } from '../../models/Author'
 import { IBook } from '../../models/Book'
 import { getAuthors } from '../../services/authors'
 import { deleteBook, getBook, saveBook } from '../../services/books'
 import { Error, Loading, NotFound } from '../components/Helpers'
-import { TypeAhead } from '../components/Typeahead'
 
 export function Book(): JSX.Element {
   const id = useParam('id')
@@ -40,7 +40,11 @@ function Form({ book, refresh }: IFormProps) {
   const onSave = useCallback((values: IBook) => saveBook(values).then(refresh), [refresh])
   const onDelete = useCallback((server: IBook) => deleteBook(server).then(() => navigate('/books')), [navigate])
   const { values, onChange, submit } = useForm(onSave, book)
-  const [authors, { loading }] = useFetch(getAuthors, [])
+  const [authors] = useFetch(getAuthors, [])
+
+  const changeAuthors = useCallback((authors: IAuthor[]) => onChange('authors', authors), [onChange])
+
+  const [authorOptions, addAuthor, removeAuthor] = useTypeahead(authors, values.authors, changeAuthors)
 
   return (
     <>
@@ -68,15 +72,26 @@ function Form({ book, refresh }: IFormProps) {
 
         <label>
           Authors ({values.authors.length})
-          {!loading && (
-            <TypeAhead
-              values={values.authors}
-              onChange={(authors) => onChange('authors', authors)}
-              options={authors}
-              getLabel={fullName}
-              getValue={(author) => author.id}
-            />
-          )}
+          <div role="combobox">
+            {values.authors.map((author) => (
+              <span role="option" key={author.id}>
+                {fullName(author)}{' '}
+                <IconX
+                  aria-label={`Remove ${fullName(author)}`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => removeAuthor(author)}
+                />
+              </span>
+            ))}
+            <input list="datalist" aria-label="Add another author" onChange={addAuthor} />
+            <datalist id="datalist" role="listbox">
+              {authorOptions.map((option) => (
+                <option key={option.id} value={option.id} data-option={JSON.stringify(option)}>
+                  {fullName(option)}
+                </option>
+              ))}
+            </datalist>
+          </div>
         </label>
 
         <div className="right mb2">

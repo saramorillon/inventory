@@ -1,13 +1,14 @@
 import { useFetch, useForm } from '@saramorillon/hooks'
-import { IconDeviceFloppy, IconTrash } from '@tabler/icons'
+import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons'
 import React, { useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
-import { fullName, IAuthor } from '../../models/Author'
+import { useTypeahead } from '../../hooks/useTypeahead'
+import { IAuthor, fullName } from '../../models/Author'
+import { IBook } from '../../models/Book'
 import { deleteAuthor, getAuthor, saveAuthor } from '../../services/authors'
 import { getBooks } from '../../services/books'
 import { Error, Loading, NotFound } from '../components/Helpers'
-import { TypeAhead } from '../components/Typeahead'
 
 export function Author(): JSX.Element {
   const { id = '' } = useParams<'id'>()
@@ -54,7 +55,11 @@ function Form({ author, refresh }: IFormProps) {
   )
   const onDelete = useCallback((server: IAuthor) => deleteAuthor(server).then(() => navigate('/authors')), [navigate])
   const { values, onChange, submit } = useForm(onSave, author ?? empty)
-  const [books, { loading }] = useFetch(getBooks, [])
+  const [books] = useFetch(getBooks, [])
+
+  const changeBooks = useCallback((books: IBook[]) => onChange('books', books), [onChange])
+
+  const [bookOptions, addBook, removeBook] = useTypeahead(books, values.books, changeBooks)
 
   return (
     <form onSubmit={submit}>
@@ -70,15 +75,26 @@ function Form({ author, refresh }: IFormProps) {
 
       <label>
         Books ({values.books.length})
-        {!loading && (
-          <TypeAhead
-            values={values.books}
-            onChange={(books) => onChange('books', books)}
-            options={books}
-            getLabel={(book) => book.title}
-            getValue={(book) => book.id}
-          />
-        )}
+        <div role="combobox">
+          {values.books.map((book) => (
+            <span role="option" key={book.id}>
+              {book.title}{' '}
+              <IconX
+                aria-label={`Remove ${book.title}`}
+                style={{ cursor: 'pointer' }}
+                onClick={() => removeBook(book)}
+              />
+            </span>
+          ))}
+          <input list="datalist" aria-label="Add another book" onChange={addBook} />
+          <datalist id="datalist" role="listbox">
+            {bookOptions.map((option) => (
+              <option key={option.id} value={option.id} data-option={JSON.stringify(option)}>
+                {option.title}
+              </option>
+            ))}
+          </datalist>
+        </div>
       </label>
 
       <div className="right">

@@ -74,8 +74,8 @@ describe('Book', () => {
     render(<Book />)
     await wait()
     expect(screen.getByText('Authors (1)')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'firstName lastName' })).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'firstName lastName' }))
+    expect(screen.getByText('firstName lastName')).toBeInTheDocument()
+    fireEvent.click(screen.getByLabelText('Remove firstName lastName'))
     expect(screen.getByRole('option', { name: 'firstName lastName', hidden: true })).toBeInTheDocument()
   })
 
