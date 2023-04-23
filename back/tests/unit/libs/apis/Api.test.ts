@@ -6,6 +6,6 @@ describe('sanitize', () => {
   })
 
   it('should replace non letters in name', () => {
-    expect(sanitize('$ù^')).toEqual([''])
+    expect(sanitize(',')).toEqual([''])
   })
 })

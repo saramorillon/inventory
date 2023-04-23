@@ -91,7 +91,7 @@ describe('postBook', () => {
     const { res } = getMockRes()
     await postBook(req, res)
     expect(prisma.author.findFirst).toHaveBeenCalledWith({
-      where: { AND: [{ OR: [{ firstName: { contains: 'author' } }] }, { OR: [{ lastName: { contains: 'author' } }] }] },
+      where: { AND: [{ OR: [{ firstName: 'author' }] }, { OR: [{ lastName: 'author' }] }] },
     })
   })
 

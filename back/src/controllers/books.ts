@@ -67,12 +67,11 @@ export async function postBook(req: Request, res: Response): Promise<void> {
 }
 
 async function getAuthor(authors: string[]) {
-  const firstNames = authors.map((author) => ({ firstName: { contains: author } }))
-  const lastNames = authors.map((author) => ({ lastName: { contains: author } }))
-  return (
-    (await prisma.author.findFirst({ where: { AND: [{ OR: firstNames }, { OR: lastNames }] } })) ??
-    (await prisma.author.create({ data: { lastName: authors.join(' ') } }))
-  )
+  const firstNames = authors.map((author) => ({ firstName: author }))
+  const lastNames = authors.map((author) => ({ lastName: author }))
+  const author = await prisma.author.findFirst({ where: { AND: [{ OR: firstNames }, { OR: lastNames }] } })
+  if (author) return author
+  return prisma.author.create({ data: { lastName: authors.join(' ') } })
 }
 
 export async function getBook(req: Request, res: Response): Promise<void> {
