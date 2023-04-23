@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 export function useHeader(title: string, subtitle?: string): void {
   useEffect(() => {
-    document.title = `Inventory - ${title}`
+    document.title = `Inventory - ${subtitle || title}`
     const header = document.querySelector('header')
     if (header) {
       header.innerHTML = `<h1>${title}</h1>`

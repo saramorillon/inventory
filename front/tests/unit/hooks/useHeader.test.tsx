@@ -8,6 +8,11 @@ describe('useHeader', () => {
     expect(document.title).toBe('Inventory - Title')
   })
 
+  it('should set document title using subtitle', () => {
+    renderHook(() => useHeader('Title', 'Subtitle'))
+    expect(document.title).toBe('Inventory - Subtitle')
+  })
+
   it('should render title in header', () => {
     render(<header />)
     renderHook(() => useHeader('Title'))
