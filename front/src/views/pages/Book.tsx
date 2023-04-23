@@ -1,5 +1,5 @@
 import { useFetch, useForm } from '@saramorillon/hooks'
-import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons'
+import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons-react'
 import { useBarcode } from 'next-barcode'
 import React, { useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -86,7 +86,7 @@ function Form({ book, refresh }: IFormProps) {
             <input list="datalist" aria-label="Add another author" onChange={addAuthor} />
             <datalist id="datalist" role="listbox">
               {authorOptions.map((option) => (
-                <option key={option.id} value={option.id} data-option={JSON.stringify(option)}>
+                <option key={option.id} value={option.id}>
                   {fullName(option)}
                 </option>
               ))}

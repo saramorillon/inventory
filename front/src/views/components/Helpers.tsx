@@ -1,4 +1,4 @@
-import { IconSearch, IconX } from '@tabler/icons'
+import { IconSearch, IconX } from '@tabler/icons-react'
 import React from 'react'
 
 export function Loading({ message }: { message: string }): JSX.Element {

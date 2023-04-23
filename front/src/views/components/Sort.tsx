@@ -1,4 +1,4 @@
-import { IconArrowsSort, IconSortAscending, IconSortDescending } from '@tabler/icons'
+import { IconArrowsSort, IconSortAscending, IconSortDescending } from '@tabler/icons-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { IColumn } from './Table'
 

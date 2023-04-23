@@ -1,10 +1,10 @@
 import { useFetch } from '@saramorillon/hooks'
-import { IconPlus, IconRefresh } from '@tabler/icons'
+import { IconPlus, IconRefresh } from '@tabler/icons-react'
 import { format, parseISO } from 'date-fns'
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
-import { fullName, IAuthor } from '../../models/Author'
+import { IAuthor, fullName } from '../../models/Author'
 import { getAuthors } from '../../services/authors'
 import { DataTable, IColumn } from '../components/Table'
 

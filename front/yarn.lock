@@ -954,10 +954,18 @@
   dependencies:
     "@sinonjs/commons" "^2.0.0"
 
-"@tabler/icons@^1.108.0":
-  version "1.108.0"
-  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.108.0.tgz#95f20eed2d32aa60a0e992ad08f6e2fa213e6161"
-  integrity sha512-g5omegUgM1aaS+ICoJNNlFpxBGHPQq92Hs0w0pZLn1LzvMRc2H/3NO7A+G4idJwrJ6Nk8V7rnA9T8X2m4aGSaQ==
+"@tabler/icons-react@^2.17.0":
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons-react/-/icons-react-2.17.0.tgz#8d7b33958bdef17c2aadaa0899b87a259c9f5f01"
+  integrity sha512-kuEW+qNwRqcK5iMl7qTapzX2NiMOwPg4Az01d+IZ1DIMwaZ7iKPJaIor2ihKFLPYrT9D5BZHXB8R5mSkw0FETg==
+  dependencies:
+    "@tabler/icons" "2.17.0"
+    prop-types "^15.7.2"
+
+"@tabler/icons@2.17.0":
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-2.17.0.tgz#3b5ac3d41576894d3e18cd8014ba8ce33f3634be"
+  integrity sha512-UeJaylOGNRhQKyDlgZfrQ3UPSGlfVQuXcmCsTYeXioKKepibW6VZ3H36Lo1jvBTBkQD2e9m+k2NxwkztOTXwrA==
 
 "@testing-library/dom@^8.11.1":
   version "8.19.0"
@@ -3981,7 +3989,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.8.1:
+prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==

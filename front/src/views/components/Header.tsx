@@ -1,4 +1,4 @@
-import { IconLogout } from '@tabler/icons'
+import { IconLogout } from '@tabler/icons-react'
 import React from 'react'
 import { Link } from 'react-router-dom'
 

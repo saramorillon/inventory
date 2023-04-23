@@ -1,4 +1,4 @@
-import { IconSearch } from '@tabler/icons'
+import { IconSearch } from '@tabler/icons-react'
 import React, { FormEvent, useCallback, useState } from 'react'
 import { scanBook } from '../../services/books'
 

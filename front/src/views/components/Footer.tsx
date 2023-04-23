@@ -1,5 +1,5 @@
 import { useFetch } from '@saramorillon/hooks'
-import { IconBrandGithub, IconWorld } from '@tabler/icons'
+import { IconBrandGithub, IconWorld } from '@tabler/icons-react'
 import React from 'react'
 import { getApp } from '../../services/app'
 
