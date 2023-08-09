@@ -1,8 +1,8 @@
-import dotenv from 'dotenv'
+import { config } from 'dotenv'
 import { join } from 'path'
 import { defineConfig } from 'vitest/config'
 
-dotenv.config({ path: join(__dirname, 'tests', '.env.test') })
+config({ path: join(__dirname, 'tests', '.env.test') })
 
 export default defineConfig({
   test: {
