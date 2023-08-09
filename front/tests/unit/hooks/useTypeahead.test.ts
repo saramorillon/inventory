@@ -1,5 +1,6 @@
 import { renderHook } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
+import { describe, expect, it, vi } from 'vitest'
 import { useTypeahead } from '../../../src/hooks/useTypeahead'
 
 describe('useTypeahead', () => {
@@ -7,12 +8,12 @@ describe('useTypeahead', () => {
   const values = [{ id: 1 }]
 
   it('should return filtered options', () => {
-    const { result } = renderHook(() => useTypeahead(options, values, jest.fn()))
+    const { result } = renderHook(() => useTypeahead(options, values, vi.fn()))
     expect(result.current[0]).toEqual([{ id: 2 }])
   })
 
   it('should not add an option if native event is input event', () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     const { result } = renderHook(() => useTypeahead(options, values, onChange))
     act(() => {
       result.current[1]({ nativeEvent: new InputEvent('type') } as never)
@@ -21,7 +22,7 @@ describe('useTypeahead', () => {
   })
 
   it('should add an option', () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     const { result } = renderHook(() => useTypeahead(options, values, onChange))
     act(() => {
       result.current[1]({ target: { value: '2' } } as never)
@@ -30,7 +31,7 @@ describe('useTypeahead', () => {
   })
 
   it('should remove an option', () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     const { result } = renderHook(() => useTypeahead(options, values, onChange))
     act(() => {
       result.current[2]({ id: 1 })

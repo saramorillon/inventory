@@ -1,25 +1,26 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { useBarcode } from 'next-barcode'
 import React from 'react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useParam } from '../../../../src/hooks/useParam'
 import { getAuthors } from '../../../../src/services/authors'
 import { deleteBook, getBook, saveBook } from '../../../../src/services/books'
 import { Book } from '../../../../src/views/pages/Book'
 import { mockAuthor, mockBook, mockNavigate, wait } from '../../../mocks'
 
-jest.mock('../../../../src/hooks/useParam')
-jest.mock('../../../../src/services/books')
-jest.mock('../../../../src/services/authors')
-jest.mock('next-barcode')
+vi.mock('../../../../src/hooks/useParam')
+vi.mock('../../../../src/services/books')
+vi.mock('../../../../src/services/authors')
+vi.mock('next-barcode')
 
 describe('Book', () => {
   beforeEach(() => {
-    jest.mocked(useParam).mockReturnValue('1')
-    jest.mocked(useBarcode).mockReturnValue({})
-    jest.mocked(saveBook).mockResolvedValue(mockBook())
-    jest.mocked(deleteBook).mockResolvedValue(undefined)
-    jest.mocked(getBook).mockResolvedValue(mockBook())
-    jest.mocked(getAuthors).mockResolvedValue([mockAuthor()])
+    vi.mocked(useParam).mockReturnValue('1')
+    vi.mocked(useBarcode).mockReturnValue({})
+    vi.mocked(saveBook).mockResolvedValue(mockBook())
+    vi.mocked(deleteBook).mockResolvedValue(undefined)
+    vi.mocked(getBook).mockResolvedValue(mockBook())
+    vi.mocked(getAuthors).mockResolvedValue([mockAuthor()])
   })
 
   it('should render a loader when loading', async () => {
@@ -29,14 +30,14 @@ describe('Book', () => {
   })
 
   it('should render an error when an error occurred', async () => {
-    jest.mocked(getBook).mockRejectedValue(new Error())
+    vi.mocked(getBook).mockRejectedValue(new Error())
     render(<Book />)
     await wait()
     expect(screen.getByText('Error while loading book')).toBeInTheDocument()
   })
 
   it('should render a not found message if the book is not found', async () => {
-    jest.mocked(getBook).mockResolvedValue(null)
+    vi.mocked(getBook).mockResolvedValue(null)
     render(<Book />)
     await wait()
     expect(screen.getByText('Book not found')).toBeInTheDocument()

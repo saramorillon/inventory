@@ -1,14 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { SessionContext, SessionProvider } from '../../../src/contexts/SessionContext'
 import { getSession } from '../../../src/services/session'
 import { mockSession, wait } from '../../mocks'
 
-jest.mock('../../../src/services/session')
+vi.mock('../../../src/services/session')
 
 describe('SessionContext', () => {
   beforeEach(() => {
-    jest.mocked(getSession).mockResolvedValue(mockSession())
+    vi.mocked(getSession).mockResolvedValue(mockSession())
   })
 
   it('should show loader when loading', async () => {

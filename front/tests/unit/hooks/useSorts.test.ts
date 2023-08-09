@@ -1,5 +1,6 @@
 import { renderHook } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
+import { describe, expect, it, vi } from 'vitest'
 import { useSorts } from '../../../src/hooks/useSorts'
 
 describe('useSorts', () => {
@@ -10,7 +11,7 @@ describe('useSorts', () => {
 
   it('should set sort at index', () => {
     const { result } = renderHook(() => useSorts())
-    const fn = jest.fn()
+    const fn = vi.fn()
     act(() => result.current[1](2, fn))
     expect(result.current[0]).toEqual([{ index: 2, fn }])
   })

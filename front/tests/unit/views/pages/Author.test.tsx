@@ -1,21 +1,22 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { deleteAuthor, getAuthor, saveAuthor } from '../../../../src/services/authors'
 import { getBooks } from '../../../../src/services/books'
 import { Author } from '../../../../src/views/pages/Author'
 import { mockAuthor, mockBook, mockNavigate, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/authors')
-jest.mock('../../../../src/services/books')
+vi.mock('../../../../src/services/authors')
+vi.mock('../../../../src/services/books')
 
 describe('Author', () => {
   beforeEach(() => {
-    jest.mocked(useParams).mockReturnValue({ id: '1' })
-    jest.mocked(saveAuthor).mockResolvedValue(mockAuthor())
-    jest.mocked(deleteAuthor).mockResolvedValue(undefined)
-    jest.mocked(getAuthor).mockResolvedValue(mockAuthor())
-    jest.mocked(getBooks).mockResolvedValue([mockBook()])
+    vi.mocked(useParams).mockReturnValue({ id: '1' })
+    vi.mocked(saveAuthor).mockResolvedValue(mockAuthor())
+    vi.mocked(deleteAuthor).mockResolvedValue(undefined)
+    vi.mocked(getAuthor).mockResolvedValue(mockAuthor())
+    vi.mocked(getBooks).mockResolvedValue([mockBook()])
   })
 
   it('should render a loader when loading', async () => {
@@ -25,22 +26,22 @@ describe('Author', () => {
   })
 
   it('should render an error when an error occurred', async () => {
-    jest.mocked(getAuthor).mockRejectedValue(new Error())
+    vi.mocked(getAuthor).mockRejectedValue(new Error())
     render(<Author />)
     await wait()
     expect(screen.getByText('Error while loading author')).toBeInTheDocument()
   })
 
   it('should render a not found message if id is not empty and the author is not found', async () => {
-    jest.mocked(getAuthor).mockResolvedValue(null)
+    vi.mocked(getAuthor).mockResolvedValue(null)
     render(<Author />)
     await wait()
     expect(screen.getByText('Author not found')).toBeInTheDocument()
   })
 
   it('should not render a not found message if id is empty and the author is not found', async () => {
-    jest.mocked(useParams).mockReturnValue({})
-    jest.mocked(getAuthor).mockResolvedValue(null)
+    vi.mocked(useParams).mockReturnValue({})
+    vi.mocked(getAuthor).mockResolvedValue(null)
     render(<Author />)
     await wait()
     expect(screen.queryByText('Author not found')).not.toBeInTheDocument()
@@ -89,8 +90,8 @@ describe('Author', () => {
   })
 
   it('should redirect to author page after creating author', async () => {
-    jest.mocked(useParams).mockReturnValue({})
-    jest.mocked(getAuthor).mockResolvedValue(null)
+    vi.mocked(useParams).mockReturnValue({})
+    vi.mocked(getAuthor).mockResolvedValue(null)
     const navigate = mockNavigate()
     render(<Author />)
     await wait()
@@ -100,8 +101,8 @@ describe('Author', () => {
   })
 
   it('should not render delete delete button is author is empty', async () => {
-    jest.mocked(useParams).mockReturnValue({})
-    jest.mocked(getAuthor).mockResolvedValue(null)
+    vi.mocked(useParams).mockReturnValue({})
+    vi.mocked(getAuthor).mockResolvedValue(null)
     render(<Author />)
     await wait()
     expect(screen.queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()

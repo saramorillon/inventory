@@ -1,14 +1,15 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { getBooks } from '../../../../src/services/books'
 import { Books, columns } from '../../../../src/views/pages/Books'
 import { mockAuthor, mockBook, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/books')
+vi.mock('../../../../src/services/books')
 
 describe('Books', () => {
   beforeEach(() => {
-    jest.mocked(getBooks).mockResolvedValue([mockBook()])
+    vi.mocked(getBooks).mockResolvedValue([mockBook()])
   })
 
   it('should render a loader when loading', async () => {
@@ -18,14 +19,14 @@ describe('Books', () => {
   })
 
   it('should render an error when an error occurred', async () => {
-    jest.mocked(getBooks).mockRejectedValue(new Error())
+    vi.mocked(getBooks).mockRejectedValue(new Error())
     render(<Books />)
     await wait()
     expect(screen.getByText('Error while loading data')).toBeInTheDocument()
   })
 
   it('should render a not found message if the book is not found', async () => {
-    jest.mocked(getBooks).mockResolvedValue([])
+    vi.mocked(getBooks).mockResolvedValue([])
     render(<Books />)
     await wait()
     expect(screen.getByText('No data for now')).toBeInTheDocument()

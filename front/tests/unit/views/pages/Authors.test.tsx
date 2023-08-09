@@ -1,14 +1,15 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { getAuthors } from '../../../../src/services/authors'
 import { Authors, columns } from '../../../../src/views/pages/Authors'
 import { mockAuthor, mockNavigate, wait } from '../../../mocks'
 
-jest.mock('../../../../src/services/authors')
+vi.mock('../../../../src/services/authors')
 
 describe('Authors', () => {
   beforeEach(() => {
-    jest.mocked(getAuthors).mockResolvedValue([mockAuthor()])
+    vi.mocked(getAuthors).mockResolvedValue([mockAuthor()])
   })
 
   it('should render a loader when loading', async () => {
@@ -18,14 +19,14 @@ describe('Authors', () => {
   })
 
   it('should render an error when an error occurred', async () => {
-    jest.mocked(getAuthors).mockRejectedValue(new Error())
+    vi.mocked(getAuthors).mockRejectedValue(new Error())
     render(<Authors />)
     await wait()
     expect(screen.getByText('Error while loading data')).toBeInTheDocument()
   })
 
   it('should render a not found message if the author is not found', async () => {
-    jest.mocked(getAuthors).mockResolvedValue([])
+    vi.mocked(getAuthors).mockResolvedValue([])
     render(<Authors />)
     await wait()
     expect(screen.getByText('No data for now')).toBeInTheDocument()
