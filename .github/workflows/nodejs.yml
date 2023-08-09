@@ -1,0 +1,49 @@
+name: Inventory
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  back:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install
+        run: yarn install
+        working-directory: back
+      - name: Build
+        run: yarn tsc
+        working-directory: back
+      - name: Test
+        run: yarn vitest run
+        working-directory: back
+
+  front:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install
+        run: yarn install
+        working-directory: front
+      - name: Build
+        run: yarn tsc
+        working-directory: front
+      - name: Test
+        run: yarn vitest run
+        working-directory: front
