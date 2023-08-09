@@ -1,6 +1,6 @@
-import { getMockRes } from '@jest-mock/express'
+import { describe, expect, it } from 'vitest'
 import { session } from '../../../src/middlewares/session'
-import { getMockReq, mockSession } from '../../mocks'
+import { getMockReq, getMockRes, mockSession } from '../../mocks'
 
 describe('session', () => {
   it('should go next if user is authenticated', () => {

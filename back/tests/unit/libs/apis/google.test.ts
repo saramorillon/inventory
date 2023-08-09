@@ -1,11 +1,12 @@
 import axios from 'axios'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { GoogleApi } from '../../../../src/libs/apis/google'
 
-jest.mock('axios')
+vi.mock('axios')
 
 describe('search', () => {
   beforeEach(() => {
-    jest.mocked(axios.get).mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: { items: [{ volumeInfo: { title: 'title', authors: ['author'] } }] },
     })
   })
@@ -18,7 +19,7 @@ describe('search', () => {
   })
 
   it('should return null if title is empty', async () => {
-    jest.mocked(axios.get).mockResolvedValue({ data: { items: [{ volumeInfo: { authors: ['author'] } }] } })
+    vi.mocked(axios.get).mockResolvedValue({ data: { items: [{ volumeInfo: { authors: ['author'] } }] } })
     const result = await new GoogleApi().search('isbn')
     expect(result).toBeNull()
   })
@@ -34,7 +35,7 @@ describe('search', () => {
   })
 
   it('should return null if error', async () => {
-    jest.mocked(axios.get).mockRejectedValue(new Error('500'))
+    vi.mocked(axios.get).mockRejectedValue(new Error('500'))
     const result = await new GoogleApi().search('isbn')
     expect(result).toBeNull()
   })

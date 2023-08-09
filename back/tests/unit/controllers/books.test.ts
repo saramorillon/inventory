@@ -1,14 +1,14 @@
-import { getMockRes } from '@jest-mock/express'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { deleteBook, getBook, getBooks, postBook, putBook } from '../../../src/controllers/books'
 import { isbnSearch } from '../../../src/libs/isbn'
 import { prisma } from '../../../src/prisma'
-import { getMockReq, mockApiResult, mockAuthor, mockBook, mockSession } from '../../mocks'
+import { getMockReq, getMockRes, mockApiResult, mockAuthor, mockBook, mockSession } from '../../mocks'
 
-jest.mock('../../../src/libs/isbn')
+vi.mock('../../../src/libs/isbn')
 
 describe('getBooks', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.book, 'findMany').mockResolvedValue([mockBook()])
+    vi.spyOn(prisma.book, 'findMany').mockResolvedValue([mockBook()])
   })
 
   it('should get books', async () => {
@@ -26,7 +26,7 @@ describe('getBooks', () => {
   })
 
   it('should send 500 status on error', async () => {
-    jest.spyOn(prisma.book, 'findMany').mockRejectedValue(new Error('500'))
+    vi.spyOn(prisma.book, 'findMany').mockRejectedValue(new Error('500'))
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getBooks(req, res)
@@ -37,11 +37,11 @@ describe('getBooks', () => {
 
 describe('postBook', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.book, 'findUnique').mockResolvedValue(null)
-    jest.spyOn(prisma.book, 'create').mockResolvedValue(mockBook())
-    jest.spyOn(prisma.author, 'findFirst').mockResolvedValue(mockAuthor())
-    jest.spyOn(prisma.author, 'create').mockResolvedValue(mockAuthor())
-    jest.mocked(isbnSearch).mockResolvedValue(mockApiResult())
+    vi.spyOn(prisma.book, 'findUnique').mockResolvedValue(null)
+    vi.spyOn(prisma.book, 'create').mockResolvedValue(mockBook())
+    vi.spyOn(prisma.author, 'findFirst').mockResolvedValue(mockAuthor())
+    vi.spyOn(prisma.author, 'create').mockResolvedValue(mockAuthor())
+    vi.mocked(isbnSearch).mockResolvedValue(mockApiResult())
   })
 
   it('should fail if parameters are invalid', async () => {
@@ -55,7 +55,7 @@ describe('postBook', () => {
   })
 
   it('should get book', async () => {
-    jest.spyOn(prisma.book, 'findUnique').mockResolvedValue(mockBook())
+    vi.spyOn(prisma.book, 'findUnique').mockResolvedValue(mockBook())
     const req = getMockReq({ body: { serial: '9780123456789' } })
     const { res } = getMockRes()
     await postBook(req, res)
@@ -63,7 +63,7 @@ describe('postBook', () => {
   })
 
   it('should send 204 status if book already exists', async () => {
-    jest.spyOn(prisma.book, 'findUnique').mockResolvedValue(mockBook())
+    vi.spyOn(prisma.book, 'findUnique').mockResolvedValue(mockBook())
     const req = getMockReq({ body: { serial: '9780123456789' } })
     const { res } = getMockRes()
     await postBook(req, res)
@@ -79,7 +79,7 @@ describe('postBook', () => {
   })
 
   it('should send 404 status if isbn is not found', async () => {
-    jest.mocked(isbnSearch).mockResolvedValue(undefined)
+    vi.mocked(isbnSearch).mockResolvedValue(undefined)
     const req = getMockReq({ body: { serial: '9780123456789' } })
     const { res } = getMockRes()
     await postBook(req, res)
@@ -96,7 +96,7 @@ describe('postBook', () => {
   })
 
   it('should create author if no matching author is found', async () => {
-    jest.spyOn(prisma.author, 'findFirst').mockResolvedValue(null)
+    vi.spyOn(prisma.author, 'findFirst').mockResolvedValue(null)
     const req = getMockReq({ body: { serial: '9780123456789' } })
     const { res } = getMockRes()
     await postBook(req, res)
@@ -120,7 +120,7 @@ describe('postBook', () => {
   })
 
   it('should send 500 status on error', async () => {
-    jest.spyOn(prisma.book, 'create').mockRejectedValue(new Error('500'))
+    vi.spyOn(prisma.book, 'create').mockRejectedValue(new Error('500'))
     const req = getMockReq({ body: { serial: '9780123456789' } })
     const { res } = getMockRes()
     await postBook(req, res)
@@ -131,7 +131,7 @@ describe('postBook', () => {
 
 describe('getBook', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.book, 'findUnique').mockResolvedValue(mockBook())
+    vi.spyOn(prisma.book, 'findUnique').mockResolvedValue(mockBook())
   })
 
   it('should fail if parameters are invalid', async () => {
@@ -159,7 +159,7 @@ describe('getBook', () => {
   })
 
   it('should send 500 status on error', async () => {
-    jest.spyOn(prisma.book, 'findUnique').mockRejectedValue(new Error('500'))
+    vi.spyOn(prisma.book, 'findUnique').mockRejectedValue(new Error('500'))
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getBook(req, res)
@@ -170,7 +170,7 @@ describe('getBook', () => {
 
 describe('putBook', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.book, 'update').mockResolvedValue(mockBook())
+    vi.spyOn(prisma.book, 'update').mockResolvedValue(mockBook())
   })
 
   it('should fail if parameters are invalid', async () => {
@@ -208,7 +208,7 @@ describe('putBook', () => {
   })
 
   it('should send 500 status on error', async () => {
-    jest.spyOn(prisma.book, 'update').mockRejectedValue(new Error('500'))
+    vi.spyOn(prisma.book, 'update').mockRejectedValue(new Error('500'))
     const req = getMockReq({
       params: { id: '1' },
       body: { serial: 'serial', title: 'title', source: 'source', authors: [{ id: 1 }] },
@@ -222,7 +222,7 @@ describe('putBook', () => {
 
 describe('deleteBook', () => {
   beforeEach(() => {
-    jest.spyOn(prisma.book, 'delete').mockResolvedValue(mockBook())
+    vi.spyOn(prisma.book, 'delete').mockResolvedValue(mockBook())
   })
 
   it('should fail if parameters are invalid', async () => {
@@ -250,7 +250,7 @@ describe('deleteBook', () => {
   })
 
   it('should send 500 status on error', async () => {
-    jest.spyOn(prisma.book, 'delete').mockRejectedValue(new Error('500'))
+    vi.spyOn(prisma.book, 'delete').mockRejectedValue(new Error('500'))
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await deleteBook(req, res)

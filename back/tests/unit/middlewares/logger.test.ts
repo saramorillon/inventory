@@ -1,8 +1,9 @@
-import { getMockReq, getMockRes } from '@jest-mock/express'
 import { Logger } from '@saramorillon/logger'
+import { describe, expect, it, vi } from 'vitest'
 import { logger } from '../../../src/middlewares/logger'
+import { getMockReq, getMockRes } from '../../mocks'
 
-jest.mock('@saramorillon/logger')
+vi.mock('@saramorillon/logger')
 
 describe('logger', () => {
   it('should create req logger', () => {

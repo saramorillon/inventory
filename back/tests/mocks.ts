@@ -1,20 +1,41 @@
-import { getMockReq as _getMockReq } from '@jest-mock/express'
 import { Author, Book, User } from '@prisma/client'
 import { Logger } from '@saramorillon/logger'
+import { NextFunction, Request, Response } from 'express'
 import { Session } from 'express-session'
+import { vi } from 'vitest'
 import { IApiResult } from '../src/libs/apis/Api'
 import { ISession } from '../src/models/Session'
 
-export function getMockReq(...params: Parameters<typeof _getMockReq>): ReturnType<typeof _getMockReq> {
-  const req = _getMockReq(...params)
-  req.session = {} as Session
-  req.logger = new Logger({ silent: true })
-  return req
+export function getMockReq(request: Partial<Request> = {}): Request {
+  return {
+    params: {},
+    query: {},
+    body: {},
+    session: {} as Session,
+    logger: new Logger({ silent: true }),
+    ...request,
+  } as never
+}
+
+export function getMockRes(response: Partial<Response> = {}): { res: Response; next: NextFunction } {
+  return {
+    res: {
+      send: vi.fn().mockReturnThis(),
+      sendStatus: vi.fn().mockReturnThis(),
+      sendFile: vi.fn().mockReturnThis(),
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn().mockReturnThis(),
+      clearCookie: vi.fn().mockReturnThis(),
+      redirect: vi.fn().mockReturnThis(),
+      ...response,
+    } as never,
+    next: vi.fn() as never,
+  }
 }
 
 export function mockAction(logger: Logger) {
-  const action = { success: jest.fn(), failure: jest.fn() }
-  logger.start = jest.fn().mockReturnValue(action)
+  const action = { success: vi.fn(), failure: vi.fn() }
+  logger.start = vi.fn().mockReturnValue(action)
   return action
 }
 

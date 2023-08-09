@@ -1,11 +1,12 @@
 import axios from 'axios'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { WorlCatApi } from '../../../../src/libs/apis/worldcat'
 
-jest.mock('axios')
+vi.mock('axios')
 
 describe('search', () => {
   beforeEach(() => {
-    jest.mocked(axios.get).mockResolvedValue({
+    vi.mocked(axios.get).mockResolvedValue({
       data: `<classify><works><work author="author" title="title" /></works></classify>`,
     })
   })
@@ -16,7 +17,7 @@ describe('search', () => {
   })
 
   it('should return null if title is empty', async () => {
-    jest.mocked(axios.get).mockResolvedValue({ data: `<classify><works><work author="author" /></works></classify>` })
+    vi.mocked(axios.get).mockResolvedValue({ data: `<classify><works><work author="author" /></works></classify>` })
     const result = await new WorlCatApi().search('isbn')
     expect(result).toBeNull()
   })
@@ -32,7 +33,7 @@ describe('search', () => {
   })
 
   it('should return null if error', async () => {
-    jest.mocked(axios.get).mockRejectedValue(new Error('500'))
+    vi.mocked(axios.get).mockRejectedValue(new Error('500'))
     const result = await new WorlCatApi().search('isbn')
     expect(result).toBeNull()
   })

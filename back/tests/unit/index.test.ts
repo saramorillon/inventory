@@ -1,10 +1,11 @@
+import { describe, expect, it, vi } from 'vitest'
 import { App } from '../../src/app'
 
-jest.mock('../../src/app')
+vi.mock('../../src/app')
 
 describe('index', () => {
-  it('should run app', () => {
-    require('../../src')
+  it('should run app', async () => {
+    await import('../../src')
     expect(App.prototype.run).toHaveBeenCalled()
   })
 })
