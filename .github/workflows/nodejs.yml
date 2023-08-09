@@ -9,10 +9,10 @@ jobs:
   back:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 18
       - name: Install
         run: yarn install
         working-directory: back
@@ -26,10 +26,10 @@ jobs:
   front:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 18
       - name: Install
         run: yarn install
         working-directory: front
