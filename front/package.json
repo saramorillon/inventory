@@ -12,6 +12,7 @@
     "@saramorillon/eslint-plugin": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
+    "@types/babel__core": "^7.20.1",
     "@types/node": "^18.14.0",
     "@vitejs/plugin-react": "^3.1.0",
     "jsdom": "^22.1.0",
