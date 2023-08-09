@@ -13,7 +13,7 @@ describe('login', () => {
     const { res } = getMockRes()
     await login(req, res)
     expect(prisma.user.findFirstOrThrow).toHaveBeenCalledWith({
-      where: { username: 'username', password: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8' },
+      where: { username: 'username', password: 'd63dc919e201d7bc4c825630d2cf25fdc93d4b2f0d46706d29038d01' },
     })
   })
 
