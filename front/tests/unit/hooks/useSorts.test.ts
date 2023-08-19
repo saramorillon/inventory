@@ -1,6 +1,5 @@
 import { renderHook } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
-import { describe, expect, it, vi } from 'vitest'
 import { useSorts } from '../../../src/hooks/useSorts'
 
 describe('useSorts', () => {

@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { OpenLibrary } from '../../../../src/libs/apis/openlibrary'
 
 vi.mock('axios')

@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { SessionContext } from '../../../../src/contexts/SessionContext'
 import { Footer } from '../../../../src/views/components/Footer'
 import { Header } from '../../../../src/views/components/Header'
@@ -20,7 +19,7 @@ describe('PublicOutlet', () => {
     render(
       <SessionContext.Provider value={mockSession()}>
         <PublicOutlet />
-      </SessionContext.Provider>
+      </SessionContext.Provider>,
     )
     expect(screen.getByText('Navigate to /')).toBeInTheDocument()
   })
@@ -29,7 +28,7 @@ describe('PublicOutlet', () => {
     render(
       <SessionContext.Provider value={null}>
         <PublicOutlet />
-      </SessionContext.Provider>
+      </SessionContext.Provider>,
     )
     expect(screen.getByText('Outlet')).toBeInTheDocument()
     expect(screen.getByText('Footer')).toBeInTheDocument()
@@ -41,7 +40,7 @@ describe('PrivateOutlet', () => {
     render(
       <SessionContext.Provider value={null}>
         <PrivateOutlet />
-      </SessionContext.Provider>
+      </SessionContext.Provider>,
     )
     expect(screen.getByText('Navigate to /login')).toBeInTheDocument()
   })
@@ -50,7 +49,7 @@ describe('PrivateOutlet', () => {
     render(
       <SessionContext.Provider value={mockSession()}>
         <PrivateOutlet />
-      </SessionContext.Provider>
+      </SessionContext.Provider>,
     )
     expect(screen.getByText('Header')).toBeInTheDocument()
     expect(screen.getByText('Outlet')).toBeInTheDocument()

@@ -1,5 +1,4 @@
 import { join } from 'path'
-import { describe, expect, it } from 'vitest'
 import { render } from '../../../src/controllers/render'
 import { getMockReq, getMockRes } from '../../mocks'
 

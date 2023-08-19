@@ -1,4 +1,3 @@
-import { describe, expect, it, vi } from 'vitest'
 import { deleteAuthor, getAuthor, getAuthors, saveAuthor } from '../../../src/services/authors'
 import { Axios } from '../../../src/services/Axios'
 import { mockAuthor } from '../../mocks'

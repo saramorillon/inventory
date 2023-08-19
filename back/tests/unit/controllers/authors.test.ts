@@ -1,4 +1,3 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { deleteAuthor, getAuthor, getAuthors, postAuthor, putAuthor } from '../../../src/controllers/authors'
 import { prisma } from '../../../src/prisma'
 import { getMockReq, getMockRes, mockAuthor } from '../../mocks'

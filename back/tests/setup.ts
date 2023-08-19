@@ -1,5 +1,4 @@
 import mockdate from 'mockdate'
-import { vi } from 'vitest'
 
 vi.mock('@prisma/internals')
 

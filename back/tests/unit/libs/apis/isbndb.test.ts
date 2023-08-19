@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { IsbnDbApi } from '../../../../src/libs/apis/isbndb'
 import { mockSession } from '../../../mocks'
 

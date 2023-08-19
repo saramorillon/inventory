@@ -2,7 +2,6 @@ import { Author, Book, User } from '@prisma/client'
 import { Logger } from '@saramorillon/logger'
 import { NextFunction, Request, Response } from 'express'
 import { Session } from 'express-session'
-import { vi } from 'vitest'
 import { IApiResult } from '../src/libs/apis/Api'
 import { ISession } from '../src/models/Session'
 

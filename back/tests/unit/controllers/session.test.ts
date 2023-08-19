@@ -1,4 +1,3 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { getSession, login, logout } from '../../../src/controllers/session'
 import { prisma } from '../../../src/prisma'
 import { getMockReq, getMockRes, mockAction, mockSession, mockUser } from '../../mocks'

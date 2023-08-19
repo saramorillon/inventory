@@ -5,8 +5,8 @@
     "module": "commonjs",
     "outDir": "dist",
     "jsx": "react",
-    "sourceMap": true,
     "esModuleInterop": true,
-    "strict": true
+    "strict": true,
+    "types": ["vitest/globals"]
   }
 }

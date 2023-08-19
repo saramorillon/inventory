@@ -1,6 +1,5 @@
 import { renderHook } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
-import { describe, expect, it } from 'vitest'
 import { useTable } from '../../../src/hooks/useTable'
 
 describe('useTable', () => {

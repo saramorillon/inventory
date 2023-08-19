@@ -1,6 +1,5 @@
 import { render, renderHook, screen } from '@testing-library/react'
 import React from 'react'
-import { describe, expect, it } from 'vitest'
 import { useHeader } from '../../../src/hooks/useHeader'
 
 describe('useHeader', () => {

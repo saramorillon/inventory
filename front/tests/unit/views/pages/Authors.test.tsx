@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { getAuthors } from '../../../../src/services/authors'
 import { Authors, columns } from '../../../../src/views/pages/Authors'
 import { mockAuthor, mockNavigate, wait } from '../../../mocks'

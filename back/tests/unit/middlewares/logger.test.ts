@@ -1,5 +1,4 @@
 import { Logger } from '@saramorillon/logger'
-import { describe, expect, it, vi } from 'vitest'
 import { logger } from '../../../src/middlewares/logger'
 import { getMockReq, getMockRes } from '../../mocks'
 
@@ -15,7 +14,7 @@ describe('logger', () => {
       {
         app: { host: 'http://app_host.io', name: 'inventory', port: 3000, version: expect.any(String) },
         req: { url: 'url', params: { param: 'value' }, query: { query: 'value' } },
-      }
+      },
     )
     expect(req.logger).toBeInstanceOf(Logger)
   })

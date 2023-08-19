@@ -1,11 +1,8 @@
-import matchers from '@testing-library/jest-dom/matchers'
+import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
 import React, { PropsWithChildren } from 'react'
 import { LinkProps, NavigateProps, NavLinkProps, OutletProps, useParams } from 'react-router-dom'
-import { afterEach, beforeEach, expect, vi } from 'vitest'
 import { mockNavigate } from './mocks'
-
-expect.extend(matchers)
 
 vi.mock('react-router-dom', async () => {
   const def = await vi.importActual<typeof import('react-router-dom')>('react-router-dom')

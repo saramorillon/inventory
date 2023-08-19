@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { getApp } from '../../src/controllers/app'
 import { deleteAuthor, getAuthor, getAuthors, postAuthor, putAuthor } from '../../src/controllers/authors'
 import { deleteBook, getBook, getBooks, postBook, putBook } from '../../src/controllers/books'

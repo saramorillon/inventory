@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { login } from '../../../../src/services/session'
 import { Login } from '../../../../src/views/pages/Login'
 import { mockLocation, restoreLocation, wait } from '../../../mocks'

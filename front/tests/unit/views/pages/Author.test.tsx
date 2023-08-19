@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { deleteAuthor, getAuthor, saveAuthor } from '../../../../src/services/authors'
 import { getBooks } from '../../../../src/services/books'
 import { Author } from '../../../../src/views/pages/Author'

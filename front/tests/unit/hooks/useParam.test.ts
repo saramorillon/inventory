@@ -1,6 +1,5 @@
 import { renderHook } from '@testing-library/react'
 import { useParams } from 'react-router-dom'
-import { describe, expect, it, vi } from 'vitest'
 import { useParam } from '../../../src/hooks/useParam'
 
 describe('useParam', () => {

@@ -1,4 +1,3 @@
-import { describe, expect, it, vi } from 'vitest'
 import { getApp } from '../../../src/controllers/app'
 import { getMockReq, getMockRes } from '../../mocks'
 

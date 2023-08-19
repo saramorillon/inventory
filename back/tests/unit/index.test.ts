@@ -1,4 +1,3 @@
-import { describe, expect, it, vi } from 'vitest'
 import { App } from '../../src/app'
 
 vi.mock('../../src/app')

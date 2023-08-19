@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import mockdate from 'mockdate'
 import React from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { getApp } from '../../../../src/services/app'
 import { Footer } from '../../../../src/views/components/Footer'
 import { mockApp, wait } from '../../../mocks'

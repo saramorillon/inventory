@@ -1,4 +1,3 @@
-import { describe, expect, it, vi } from 'vitest'
 import { Axios } from '../../../src/services/Axios'
 import { deleteBook, getBook, getBooks, saveBook, scanBook } from '../../../src/services/books'
 import { mockBook } from '../../mocks'

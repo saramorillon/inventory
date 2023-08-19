@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { describe, expect, it, vi } from 'vitest'
 import { Axios } from '../../../src/services/Axios'
 import { getSession, login } from '../../../src/services/session'
 

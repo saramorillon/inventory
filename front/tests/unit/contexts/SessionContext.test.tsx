@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { SessionContext, SessionProvider } from '../../../src/contexts/SessionContext'
 import { getSession } from '../../../src/services/session'
 import { mockSession, wait } from '../../mocks'
@@ -28,7 +27,7 @@ describe('SessionContext', () => {
     render(
       <SessionProvider>
         <SessionContext.Consumer>{(value) => <>{value?.username}</>}</SessionContext.Consumer>
-      </SessionProvider>
+      </SessionProvider>,
     )
     await wait()
     expect(screen.getByText('username')).toBeInTheDocument()

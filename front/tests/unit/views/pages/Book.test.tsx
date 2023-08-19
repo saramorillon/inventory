@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { useBarcode } from 'next-barcode'
 import React from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useParam } from '../../../../src/hooks/useParam'
 import { getAuthors } from '../../../../src/services/authors'
 import { deleteBook, getBook, saveBook } from '../../../../src/services/books'

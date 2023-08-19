@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest'
 import { session } from '../../../src/middlewares/session'
 import { getMockReq, getMockRes, mockSession } from '../../mocks'
 
