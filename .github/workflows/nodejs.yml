@@ -17,7 +17,7 @@ jobs:
         run: yarn install
         working-directory: back
       - name: Build
-        run: yarn tsc
+        run: yarn build
         working-directory: back
       - name: Test
         run: yarn vitest run
@@ -34,7 +34,7 @@ jobs:
         run: yarn install
         working-directory: front
       - name: Build
-        run: yarn tsc
+        run: yarn build
         working-directory: front
       - name: Test
         run: yarn vitest run
