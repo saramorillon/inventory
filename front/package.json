@@ -2,7 +2,7 @@
   "name": "front",
   "private": true,
   "scripts": {
-    "prebuild": "tsc",
+    "prebuild": "tsc -b tsconfig.build.json",
     "build": "vite build",
     "serve": "vite dev",
     "format": "prettier \"src/**/*.{ts,tsx}\" --write",
