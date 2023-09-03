@@ -20,7 +20,7 @@ interface ITableProps<T> {
   error?: unknown
 }
 
-export function DataTable<T>({ columns, data, loading, error }: ITableProps<T>): JSX.Element {
+export function DataTable<T>({ columns, data, loading, error }: ITableProps<T>) {
   const [limit, setLimit] = useState(10)
   const { rows, maxPage, pagination, onSort, onFilter } = useTable(data, limit)
 

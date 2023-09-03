@@ -8,7 +8,7 @@ import { Book } from './pages/Book'
 import { Books } from './pages/Books'
 import { Login } from './pages/Login'
 
-export function App(): JSX.Element | null {
+export function App() {
   return (
     <SessionProvider>
       <BrowserRouter>

@@ -1,4 +1,4 @@
-import { useFetch, useForm } from '@saramorillon/hooks'
+import { useForm, useQuery } from '@saramorillon/hooks'
 import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons-react'
 import React, { useCallback } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -10,10 +10,10 @@ import { deleteAuthor, getAuthor, saveAuthor } from '../../services/authors'
 import { getBooks } from '../../services/books'
 import { Error, Loading, NotFound } from '../components/Helpers'
 
-export function Author(): JSX.Element {
+export function Author() {
   const { id = '' } = useParams<'id'>()
   const call = useCallback(() => getAuthor(id), [id])
-  const [author, { loading, error }, refresh] = useFetch(call, null)
+  const { result: author, loading, error, execute } = useQuery(call, { autoRun: true })
 
   if (loading) return <Loading message="Loading author" />
 
@@ -21,7 +21,7 @@ export function Author(): JSX.Element {
 
   if (id && !author) return <NotFound message="Author not found" />
 
-  return <Form author={author} refresh={refresh} />
+  return <Form author={author} refresh={execute} />
 }
 
 const empty: IAuthor = {
@@ -34,7 +34,7 @@ const empty: IAuthor = {
 }
 
 interface IFormProps {
-  author: IAuthor | null
+  author?: IAuthor
   refresh: () => void
 }
 
@@ -51,15 +51,10 @@ function Form({ author, refresh }: IFormProps) {
           navigate(`/author/${data.id}`)
         }
       }),
-    [navigate, refresh, author]
+    [navigate, refresh, author],
   )
   const onDelete = useCallback((server: IAuthor) => deleteAuthor(server).then(() => navigate('/authors')), [navigate])
   const { values, onChange, submit } = useForm(onSave, author ?? empty)
-  const [books] = useFetch(getBooks, [])
-
-  const changeBooks = useCallback((books: IBook[]) => onChange('books', books), [onChange])
-
-  const [bookOptions, addBook, removeBook] = useTypeahead(books, values.books, changeBooks)
 
   return (
     <form onSubmit={submit}>
@@ -75,26 +70,7 @@ function Form({ author, refresh }: IFormProps) {
 
       <label>
         Books ({values.books.length})
-        <div role="combobox">
-          {values.books.map((book) => (
-            <span role="option" key={book.id}>
-              <Link to={`/book/${book.id}`}>{book.title} </Link>
-              <IconX
-                aria-label={`Remove ${book.title}`}
-                style={{ cursor: 'pointer' }}
-                onClick={() => removeBook(book)}
-              />
-            </span>
-          ))}
-          <input list="datalist" aria-label="Add another book" onChange={addBook} />
-          <datalist id="datalist" role="listbox">
-            {bookOptions.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.title}
-              </option>
-            ))}
-          </datalist>
-        </div>
+        <Books values={values} onChange={(books: IBook[]) => onChange('books', books)} />
       </label>
 
       <div className="right">
@@ -109,5 +85,35 @@ function Form({ author, refresh }: IFormProps) {
         )}
       </div>
     </form>
+  )
+}
+
+interface IBooksProps {
+  values: IAuthor
+  onChange: (value: IBook[]) => void
+}
+
+function Books({ values, onChange }: IBooksProps) {
+  const { result: books } = useQuery(getBooks, { autoRun: true, defaultValue: [] })
+
+  const { options, add, remove } = useTypeahead(books, values.books, onChange)
+
+  return (
+    <div role="combobox">
+      {values.books.map((book) => (
+        <span role="option" key={book.id}>
+          <Link to={`/book/${book.id}`}>{book.title} </Link>
+          <IconX aria-label={`Remove ${book.title}`} style={{ cursor: 'pointer' }} onClick={() => remove(book)} />
+        </span>
+      ))}
+      <input list="datalist" aria-label="Add another book" onChange={add} />
+      <datalist id="datalist" role="listbox">
+        {options.map((option) => (
+          <option key={option.id} value={option.id}>
+            {option.title}
+          </option>
+        ))}
+      </datalist>
+    </div>
   )
 }

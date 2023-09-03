@@ -26,7 +26,7 @@ describe('PublicOutlet', () => {
 
   it('should render outlet and footer if no session', () => {
     render(
-      <SessionContext.Provider value={null}>
+      <SessionContext.Provider value={undefined}>
         <PublicOutlet />
       </SessionContext.Provider>,
     )
@@ -38,7 +38,7 @@ describe('PublicOutlet', () => {
 describe('PrivateOutlet', () => {
   it('should redirect to login page if no session', () => {
     render(
-      <SessionContext.Provider value={null}>
+      <SessionContext.Provider value={undefined}>
         <PrivateOutlet />
       </SessionContext.Provider>,
     )

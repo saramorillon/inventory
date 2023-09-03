@@ -1,13 +1,9 @@
 import { ChangeEvent, useCallback, useMemo } from 'react'
 
-export function useTypeahead<T extends { id: number }>(
-  options: T[],
-  values: T[],
-  onChange: (values: T[]) => void
-): [T[], (e: ChangeEvent<HTMLInputElement>) => void, (option: T) => void] {
+export function useTypeahead<T extends { id: number }>(options: T[], values: T[], onChange: (values: T[]) => void) {
   const filteredOptions = useMemo(
     () => options.filter((option) => !values.find((value) => value.id === option.id)),
-    [options, values]
+    [options, values],
   )
 
   const add = useCallback(
@@ -18,13 +14,13 @@ export function useTypeahead<T extends { id: number }>(
         e.target.value = ''
       }
     },
-    [options, onChange, values]
+    [options, onChange, values],
   )
 
   const remove = useCallback(
     (option: T) => onChange(values.filter((value) => value.id !== option.id)),
-    [onChange, values]
+    [onChange, values],
   )
 
-  return useMemo(() => [filteredOptions, add, remove], [filteredOptions, add, remove])
+  return useMemo(() => ({ options: filteredOptions, add, remove }), [filteredOptions, add, remove])
 }

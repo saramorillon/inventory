@@ -1,4 +1,4 @@
-import { useFetch, useForm } from '@saramorillon/hooks'
+import { useForm, useQuery } from '@saramorillon/hooks'
 import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons-react'
 import { useBarcode } from 'next-barcode'
 import React, { useCallback } from 'react'
@@ -12,10 +12,10 @@ import { getAuthors } from '../../services/authors'
 import { deleteBook, getBook, saveBook } from '../../services/books'
 import { Error, Loading, NotFound } from '../components/Helpers'
 
-export function Book(): JSX.Element {
+export function Book() {
   const id = useParam('id')
   const call = useCallback(() => getBook(id), [id])
-  const [book, { loading, error }, refresh] = useFetch(call, null)
+  const { result: book, loading, error, execute } = useQuery(call, { autoRun: true })
 
   if (loading) return <Loading message="Loading book" />
 
@@ -23,7 +23,7 @@ export function Book(): JSX.Element {
 
   if (!book) return <NotFound message="Book not found" />
 
-  return <Form book={book} refresh={refresh} />
+  return <Form book={book} refresh={execute} />
 }
 
 interface IFormProps {
@@ -40,11 +40,6 @@ function Form({ book, refresh }: IFormProps) {
   const onSave = useCallback((values: IBook) => saveBook(values).then(refresh), [refresh])
   const onDelete = useCallback((server: IBook) => deleteBook(server).then(() => navigate('/books')), [navigate])
   const { values, onChange, submit } = useForm(onSave, book)
-  const [authors] = useFetch(getAuthors, [])
-
-  const changeAuthors = useCallback((authors: IAuthor[]) => onChange('authors', authors), [onChange])
-
-  const [authorOptions, addAuthor, removeAuthor] = useTypeahead(authors, values.authors, changeAuthors)
 
   return (
     <>
@@ -72,26 +67,7 @@ function Form({ book, refresh }: IFormProps) {
 
         <label>
           Authors ({values.authors.length})
-          <div role="combobox">
-            {values.authors.map((author) => (
-              <span role="option" key={author.id}>
-                <Link to={`/author/${author.id}`}>{fullName(author)} </Link>
-                <IconX
-                  aria-label={`Remove ${fullName(author)}`}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => removeAuthor(author)}
-                />
-              </span>
-            ))}
-            <input list="datalist" aria-label="Add another author" onChange={addAuthor} />
-            <datalist id="datalist" role="listbox">
-              {authorOptions.map((option) => (
-                <option key={option.id} value={option.id}>
-                  {fullName(option)}
-                </option>
-              ))}
-            </datalist>
-          </div>
+          <Authors values={values} onChange={(authors) => onChange('authors', authors)} />
         </label>
 
         <div className="right mb2">
@@ -112,5 +88,39 @@ function Form({ book, refresh }: IFormProps) {
         height="400"
       />
     </>
+  )
+}
+
+interface IAuthorsProps {
+  values: IBook
+  onChange: (authors: IAuthor[]) => void
+}
+
+function Authors({ values, onChange }: IAuthorsProps) {
+  const { result: authors } = useQuery(getAuthors, { autoRun: true, defaultValue: [] })
+
+  const { options, add, remove } = useTypeahead(authors, values.authors, onChange)
+
+  return (
+    <div role="combobox">
+      {values.authors.map((author) => (
+        <span role="option" key={author.id}>
+          <Link to={`/author/${author.id}`}>{fullName(author)} </Link>
+          <IconX
+            aria-label={`Remove ${fullName(author)}`}
+            style={{ cursor: 'pointer' }}
+            onClick={() => remove(author)}
+          />
+        </span>
+      ))}
+      <input list="datalist" aria-label="Add another author" onChange={add} />
+      <datalist id="datalist" role="listbox">
+        {options.map((option) => (
+          <option key={option.id} value={option.id}>
+            {fullName(option)}
+          </option>
+        ))}
+      </datalist>
+    </div>
   )
 }

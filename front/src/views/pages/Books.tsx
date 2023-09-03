@@ -1,4 +1,4 @@
-import { useFetch } from '@saramorillon/hooks'
+import { useQuery } from '@saramorillon/hooks'
 import { IconRefresh } from '@tabler/icons-react'
 import { format, parseISO } from 'date-fns'
 import React from 'react'
@@ -37,18 +37,18 @@ export const columns: IColumn<IBook>[] = [
   },
 ]
 
-export function Books(): JSX.Element {
-  const [books, { loading, error }, refresh] = useFetch(getBooks, [])
+export function Books() {
+  const { result: books, loading, error, execute } = useQuery(getBooks, { autoRun: true, defaultValue: [] })
   useHeader(`Books (${books.length})`, 'Scan an ISBN to add a volume to your library')
 
   return (
     <>
       <div className="right mb2">
-        <button data-variant="outlined" title="Refresh" className="mr1" onClick={refresh}>
+        <button data-variant="outlined" title="Refresh" className="mr1" onClick={execute}>
           <IconRefresh size={16} />
         </button>
       </div>
-      <Scanner refresh={refresh} />
+      <Scanner refresh={execute} />
       <DataTable loading={loading} error={error} columns={columns} data={books} />
     </>
   )

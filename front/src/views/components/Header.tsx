@@ -2,7 +2,7 @@ import { IconLogout } from '@tabler/icons-react'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export function Header(): JSX.Element {
+export function Header() {
   return (
     <>
       <nav aria-label="Main">

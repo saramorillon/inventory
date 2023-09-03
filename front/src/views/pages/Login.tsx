@@ -3,13 +3,13 @@ import React, { useCallback } from 'react'
 import { login } from '../../services/session'
 import { Error } from '../components/Helpers'
 
-export function Login(): JSX.Element {
+export function Login() {
   const save = useCallback(
     ({ username, password }: { username: string; password: string }) =>
       login(username, password).then(() => {
         window.location.reload()
       }),
-    []
+    [],
   )
 
   const { values, onChange, submit, loading, error } = useForm(save, { username: '', password: '' })

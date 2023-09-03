@@ -17,10 +17,10 @@ describe('getSession', () => {
     expect(result).toBe('session')
   })
 
-  it('should return null if error', async () => {
+  it('should return undefined if error', async () => {
     vi.mocked(Axios.get).mockRejectedValue(new Error())
     const result = await getSession()
-    expect(result).toBeNull()
+    expect(result).toBeUndefined()
   })
 })
 

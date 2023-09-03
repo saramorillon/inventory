@@ -1,16 +1,15 @@
 import axios from 'axios'
-import { ISession } from '../models/Session'
 import { Axios } from './Axios'
 
-export async function getSession(): Promise<ISession | null> {
+export async function getSession() {
   try {
     const { data } = await axios.get('/api/session')
     return data
   } catch (error) {
-    return null
+    return undefined
   }
 }
 
-export async function login(username: string, password: string): Promise<void> {
+export async function login(username: string, password: string) {
   await Axios.post('/api/login', { username, password })
 }

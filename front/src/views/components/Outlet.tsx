@@ -4,7 +4,7 @@ import { SessionContext } from '../../contexts/SessionContext'
 import { Footer } from './Footer'
 import { Header } from './Header'
 
-export function PublicOutlet(): JSX.Element {
+export function PublicOutlet() {
   const session = useContext(SessionContext)
   if (session) return <Navigate to="/" />
   return (
@@ -17,7 +17,7 @@ export function PublicOutlet(): JSX.Element {
   )
 }
 
-export function PrivateOutlet(): JSX.Element {
+export function PrivateOutlet() {
   const session = useContext(SessionContext)
   if (!session) return <Navigate to="/login" />
   return (

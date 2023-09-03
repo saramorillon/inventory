@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-export function useHeader(title: string, subtitle?: string): void {
+export function useHeader(title: string, subtitle?: string) {
   useEffect(() => {
     document.title = `Inventory - ${subtitle || title}`
     const header = document.querySelector('header')

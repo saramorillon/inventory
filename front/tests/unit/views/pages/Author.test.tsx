@@ -32,7 +32,7 @@ describe('Author', () => {
   })
 
   it('should render a not found message if id is not empty and the author is not found', async () => {
-    vi.mocked(getAuthor).mockResolvedValue(null)
+    vi.mocked(getAuthor).mockResolvedValue(undefined)
     render(<Author />)
     await wait()
     expect(screen.getByText('Author not found')).toBeInTheDocument()
@@ -40,7 +40,7 @@ describe('Author', () => {
 
   it('should not render a not found message if id is empty and the author is not found', async () => {
     vi.mocked(useParams).mockReturnValue({})
-    vi.mocked(getAuthor).mockResolvedValue(null)
+    vi.mocked(getAuthor).mockResolvedValue(undefined)
     render(<Author />)
     await wait()
     expect(screen.queryByText('Author not found')).not.toBeInTheDocument()
@@ -90,7 +90,7 @@ describe('Author', () => {
 
   it('should redirect to author page after creating author', async () => {
     vi.mocked(useParams).mockReturnValue({})
-    vi.mocked(getAuthor).mockResolvedValue(null)
+    vi.mocked(getAuthor).mockResolvedValue(undefined)
     const navigate = mockNavigate()
     render(<Author />)
     await wait()
@@ -101,7 +101,7 @@ describe('Author', () => {
 
   it('should not render delete delete button is author is empty', async () => {
     vi.mocked(useParams).mockReturnValue({})
-    vi.mocked(getAuthor).mockResolvedValue(null)
+    vi.mocked(getAuthor).mockResolvedValue(undefined)
     render(<Author />)
     await wait()
     expect(screen.queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()

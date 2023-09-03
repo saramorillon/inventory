@@ -10,7 +10,7 @@ export const error = new Audio('/Buzzer1.ogg')
 export const success = new Audio('/Decision2.ogg')
 export const existing = new Audio('/Item1.ogg')
 
-export function Scanner({ refresh }: IScannerProps): JSX.Element {
+export function Scanner({ refresh }: IScannerProps) {
   const [value, setValue] = useState('')
 
   const onSubmit = useCallback(
@@ -21,7 +21,7 @@ export function Scanner({ refresh }: IScannerProps): JSX.Element {
         .catch(() => error.play())
         .finally(() => setValue(''))
     },
-    [refresh, value]
+    [refresh, value],
   )
 
   return (

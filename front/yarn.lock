@@ -492,10 +492,10 @@
     eslint-plugin-testing-library "*"
     eslint-plugin-vitest "*"
 
-"@saramorillon/hooks@^2.10.0":
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/@saramorillon/hooks/-/hooks-2.10.0.tgz#131a66ddc1c0256fd5f8ed73862734a4b822c5a5"
-  integrity sha512-TR0ggLQBQKHFpRl1aYYbuoM3lPcTLeSKU52TxBOP3tzpAqhD4c2etFTSlnadKLaFpGcog1hkPAiBqmvYny38XA==
+"@saramorillon/hooks@^2.12.1":
+  version "2.12.1"
+  resolved "https://registry.yarnpkg.com/@saramorillon/hooks/-/hooks-2.12.1.tgz#f12eaaa78a04e47cf751254ddcfa791c31f22258"
+  integrity sha512-hNmx4q6eP1aynvmxYS6Fu0aGdz7nGOObC+rBz3sX9WOR8yy8LxCnnaiDQroDpygwgTgTJItKa/DWIXB0QeDQ6Q==
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"

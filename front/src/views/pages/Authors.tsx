@@ -1,4 +1,4 @@
-import { useFetch } from '@saramorillon/hooks'
+import { useQuery } from '@saramorillon/hooks'
 import { IconPlus, IconRefresh } from '@tabler/icons-react'
 import { format, parseISO } from 'date-fns'
 import React from 'react'
@@ -41,9 +41,9 @@ export const columns: IColumn<IAuthor>[] = [
   },
 ]
 
-export function Authors(): JSX.Element {
+export function Authors() {
   const navigate = useNavigate()
-  const [authors, { loading, error }, refresh] = useFetch(getAuthors, [])
+  const { result: authors, loading, error, execute } = useQuery(getAuthors, { autoRun: true, defaultValue: [] })
   useHeader(`Authors (${authors.length})`)
 
   return (
@@ -52,7 +52,7 @@ export function Authors(): JSX.Element {
         <button data-variant="outlined" title="Create" className="mr1" onClick={() => navigate('/author')}>
           <IconPlus size={16} />
         </button>
-        <button data-variant="outlined" title="Refresh" className="mr1" onClick={refresh}>
+        <button data-variant="outlined" title="Refresh" className="mr1" onClick={execute}>
           <IconRefresh size={16} />
         </button>
       </div>

@@ -1,10 +1,10 @@
-import { useFetch } from '@saramorillon/hooks'
+import { useQuery } from '@saramorillon/hooks'
 import { IconBrandGithub, IconWorld } from '@tabler/icons-react'
 import React from 'react'
 import { getApp } from '../../services/app'
 
-export function Footer(): JSX.Element | null {
-  const [app] = useFetch(getApp, null)
+export function Footer() {
+  const { result: app } = useQuery(getApp, { autoRun: true })
 
   if (!app) return null
 

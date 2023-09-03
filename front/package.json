@@ -2,7 +2,7 @@
   "name": "front",
   "private": true,
   "scripts": {
-    "prebuild": "tsc -b tsconfig.build.json",
+    "prebuild": "tsc -p tsconfig.build.json",
     "build": "vite build",
     "serve": "vite dev",
     "format": "prettier \"src/**/*.{ts,tsx}\" --write",
@@ -25,7 +25,7 @@
     "vitest": "^0.34.2"
   },
   "dependencies": {
-    "@saramorillon/hooks": "^2.10.0",
+    "@saramorillon/hooks": "^2.12.1",
     "@tabler/icons-react": "^2.31.0",
     "axios": "^1.4.0",
     "date-fns": "^2.30.0",

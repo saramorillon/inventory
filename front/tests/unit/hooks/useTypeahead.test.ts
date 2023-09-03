@@ -8,14 +8,14 @@ describe('useTypeahead', () => {
 
   it('should return filtered options', () => {
     const { result } = renderHook(() => useTypeahead(options, values, vi.fn()))
-    expect(result.current[0]).toEqual([{ id: 2 }])
+    expect(result.current.options).toEqual([{ id: 2 }])
   })
 
   it('should not add an option if native event is input event', () => {
     const onChange = vi.fn()
     const { result } = renderHook(() => useTypeahead(options, values, onChange))
     act(() => {
-      result.current[1]({ nativeEvent: new InputEvent('type') } as never)
+      result.current.add({ nativeEvent: new InputEvent('type') } as never)
     })
     expect(onChange).not.toHaveBeenCalled()
   })
@@ -24,7 +24,7 @@ describe('useTypeahead', () => {
     const onChange = vi.fn()
     const { result } = renderHook(() => useTypeahead(options, values, onChange))
     act(() => {
-      result.current[1]({ target: { value: '2' } } as never)
+      result.current.add({ target: { value: '2' } } as never)
     })
     expect(onChange).toHaveBeenCalledWith([{ id: 1 }, { id: 2 }])
   })
@@ -33,7 +33,7 @@ describe('useTypeahead', () => {
     const onChange = vi.fn()
     const { result } = renderHook(() => useTypeahead(options, values, onChange))
     act(() => {
-      result.current[2]({ id: 1 })
+      result.current.remove({ id: 1 })
     })
     expect(onChange).toHaveBeenCalledWith([])
   })

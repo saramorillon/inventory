@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 
 export type Filter<T> = ((data1: T) => boolean) | undefined
 
-export function useFilters<T>(): [Filter<T>[], (index: number, fn: (data1: T) => boolean) => void] {
+export function useFilters<T>() {
   const [filters, setFilters] = useState<Filter<T>[]>([])
 
   const onFilter = useCallback((index: number, fn?: (data1: T) => boolean) => {
@@ -13,5 +13,5 @@ export function useFilters<T>(): [Filter<T>[], (index: number, fn: (data1: T) =>
     })
   }, [])
 
-  return useMemo(() => [filters, onFilter], [filters, onFilter])
+  return useMemo(() => ({ filters, onFilter }), [filters, onFilter])
 }
