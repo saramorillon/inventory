@@ -18,7 +18,6 @@ RUN yarn --cwd back prisma generate
 COPY back/tsconfig.json back/
 COPY back/tsconfig.build.json back/
 COPY back/src back/src
-COPY back/types back/types
 
 RUN yarn --cwd back build
 RUN yarn --cwd back install --frozen-lockfile --force --production --ignore-scripts --prefer-offline

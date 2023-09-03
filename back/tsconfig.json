@@ -1,5 +1,5 @@
 {
-  "include": ["src", "types", "tests", "prisma", "vitest.config.ts"],
+  "include": ["src", "tests", "prisma", "vitest.config.ts"],
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
@@ -7,7 +7,9 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "strict": true,
-    "types": ["vitest/globals"],
-    "typeRoots": ["types", "./node_modules/@types", "./node_modules"]
+    "types": ["node", "vitest/globals"]
+  },
+  "ts-node": {
+    "files": true
   }
 }

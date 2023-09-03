@@ -1,5 +1,5 @@
 import { Logger } from '@saramorillon/logger'
-import { ISession } from '../../src/models/Session'
+import { ISession } from '../../models/Session'
 
 declare global {
   namespace Express {
