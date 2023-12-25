@@ -1,9 +1,9 @@
 import { useForm, useQuery } from '@saramorillon/hooks'
 import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons-react'
 import React, { useCallback } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
-import { useParam } from '../../hooks/useParam'
+import { useRefresh } from '../../hooks/useRefresh'
 import { useTypeahead } from '../../hooks/useTypeahead'
 import { IAuthor, fullName } from '../../models/Author'
 import { IBook } from '../../models/Book'
@@ -13,31 +13,42 @@ import { BarCode } from '../components/BarCode'
 import { Error2, Loading, NotFound } from '../components/Helpers'
 
 export function Book() {
-  const id = useParam('id')
+  const { id = '' } = useParams<'id'>()
   const call = useCallback(() => getBook(id), [id])
   const { result: book, loading, error, execute } = useQuery(call, { autoRun: true, defaultValue: null })
+  const refresh = useRefresh<IBook>(execute, (book) => `/book/${book.id}`)
 
   if (loading) return <Loading message="Loading book" />
 
   if (error) return <Error2 message="Error while loading book" />
 
-  if (!book) return <NotFound message="Book not found" />
+  if (id && !book) return <NotFound message="Book not found" />
 
-  return <Form book={book} refresh={execute} />
+  return <Form book={book} refresh={refresh} />
+}
+
+const empty: IBook = {
+  id: 0,
+  serial: '',
+  title: '',
+  source: 'manual',
+  authors: [],
+  createdAt: '',
+  updatedAt: '',
 }
 
 interface IFormProps {
-  book: IBook
-  refresh: () => void
+  book: IBook | null
+  refresh: (book: IBook) => void
 }
 
 function Form({ book, refresh }: IFormProps) {
   const navigate = useNavigate()
-  useHeader('Book', book.title)
+  useHeader('Book', book ? book.title : 'New book')
 
   const onSave = useCallback((values: IBook) => saveBook(values).then(refresh), [refresh])
   const onDelete = useCallback((server: IBook) => deleteBook(server).then(() => navigate('/books')), [navigate])
-  const { values, onChange, submit } = useForm(onSave, book)
+  const { values, onChange, submit } = useForm(onSave, book ?? empty)
 
   return (
     <>
@@ -46,21 +57,16 @@ function Form({ book, refresh }: IFormProps) {
           <div className="flex-auto mr2">
             <label>
               Source
-              <input id="source" value={book.source} required disabled />
+              <input id="source" value={values.source} required disabled />
             </label>
 
             <label>
               Serial
-              <input
-                id="serial"
-                value={values.serial || ''}
-                onChange={(e) => onChange('serial', e.target.value)}
-                required
-              />
+              <input id="serial" value={values.serial} onChange={(e) => onChange('serial', e.target.value)} />
             </label>
           </div>
 
-          {book.serial && <BarCode serial={book.serial} />}
+          {values.serial.match(/^97(8|9)\d{10}$/) && <BarCode serial={values.serial} />}
         </div>
 
         <label>
@@ -74,22 +80,26 @@ function Form({ book, refresh }: IFormProps) {
         </label>
 
         <div className="right mb2">
-          <button data-variant="primary" className="mr1" type="submit">
+          <button type="submit" data-variant="primary" className="mr1">
             <IconDeviceFloppy size={16} /> Save
           </button>
 
-          <button data-variant="outlined" className="mr1" onClick={() => onDelete(book)} type="button">
-            <IconTrash size={16} /> Delete
-          </button>
+          {book && (
+            <button type="button" data-variant="outlined" className="mr1" onClick={() => onDelete(book)}>
+              <IconTrash size={16} /> Delete
+            </button>
+          )}
         </div>
       </form>
 
-      <iframe
-        title={`Google page for "${book.title}"`}
-        src={`https://www.google.com/search?q=${book.serial}&igu=1`}
-        width="100%"
-        height="400"
-      />
+      {book && (
+        <iframe
+          title={`Google page for "${book.title}"`}
+          src={`https://www.google.com/search?q=${book.serial}&igu=1`}
+          width="100%"
+          height="400"
+        />
+      )}
     </>
   )
 }

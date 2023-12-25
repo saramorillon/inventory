@@ -32,7 +32,7 @@ model Author {
 
 model Book {
   id        Int      @id @default(autoincrement())
-  serial    String?  @unique
+  serial    String   @unique
   authors   Author[] @relation("author_to_book")
   title     String
   source    String

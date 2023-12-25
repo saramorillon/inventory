@@ -1,6 +1,7 @@
 import { act } from 'react-dom/test-utils'
 import { useNavigate } from 'react-router-dom'
 import { Mock } from 'vitest'
+import { useRefresh } from '../src/hooks/useRefresh'
 import { IApp } from '../src/models/App'
 import { IAuthor } from '../src/models/Author'
 import { IBook } from '../src/models/Book'
@@ -24,6 +25,13 @@ export function mockNavigate(): Mock {
   const navigate = vi.fn()
   vi.mocked(useNavigate).mockReturnValue(navigate)
   return navigate
+}
+
+export function mockRefresh(): Mock {
+  const refresh = vi.fn()
+  console.log(useRefresh)
+  vi.mocked(useRefresh).mockReturnValue(refresh)
+  return refresh
 }
 
 export function mockSession(session: Partial<ISession> = {}): ISession {

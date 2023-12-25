@@ -19,6 +19,18 @@ describe('getBooks', () => {
 })
 
 describe('getBook', () => {
+  it('should not get book if id is empty', async () => {
+    vi.mocked(Axios.get).mockResolvedValue({ data: 'book' })
+    await getBook('')
+    expect(Axios.get).not.toHaveBeenCalled()
+  })
+
+  it('should return null if id is empty', async () => {
+    vi.mocked(Axios.get).mockResolvedValue({ data: 'book' })
+    const result = await getBook('')
+    expect(result).toBeNull()
+  })
+
   it('should get book', async () => {
     vi.mocked(Axios.get).mockResolvedValue({ data: 'book' })
     await getBook('id')
@@ -33,15 +45,27 @@ describe('getBook', () => {
 })
 
 describe('saveBook', () => {
+  it('should create book if id is nullisch', async () => {
+    vi.mocked(Axios.post).mockResolvedValue({ data: 'book' })
+    await saveBook(mockBook({ id: 0 }))
+    expect(Axios.post).toHaveBeenCalledWith('/api/books', mockBook({ id: 0 }))
+  })
+
+  it('should return created book', async () => {
+    vi.mocked(Axios.post).mockResolvedValue({ data: 'book' })
+    const result = await saveBook(mockBook({ id: 0 }))
+    expect(result).toBe('book')
+  })
+
   it('should update book', async () => {
     vi.mocked(Axios.put).mockResolvedValue({ data: 'book' })
-    await saveBook(mockBook({ id: 1 }))
+    await saveBook(mockBook())
     expect(Axios.put).toHaveBeenCalledWith('/api/books/1', mockBook())
   })
 
   it('should return updated book', async () => {
     vi.mocked(Axios.put).mockResolvedValue({ data: 'book' })
-    const result = await saveBook(mockBook({ id: 1 }))
+    const result = await saveBook(mockBook())
     expect(result).toBe('book')
   })
 })

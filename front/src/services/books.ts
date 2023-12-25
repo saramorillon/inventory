@@ -7,12 +7,17 @@ export async function getBooks() {
 }
 
 export async function getBook(id: string) {
+  if (!id) return null
   const { data } = await Axios.get<IBook | null>(`/api/books/${id}`)
   return data
 }
 
 export async function saveBook(book: IBook) {
-  const { data } = await Axios.put<IBook>(`/api/books/${book.id}`, book)
+  if (book.id) {
+    const { data } = await Axios.put<IBook>(`/api/books/${book.id}`, book)
+    return data
+  }
+  const { data } = await Axios.post<IBook>('/api/books', book)
   return data
 }
 

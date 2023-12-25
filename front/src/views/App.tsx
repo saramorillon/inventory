@@ -19,6 +19,7 @@ export function App() {
 
           <Route element={<PrivateOutlet />}>
             <Route path="/books" element={<Books />} />
+            <Route path="/book" element={<Book />} />
             <Route path="/book/:id" element={<Book />} />
 
             <Route path="/authors" element={<Authors />} />

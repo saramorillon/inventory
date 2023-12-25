@@ -14,7 +14,7 @@
     "build": "tsc -p tsconfig.build.json",
     "prestart": "prisma migrate deploy",
     "start": "node dist/src/index.js",
-    "watch": "tsx --require dotenv/config --watch src/index.ts",
+    "watch": "tsx --require dotenv/config --inspect --watch src/index.ts",
     "check": "biome check --apply ."
   },
   "prisma": {

@@ -41,7 +41,7 @@ describe('postAuthor', () => {
     const { res } = getMockRes()
     await postAuthor(req, res)
     expect(res.json).toHaveBeenCalledWith({
-      message: 'firstName: Required\nlastName: Required\nbooks: Required',
+      message: 'firstName: Required, lastName: Required, books: Required',
       stack: expect.any(String),
     })
   })

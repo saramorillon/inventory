@@ -6,9 +6,17 @@ import { capitalize } from '../utils/capitalize'
 import { parseError } from '../utils/parseError'
 
 const schema = {
-  post: z.object({
-    serial: z.string().regex(/^97(8|9)\d{10}$/),
-  }),
+  post: z.union([
+    z.object({
+      serial: z.string(),
+      title: z.string(),
+      source: z.string(),
+      authors: z.array(z.object({ id: z.number() })),
+    }),
+    z.object({
+      serial: z.string().regex(/^97(8|9)\d{10}$/),
+    }),
+  ]),
   get: z.object({
     id: z.string().transform(Number),
   }),
@@ -37,27 +45,36 @@ export async function getBooks(req: Request, res: Response): Promise<void> {
 }
 
 export async function postBook(req: Request, res: Response): Promise<void> {
-  const { success, failure } = req.logger.start('scan_book')
+  const { success, failure } = req.logger.start('post_book')
   try {
-    const { serial } = schema.post.parse(req.body)
-    const book = await prisma.book.findUnique({ where: { serial } })
-    if (book) {
-      res.sendStatus(204)
-      success()
-      return
+    const body = schema.post.parse(req.body)
+    if ('title' in body) {
+      const { serial, title, source, authors } = body
+      const book = await prisma.book.create({
+        data: { serial, title: capitalize(title), source, authors: { connect: authors } },
+      })
+      res.json(book)
+    } else {
+      const { serial } = body
+      let book = await prisma.book.findUnique({ where: { serial } })
+      if (book) {
+        res.sendStatus(204)
+        success()
+        return
+      }
+      const result = await isbnSearch(serial, req.session.user)
+      if (!result) {
+        res.sendStatus(404)
+        success()
+        return
+      }
+      const { title, authors, source } = result
+      const author = await getAuthor(authors)
+      book = await prisma.book.create({
+        data: { serial, title: capitalize(title), source, authors: { connect: [{ id: author.id }] } },
+      })
+      res.json(book)
     }
-    const result = await isbnSearch(serial, req.session.user)
-    if (!result) {
-      res.sendStatus(404)
-      success()
-      return
-    }
-    const { title, authors, source } = result
-    const author = await getAuthor(authors)
-    await prisma.book.create({
-      data: { serial, title: capitalize(title), source, authors: { connect: [{ id: author.id }] } },
-    })
-    res.sendStatus(201)
     success()
   } catch (e) {
     const error = parseError(e)

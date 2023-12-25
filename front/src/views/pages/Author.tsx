@@ -3,6 +3,7 @@ import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons-react'
 import React, { useCallback } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
+import { useRefresh } from '../../hooks/useRefresh'
 import { useTypeahead } from '../../hooks/useTypeahead'
 import { IAuthor, fullName } from '../../models/Author'
 import { IBook } from '../../models/Book'
@@ -14,6 +15,7 @@ export function Author() {
   const { id = '' } = useParams<'id'>()
   const call = useCallback(() => getAuthor(id), [id])
   const { result: author, loading, error, execute } = useQuery(call, { autoRun: true, defaultValue: null })
+  const refresh = useRefresh<IAuthor>(execute, (author) => `/author/${author.id}`)
 
   if (loading) return <Loading message="Loading author" />
 
@@ -21,7 +23,7 @@ export function Author() {
 
   if (id && !author) return <NotFound message="Author not found" />
 
-  return <Form author={author} refresh={execute} />
+  return <Form author={author} refresh={refresh} />
 }
 
 const empty: IAuthor = {
@@ -35,24 +37,14 @@ const empty: IAuthor = {
 
 interface IFormProps {
   author: IAuthor | null
-  refresh: () => void
+  refresh: (author: IAuthor) => void
 }
 
 function Form({ author, refresh }: IFormProps) {
   const navigate = useNavigate()
   useHeader('Author', author ? fullName(author) : 'New author')
 
-  const onSave = useCallback(
-    (values: IAuthor) =>
-      saveAuthor(values).then((data) => {
-        if (author) {
-          refresh()
-        } else {
-          navigate(`/author/${data.id}`)
-        }
-      }),
-    [navigate, refresh, author],
-  )
+  const onSave = useCallback((values: IAuthor) => saveAuthor(values).then(refresh), [refresh])
   const onDelete = useCallback((server: IAuthor) => deleteAuthor(server).then(() => navigate('/authors')), [navigate])
   const { values, onChange, submit } = useForm(onSave, author ?? empty)
 
@@ -74,12 +66,12 @@ function Form({ author, refresh }: IFormProps) {
       </label>
 
       <div className="right">
-        <button data-variant="primary" className="mr1" type="submit">
+        <button type="submit" data-variant="primary" className="mr1">
           <IconDeviceFloppy size={16} /> Save
         </button>
 
         {author && (
-          <button data-variant="outlined" className="mr1" onClick={() => onDelete(author)} type="button">
+          <button type="button" data-variant="outlined" className="mr1" onClick={() => onDelete(author)}>
             <IconTrash size={16} /> Delete
           </button>
         )}

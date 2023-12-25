@@ -1,6 +1,13 @@
 import { inspect } from 'util'
 import { isNativeError } from 'util/types'
-import { ZodError } from 'zod'
+import { ZodError, ZodIssue } from 'zod'
+
+function parseZodIssue(issue: ZodIssue): string {
+  if (issue.code === 'invalid_union') {
+    return issue.unionErrors.flatMap((error) => error.issues.map(parseZodIssue).join(', ')).join(' OR ')
+  }
+  return `${issue.path.join('.')}: ${issue.message}`
+}
 
 export function parseError(error?: unknown): Record<string, unknown> | undefined {
   if (!error) {
@@ -9,7 +16,7 @@ export function parseError(error?: unknown): Record<string, unknown> | undefined
 
   if (error instanceof ZodError) {
     return {
-      message: error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`).join('\n'),
+      message: error.issues.map(parseZodIssue).join(', '),
       stack: error.stack,
     }
   }

@@ -1,8 +1,8 @@
 import { useQuery } from '@saramorillon/hooks'
-import { IconRefresh } from '@tabler/icons-react'
+import { IconPlus, IconRefresh } from '@tabler/icons-react'
 import { format, parseISO } from 'date-fns'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
 import { IBook, authors } from '../../models/Book'
 import { getBooks } from '../../services/books'
@@ -13,8 +13,8 @@ export const columns: IColumn<IBook>[] = [
   {
     header: () => 'Serial',
     cell: (book) => book.serial,
-    filter: (book, filter) => (book.serial || '').toLowerCase().includes(filter),
-    sort: (book1, book2) => (book1.serial || '').localeCompare(book2.serial || ''),
+    filter: (book, filter) => book.serial.toLowerCase().includes(filter),
+    sort: (book1, book2) => book1.serial.localeCompare(book2.serial),
   },
   {
     header: () => 'Title',
@@ -38,12 +38,17 @@ export const columns: IColumn<IBook>[] = [
 ]
 
 export function Books() {
+  const navigate = useNavigate()
   const { result: books, loading, error, execute } = useQuery(getBooks, { autoRun: true, defaultValue: [] })
   useHeader(`Books (${books.length})`, 'Scan an ISBN to add a volume to your library')
 
   return (
     <>
       <div className="right mb2">
+        <button type="button" data-variant="outlined" title="Create" className="mr1" onClick={() => navigate('/book')}>
+          <IconPlus size={16} />
+        </button>
+
         <button type="button" data-variant="outlined" title="Refresh" className="mr1" onClick={execute}>
           <IconRefresh size={16} />
         </button>

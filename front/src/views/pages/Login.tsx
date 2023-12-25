@@ -32,7 +32,7 @@ export function Login() {
           />
         </label>
 
-        <button type="button" data-variant="primary" aria-busy={loading} disabled={loading}>
+        <button type="submit" data-variant="primary" aria-busy={loading} disabled={loading}>
           Log in
         </button>
 

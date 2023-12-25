@@ -48,12 +48,32 @@ describe('postBook', () => {
     const { res } = getMockRes()
     await postBook(req, res)
     expect(res.json).toHaveBeenCalledWith({
-      message: 'serial: Required',
+      message: 'serial: Required, title: Required, source: Required, authors: Required OR serial: Required',
       stack: expect.any(String),
     })
   })
 
-  it('should get book', async () => {
+  it('should create book if body is full', async () => {
+    const req = getMockReq({
+      body: { serial: '9780123456789', title: 'Title', source: 'manual', authors: [{ id: 1 }] },
+    })
+    const { res } = getMockRes()
+    await postBook(req, res)
+    expect(prisma.book.create).toHaveBeenCalledWith({
+      data: { authors: { connect: [{ id: 1 }] }, serial: '9780123456789', source: 'manual', title: 'Title' },
+    })
+  })
+
+  it('should send created book', async () => {
+    const req = getMockReq({
+      body: { serial: '9780123456789', title: 'Title', source: 'manual', authors: [{ id: 1 }] },
+    })
+    const { res } = getMockRes()
+    await postBook(req, res)
+    expect(res.json).toHaveBeenCalledWith(mockBook())
+  })
+
+  it('should get book if body contains serial only', async () => {
     vi.spyOn(prisma.book, 'findUnique').mockResolvedValue(mockBook())
     const req = getMockReq({ body: { serial: '9780123456789' } })
     const { res } = getMockRes()
@@ -111,11 +131,11 @@ describe('postBook', () => {
     })
   })
 
-  it('should send 201 status', async () => {
+  it('should send scanned book', async () => {
     const req = getMockReq({ body: { serial: '9780123456789' } })
     const { res } = getMockRes()
     await postBook(req, res)
-    expect(res.sendStatus).toHaveBeenCalledWith(201)
+    expect(res.json).toHaveBeenCalledWith(mockBook())
   })
 
   it('should send 500 status on error', async () => {

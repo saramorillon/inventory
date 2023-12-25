@@ -1,11 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import { useRefresh } from '../../../../src/hooks/useRefresh'
 import { deleteAuthor, getAuthor, saveAuthor } from '../../../../src/services/authors'
 import { getBooks } from '../../../../src/services/books'
 import { Author } from '../../../../src/views/pages/Author'
 import { mockAuthor, mockBook, mockNavigate, wait } from '../../../mocks'
 
+vi.mock('../../../../src/hooks/useRefresh')
 vi.mock('../../../../src/services/authors')
 vi.mock('../../../../src/services/books')
 
@@ -79,24 +81,14 @@ describe('Author', () => {
     expect(saveAuthor).toHaveBeenCalledWith(mockAuthor())
   })
 
-  it('should refresh after updating author', async () => {
-    render(<Author />)
-    await wait()
-    expect(getAuthor).toHaveBeenCalledTimes(1)
-    fireEvent.click(screen.getByRole('button', { name: 'Save' }))
-    await wait()
-    expect(getAuthor).toHaveBeenCalledTimes(2)
-  })
-
-  it('should redirect to author page after creating author', async () => {
-    vi.mocked(useParams).mockReturnValue({})
-    vi.mocked(getAuthor).mockResolvedValue(null)
-    const navigate = mockNavigate()
+  it('should refresh after saving author', async () => {
+    const refresh = vi.fn()
+    vi.mocked(useRefresh).mockReturnValue(refresh)
     render(<Author />)
     await wait()
     fireEvent.click(screen.getByRole('button', { name: 'Save' }))
     await wait()
-    expect(navigate).toHaveBeenCalledWith('/author/1')
+    expect(refresh).toHaveBeenCalledWith(mockAuthor())
   })
 
   it('should not render delete delete button is author is empty', async () => {
