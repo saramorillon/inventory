@@ -7,7 +7,7 @@ export async function getBooks() {
 }
 
 export async function getBook(id: string) {
-  const { data } = await Axios.get<IBook>(`/api/books/${id}`)
+  const { data } = await Axios.get<IBook | null>(`/api/books/${id}`)
   return data
 }
 

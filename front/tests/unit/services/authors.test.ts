@@ -25,10 +25,10 @@ describe('getAuthor', () => {
     expect(Axios.get).not.toHaveBeenCalled()
   })
 
-  it('should return undefined if id is empty', async () => {
+  it('should return null if id is empty', async () => {
     vi.mocked(Axios.get).mockResolvedValue({ data: 'author' })
     const result = await getAuthor('')
-    expect(result).toBeUndefined()
+    expect(result).toBeNull()
   })
 
   it('should get author', async () => {

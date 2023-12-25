@@ -36,7 +36,7 @@ describe('Book', () => {
   })
 
   it('should render a not found message if the book is not found', async () => {
-    vi.mocked(getBook).mockResolvedValue(undefined)
+    vi.mocked(getBook).mockResolvedValue(null)
     render(<Book />)
     await wait()
     expect(screen.getByText('Book not found')).toBeInTheDocument()

@@ -13,7 +13,7 @@ import { Error, Loading, NotFound } from '../components/Helpers'
 export function Author() {
   const { id = '' } = useParams<'id'>()
   const call = useCallback(() => getAuthor(id), [id])
-  const { result: author, loading, error, execute } = useQuery(call, { autoRun: true })
+  const { result: author, loading, error, execute } = useQuery(call, { autoRun: true, defaultValue: null })
 
   if (loading) return <Loading message="Loading author" />
 
@@ -34,7 +34,7 @@ const empty: IAuthor = {
 }
 
 interface IFormProps {
-  author?: IAuthor
+  author: IAuthor | null
   refresh: () => void
 }
 

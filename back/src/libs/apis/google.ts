@@ -9,7 +9,7 @@ type Response = {
         subtitle?: string
         authors: string[]
       }
-    }
+    },
   ]
 }
 

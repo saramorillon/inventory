@@ -2,7 +2,7 @@ import { fullName, IAuthor } from './Author'
 
 export type IBook = {
   id: number
-  serial: string
+  serial: string | null
   title: string
   authors: IAuthor[]
   source: string

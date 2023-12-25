@@ -13,8 +13,8 @@ export const columns: IColumn<IBook>[] = [
   {
     header: () => 'Serial',
     cell: (book) => book.serial,
-    filter: (book, filter) => book.serial.toLowerCase().includes(filter),
-    sort: (book1, book2) => book1.serial.localeCompare(book2.serial),
+    filter: (book, filter) => (book.serial || '').toLowerCase().includes(filter),
+    sort: (book1, book2) => (book1.serial || '').localeCompare(book2.serial || ''),
   },
   {
     header: () => 'Title',

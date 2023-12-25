@@ -7,8 +7,8 @@ export async function getAuthors() {
 }
 
 export async function getAuthor(id: string) {
-  if (!id) return undefined
-  const { data } = await Axios.get<IAuthor>(`/api/authors/${id}`)
+  if (!id) return null
+  const { data } = await Axios.get<IAuthor | null>(`/api/authors/${id}`)
   return data
 }
 

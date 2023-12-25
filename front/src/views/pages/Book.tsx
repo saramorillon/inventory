@@ -1,6 +1,5 @@
 import { useForm, useQuery } from '@saramorillon/hooks'
 import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons-react'
-import { useBarcode } from 'next-barcode'
 import React, { useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
@@ -10,12 +9,13 @@ import { IAuthor, fullName } from '../../models/Author'
 import { IBook } from '../../models/Book'
 import { getAuthors } from '../../services/authors'
 import { deleteBook, getBook, saveBook } from '../../services/books'
+import { BarCode } from '../components/BarCode'
 import { Error, Loading, NotFound } from '../components/Helpers'
 
 export function Book() {
   const id = useParam('id')
   const call = useCallback(() => getBook(id), [id])
-  const { result: book, loading, error, execute } = useQuery(call, { autoRun: true })
+  const { result: book, loading, error, execute } = useQuery(call, { autoRun: true, defaultValue: null })
 
   if (loading) return <Loading message="Loading book" />
 
@@ -35,8 +35,6 @@ function Form({ book, refresh }: IFormProps) {
   const navigate = useNavigate()
   useHeader('Book', book.title)
 
-  const { inputRef } = useBarcode({ value: book.serial, options: { format: 'EAN13' } })
-
   const onSave = useCallback((values: IBook) => saveBook(values).then(refresh), [refresh])
   const onDelete = useCallback((server: IBook) => deleteBook(server).then(() => navigate('/books')), [navigate])
   const { values, onChange, submit } = useForm(onSave, book)
@@ -53,11 +51,16 @@ function Form({ book, refresh }: IFormProps) {
 
             <label>
               Serial
-              <input id="serial" value={values.serial} onChange={(e) => onChange('serial', e.target.value)} required />
+              <input
+                id="serial"
+                value={values.serial || ''}
+                onChange={(e) => onChange('serial', e.target.value)}
+                required
+              />
             </label>
           </div>
 
-          <canvas title={book.serial} ref={inputRef} />
+          {book.serial && <BarCode serial={book.serial} />}
         </div>
 
         <label>
