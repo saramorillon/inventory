@@ -4,9 +4,8 @@
   "scripts": {
     "prebuild": "tsc -p tsconfig.build.json",
     "build": "vite build",
-    "serve": "vite dev",
-    "format": "prettier \"src/**/*.{ts,tsx}\" --write",
-    "lint": "eslint \"{tests,src}/**/*.{ts,tsx}\""
+    "watch": "vite dev",
+    "check": "biome check --apply ."
   },
   "devDependencies": {
     "@biomejs/biome": "^1.4.1",
