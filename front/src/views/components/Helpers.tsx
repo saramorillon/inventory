@@ -17,7 +17,7 @@ export function NotFound({ message }: { message: string }) {
   )
 }
 
-export function Error({ message }: { message: string }) {
+export function Error2({ message }: { message: string }) {
   return (
     <>
       <IconX color="crimson" /> {message}

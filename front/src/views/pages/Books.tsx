@@ -44,7 +44,7 @@ export function Books() {
   return (
     <>
       <div className="right mb2">
-        <button data-variant="outlined" title="Refresh" className="mr1" onClick={execute}>
+        <button type="button" data-variant="outlined" title="Refresh" className="mr1" onClick={execute}>
           <IconRefresh size={16} />
         </button>
       </div>

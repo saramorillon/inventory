@@ -10,7 +10,7 @@ import { routes } from './routes'
 import { settings } from './settings'
 
 export class App {
-  private logger = new Logger(settings.logs, { app: settings.app })
+  logger = new Logger(settings.logs, { app: settings.app })
 
   async run() {
     const { success, failure } = this.logger.start('app_start')

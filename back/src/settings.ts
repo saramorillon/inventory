@@ -1,5 +1,5 @@
 import { ILoggerOptions } from '@saramorillon/logger'
-import { bool, cleanEnv, num, str, url } from 'envalid'
+import { url, bool, cleanEnv, num, str } from 'envalid'
 import session, { SessionOptions } from 'express-session'
 import { HelmetOptions } from 'helmet'
 import filestore from 'session-file-store'

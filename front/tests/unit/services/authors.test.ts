@@ -1,5 +1,5 @@
-import { deleteAuthor, getAuthor, getAuthors, saveAuthor } from '../../../src/services/authors'
 import { Axios } from '../../../src/services/Axios'
+import { deleteAuthor, getAuthor, getAuthors, saveAuthor } from '../../../src/services/authors'
 import { mockAuthor } from '../../mocks'
 
 vi.mock('../../../src/services/Axios')

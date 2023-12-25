@@ -11,25 +11,26 @@ interface IPaginationProps {
 export function Pagination({ maxPage, pagination, limit, setLimit }: IPaginationProps) {
   const { page, first, previous, next, last, canPrevious, canNext } = pagination
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Go back to first page on limit change
   useEffect(() => {
     first()
   }, [limit, first])
 
   return (
     <div className="right-align mt1">
-      <button disabled={!canPrevious} onClick={first} aria-label="First">
+      <button type="button" disabled={!canPrevious} onClick={first} aria-label="First">
         ⟪
       </button>
-      <button disabled={!canPrevious} onClick={previous} aria-label="Previous">
+      <button type="button" disabled={!canPrevious} onClick={previous} aria-label="Previous">
         ⟨
       </button>
       <span className="mx1">
         Page {page} of {maxPage}
       </span>
-      <button disabled={!canNext} onClick={next} aria-label="Next">
+      <button type="button" disabled={!canNext} onClick={next} aria-label="Next">
         ⟩
       </button>
-      <button disabled={!canNext} onClick={last} aria-label="Last">
+      <button type="button" disabled={!canNext} onClick={last} aria-label="Last">
         ⟫
       </button>
       <select value={limit} onChange={(e) => setLimit(Number(e.target.value))}>

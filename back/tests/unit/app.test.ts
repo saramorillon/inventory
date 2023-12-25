@@ -1,6 +1,6 @@
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import express, { Express, static as _static, json, urlencoded } from 'express'
+import express, { Express, json, static as _static, urlencoded } from 'express'
 import session from 'express-session'
 import helmet from 'helmet'
 import { App } from '../../src/app'
@@ -72,7 +72,7 @@ describe('run', () => {
 
   it('should log when app succesfully starts', async () => {
     const app = new App()
-    const { success } = mockAction(app['logger'])
+    const { success } = mockAction(app.logger)
     await app.run()
     expect(success).toHaveBeenCalled()
   })
@@ -82,7 +82,7 @@ describe('run', () => {
       throw 'error'
     })
     const app = new App()
-    const { failure } = mockAction(app['logger'])
+    const { failure } = mockAction(app.logger)
     await app.run()
     expect(failure).toHaveBeenCalledWith('error')
   })

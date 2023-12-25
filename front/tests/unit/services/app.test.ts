@@ -1,5 +1,5 @@
-import { getApp } from '../../../src/services/app'
 import { Axios } from '../../../src/services/Axios'
+import { getApp } from '../../../src/services/app'
 
 vi.mock('../../../src/services/Axios')
 

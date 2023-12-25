@@ -1,5 +1,5 @@
-import { config } from 'dotenv'
 import { join } from 'path'
+import { config } from 'dotenv'
 import { defineConfig } from 'vitest/config'
 
 config({ path: join(__dirname, 'tests', '.env.test') })

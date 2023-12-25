@@ -22,7 +22,7 @@ export function useTable<T>(data: T[], limit: number) {
 function applySort<T>(a: T, b: T, sorts: Sort<T>[]) {
   for (const sort of sorts) {
     const result = sort.fn(a, b)
-    if (result != 0) return result
+    if (result !== 0) return result
   }
   return 0
 }

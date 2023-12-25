@@ -1,7 +1,7 @@
 import { useForm } from '@saramorillon/hooks'
 import React, { useCallback } from 'react'
 import { login } from '../../services/session'
-import { Error } from '../components/Helpers'
+import { Error2 } from '../components/Helpers'
 
 export function Login() {
   const save = useCallback(
@@ -32,13 +32,13 @@ export function Login() {
           />
         </label>
 
-        <button data-variant="primary" aria-busy={loading} disabled={loading}>
+        <button type="button" data-variant="primary" aria-busy={loading} disabled={loading}>
           Log in
         </button>
 
         {Boolean(error) && (
           <span className="mx2">
-            <Error message="Invalid credentials" />
+            <Error2 message="Invalid credentials" />
           </span>
         )}
       </form>

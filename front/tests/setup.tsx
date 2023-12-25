@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
 import React, { PropsWithChildren } from 'react'
-import { LinkProps, NavigateProps, NavLinkProps, OutletProps, useParams } from 'react-router-dom'
+import { LinkProps, NavLinkProps, NavigateProps, OutletProps, useParams } from 'react-router-dom'
 import { mockNavigate } from './mocks'
 
 vi.mock('react-router-dom', async () => {

@@ -12,7 +12,7 @@ describe('SessionContext', () => {
   })
 
   it('should show loader when loading', async () => {
-    render(<SessionProvider></SessionProvider>)
+    render(<SessionProvider />)
     expect(screen.getByLabelText('Loading...')).toBeInTheDocument()
     await wait()
   })

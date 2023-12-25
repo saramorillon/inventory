@@ -10,7 +10,7 @@ import { IBook } from '../../models/Book'
 import { getAuthors } from '../../services/authors'
 import { deleteBook, getBook, saveBook } from '../../services/books'
 import { BarCode } from '../components/BarCode'
-import { Error, Loading, NotFound } from '../components/Helpers'
+import { Error2, Loading, NotFound } from '../components/Helpers'
 
 export function Book() {
   const id = useParam('id')
@@ -19,7 +19,7 @@ export function Book() {
 
   if (loading) return <Loading message="Loading book" />
 
-  if (error) return <Error message="Error while loading book" />
+  if (error) return <Error2 message="Error while loading book" />
 
   if (!book) return <NotFound message="Book not found" />
 
@@ -105,9 +105,9 @@ function Authors({ values, onChange }: IAuthorsProps) {
   const { options, add, remove } = useTypeahead(authors, values.authors, onChange)
 
   return (
-    <div role="combobox">
+    <div role="combobox" aria-controls="#datalist" aria-expanded={false}>
       {values.authors.map((author) => (
-        <span role="option" key={author.id}>
+        <span role="option" aria-selected={false} key={author.id}>
           <Link to={`/author/${author.id}`}>{fullName(author)} </Link>
           <IconX
             aria-label={`Remove ${fullName(author)}`}
@@ -117,7 +117,7 @@ function Authors({ values, onChange }: IAuthorsProps) {
         </span>
       ))}
       <input list="datalist" aria-label="Add another author" onChange={add} />
-      <datalist id="datalist" role="listbox">
+      <datalist id="datalist">
         {options.map((option) => (
           <option key={option.id} value={option.id}>
             {fullName(option)}

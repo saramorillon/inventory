@@ -6,7 +6,7 @@ vi.mock('axios')
 describe('search', () => {
   beforeEach(() => {
     vi.mocked(axios.get).mockResolvedValue({
-      data: { ['ISBN:isbn']: { title: 'title', authors: [{ name: 'author' }] } },
+      data: { 'ISBN:isbn': { title: 'title', authors: [{ name: 'author' }] } },
     })
   })
 
@@ -18,7 +18,7 @@ describe('search', () => {
   })
 
   it('should return null if title is empty', async () => {
-    vi.mocked(axios.get).mockResolvedValue({ data: { ['ISBN:isbn']: { authors: [{ name: 'author' }] } } })
+    vi.mocked(axios.get).mockResolvedValue({ data: { 'ISBN:isbn': { authors: [{ name: 'author' }] } } })
     const result = await new OpenLibrary().search('isbn')
     expect(result).toBeNull()
   })

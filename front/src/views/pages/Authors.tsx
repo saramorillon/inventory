@@ -49,10 +49,16 @@ export function Authors() {
   return (
     <>
       <div className="right mb2">
-        <button data-variant="outlined" title="Create" className="mr1" onClick={() => navigate('/author')}>
+        <button
+          type="button"
+          data-variant="outlined"
+          title="Create"
+          className="mr1"
+          onClick={() => navigate('/author')}
+        >
           <IconPlus size={16} />
         </button>
-        <button data-variant="outlined" title="Refresh" className="mr1" onClick={execute}>
+        <button type="button" data-variant="outlined" title="Refresh" className="mr1" onClick={execute}>
           <IconRefresh size={16} />
         </button>
       </div>
