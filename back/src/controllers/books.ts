@@ -73,7 +73,7 @@ export async function postBook(req: Request, res: Response): Promise<void> {
       book = await prisma.book.create({
         data: { serial, title: capitalize(title), source, authors: { connect: [{ id: author.id }] } },
       })
-      res.json(book)
+      res.status(201).json(book)
     }
     success()
   } catch (e) {

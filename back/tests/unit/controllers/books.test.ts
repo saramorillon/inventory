@@ -135,6 +135,7 @@ describe('postBook', () => {
     const req = getMockReq({ body: { serial: '9780123456789' } })
     const { res } = getMockRes()
     await postBook(req, res)
+    expect(res.status).toHaveBeenCalledWith(201)
     expect(res.json).toHaveBeenCalledWith(mockBook())
   })
 
