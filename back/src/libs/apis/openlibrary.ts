@@ -10,7 +10,6 @@ type Response = {
 }
 
 export class OpenLibrary implements IApi {
-  limit = 100
   source = 'openlibrary'
   url = 'https://openlibrary.org/api/books'
 

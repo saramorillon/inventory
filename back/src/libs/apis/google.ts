@@ -14,7 +14,6 @@ type Response = {
 }
 
 export class GoogleApi implements IApi {
-  limit = 1
   source = 'google'
   url = 'https://www.googleapis.com/books/v1/volumes'
 

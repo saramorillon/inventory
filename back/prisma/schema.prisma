@@ -8,12 +8,11 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  username    String   @unique(map: "uq_user_username") @db.VarChar(40)
-  password    String   @db.Char(56)
-  isbndbToken String?  @db.Char(38)
-  createdAt   DateTime @default(now()) @db.DateTime(6)
-  updatedAt   DateTime @updatedAt @db.DateTime(6)
+  id        Int      @id @default(autoincrement())
+  username  String   @unique(map: "uq_user_username") @db.VarChar(40)
+  password  String   @db.Char(56)
+  createdAt DateTime @default(now()) @db.DateTime(6)
+  updatedAt DateTime @updatedAt @db.DateTime(6)
 
   books Book[] @relation("user_to_book")
 

@@ -41,7 +41,6 @@ export function mockAction(logger: Logger) {
 export function mockSession(session: Partial<ISession> = {}): ISession {
   return {
     username: 'username',
-    isbndbToken: 'token',
     ...session,
   }
 }
@@ -51,7 +50,6 @@ export function mockUser(): User {
     id: 1,
     username: 'username',
     password: 'password',
-    isbndbToken: 'token',
     createdAt: new Date('2022-01-01T00:00:00.000Z'),
     updatedAt: new Date('2023-01-01T00:00:00.000Z'),
   }

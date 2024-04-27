@@ -19,7 +19,6 @@ type Response = {
 }
 
 export class WorlCatApi implements IApi {
-  limit = 100
   source = 'worldcat'
   url = 'http://classify.oclc.org/classify2/Classify'
 
