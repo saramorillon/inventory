@@ -34,7 +34,7 @@ jobs:
         working-directory: ${{ matrix.directory }}
 
       - name: Check
-        run: pnpm run check
+        run: pnpm exec biome check .
         working-directory: ${{ matrix.directory }}
 
       - name: Build

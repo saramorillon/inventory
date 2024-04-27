@@ -51,6 +51,7 @@ FROM base as release
 
 ENV PUBLIC_DIR=/app/dist/public
 
+COPY --from=back --chown=node:node /app/back/package.json /app/package.json
 COPY --from=back --chown=node:node /app/back/prisma/ /app/prisma/
 COPY --from=back --chown=node:node /app/back/node_modules/ /app/node_modules/
 COPY --from=back --chown=node:node /app/back/dist/ /app/dist/
@@ -62,4 +63,4 @@ RUN chown -R node:node /app/sessions
 
 USER node
 
-CMD ["node", "dist/src/index.js"]
+CMD ["pnpm", "run", "start"]

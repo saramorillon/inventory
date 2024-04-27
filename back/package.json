@@ -16,7 +16,7 @@
     "prestart": "prisma migrate deploy",
     "start": "node dist/src/index.js",
     "watch": "node -r dotenv/config --inspect --watch --import=tsx src/index.ts",
-    "check": "biome check --apply ."
+    "fix": "biome check --apply ."
   },
   "prisma": {
     "seed": "ts-node --transpile-only prisma/seeds/index.ts"

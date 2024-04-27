@@ -5,7 +5,7 @@
     "prebuild": "tsc -p tsconfig.build.json",
     "build": "vite build",
     "watch": "vite dev",
-    "check": "biome check --apply ."
+    "fix": "biome check --apply ."
   },
   "devDependencies": {
     "@biomejs/biome": "^1.4.1",
