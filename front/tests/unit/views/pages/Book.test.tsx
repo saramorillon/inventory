@@ -137,10 +137,4 @@ describe('Book', () => {
     await wait()
     expect(navigate).toHaveBeenCalledWith('/books')
   })
-
-  it('should render google page', async () => {
-    render(<Book />)
-    await wait()
-    expect(screen.getByTitle('Google page for "title"')).toBeInTheDocument()
-  })
 })

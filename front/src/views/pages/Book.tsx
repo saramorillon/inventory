@@ -5,7 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
 import { useRefresh } from '../../hooks/useRefresh'
 import { useTypeahead } from '../../hooks/useTypeahead'
-import { type IAuthor, fullName } from '../../models/Author'
+import { fullName, type IAuthor } from '../../models/Author'
 import type { IBook } from '../../models/Book'
 import { getAuthors } from '../../services/authors'
 import { deleteBook, getBook, saveBook } from '../../services/books'
@@ -91,15 +91,6 @@ function Form({ book, refresh }: IFormProps) {
           )}
         </div>
       </form>
-
-      {book && (
-        <iframe
-          title={`Google page for "${book.title}"`}
-          src={`https://www.google.com/search?q=${book.serial}&igu=1`}
-          width="100%"
-          height="400"
-        />
-      )}
     </>
   )
 }
