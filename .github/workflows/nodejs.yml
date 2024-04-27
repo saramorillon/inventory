@@ -6,36 +6,41 @@ on:
       - master
 
 jobs:
-  back:
+  build_and_test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Install
-        run: yarn install
-        working-directory: back
-      - name: Build
-        run: yarn build
-        working-directory: back
-      - name: Test
-        run: yarn vitest run
-        working-directory: back
 
-  front:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory:
+          - back
+          - front
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: latest
+
       - name: Install
-        run: yarn install
-        working-directory: front
+        run: pnpm install
+        working-directory: ${{ matrix.directory }}
+
+      - name: Check
+        run: pnpm run check
+        working-directory: ${{ matrix.directory }}
+
       - name: Build
-        run: yarn build
-        working-directory: front
+        run: pnpm run build
+        working-directory: ${{ matrix.directory }}
+
       - name: Test
-        run: yarn vitest run
-        working-directory: front
+        run: pnpm exec vitest run
+        working-directory: ${{ matrix.directory }}
