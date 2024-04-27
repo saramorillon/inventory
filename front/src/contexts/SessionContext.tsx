@@ -1,6 +1,6 @@
 import { useQuery } from '@saramorillon/hooks'
-import React, { PropsWithChildren, createContext } from 'react'
-import { ISession } from '../models/Session'
+import React, { type PropsWithChildren, createContext } from 'react'
+import type { ISession } from '../models/Session'
 import { getSession } from '../services/session'
 
 export const SessionContext = createContext<ISession | undefined>(undefined)

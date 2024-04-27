@@ -1,4 +1,4 @@
-import { IApp } from '../models/App'
+import type { IApp } from '../models/App'
 import { Axios } from './Axios'
 
 export async function getApp() {

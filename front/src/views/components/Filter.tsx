@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { IColumn } from './Table'
+import type { IColumn } from './Table'
 
 interface IFilterProps<T> {
   onFilter: (index: number, fn: (data1: T) => boolean) => void

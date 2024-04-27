@@ -1,4 +1,4 @@
-import { IAuthor } from '../models/Author'
+import type { IAuthor } from '../models/Author'
 import { Axios } from './Axios'
 
 export async function getAuthors() {

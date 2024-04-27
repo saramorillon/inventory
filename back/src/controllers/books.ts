@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import type { Request, Response } from 'express'
 import { z } from 'zod'
 import { isbnSearch } from '../libs/isbn'
 import { prisma } from '../prisma'

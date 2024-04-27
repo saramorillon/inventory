@@ -1,7 +1,7 @@
 import { usePagination } from '@saramorillon/hooks'
 import { useMemo } from 'react'
-import { Filter, useFilters } from './useFilters'
-import { Sort, useSorts } from './useSorts'
+import { type Filter, useFilters } from './useFilters'
+import { type Sort, useSorts } from './useSorts'
 
 export function useTable<T>(data: T[], limit: number) {
   const { sorts, onSort } = useSorts<T>()

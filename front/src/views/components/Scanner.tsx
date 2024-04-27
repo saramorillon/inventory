@@ -1,5 +1,5 @@
 import { IconSearch } from '@tabler/icons-react'
-import React, { FormEvent, useCallback, useState } from 'react'
+import React, { type FormEvent, useCallback, useState } from 'react'
 import { scanBook } from '../../services/books'
 
 interface IScannerProps {

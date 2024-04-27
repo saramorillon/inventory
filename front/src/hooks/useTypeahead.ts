@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useMemo } from 'react'
+import { type ChangeEvent, useCallback, useMemo } from 'react'
 
 export function useTypeahead<T extends { id: number }>(options: T[], values: T[], onChange: (values: T[]) => void) {
   const filteredOptions = useMemo(

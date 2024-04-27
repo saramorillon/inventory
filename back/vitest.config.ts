@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 import { config } from 'dotenv'
 import { defineConfig } from 'vitest/config'
 

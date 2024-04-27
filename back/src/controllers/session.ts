@@ -1,5 +1,5 @@
-import { createHash } from 'crypto'
-import { Request, Response } from 'express'
+import { createHash } from 'node:crypto'
+import type { Request, Response } from 'express'
 import { z } from 'zod'
 import { prisma } from '../prisma'
 import { settings } from '../settings'

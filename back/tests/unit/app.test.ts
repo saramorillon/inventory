@@ -1,6 +1,6 @@
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import express, { Express, json, static as _static, urlencoded } from 'express'
+import express, { type Express, json, static as _static, urlencoded } from 'express'
 import session from 'express-session'
 import helmet from 'helmet'
 import { App } from '../../src/app'

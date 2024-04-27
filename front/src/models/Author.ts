@@ -1,4 +1,4 @@
-import { IBook } from './Book'
+import type { IBook } from './Book'
 
 export type IAuthor = {
   id: number

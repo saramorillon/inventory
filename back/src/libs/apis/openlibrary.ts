@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IApi, IApiResult, sanitize } from './Api'
+import { type IApi, type IApiResult, sanitize } from './Api'
 
 type Response = {
   [key: string]: {

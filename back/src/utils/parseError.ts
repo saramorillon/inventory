@@ -1,6 +1,6 @@
-import { inspect } from 'util'
-import { isNativeError } from 'util/types'
-import { ZodError, ZodIssue } from 'zod'
+import { inspect } from 'node:util'
+import { isNativeError } from 'node:util/types'
+import { ZodError, type ZodIssue } from 'zod'
 
 function parseZodIssue(issue: ZodIssue): string {
   if (issue.code === 'invalid_union') {

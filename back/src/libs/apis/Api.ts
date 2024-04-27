@@ -1,4 +1,4 @@
-import { ISession } from '../../models/Session'
+import type { ISession } from '../../models/Session'
 
 export interface IApi {
   limit: number

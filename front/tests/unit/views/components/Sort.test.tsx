@@ -3,7 +3,7 @@ import React from 'react'
 import { Sort } from '../../../../src/views/components/Sort'
 
 describe('Sort', () => {
-  const column = { header: () => 'header', cell: () => 'cell' }
+  const column = { id: 'id', header: () => 'header', cell: () => 'cell' }
 
   it('should render nothing if column has no sort', () => {
     const { container } = render(<Sort index={0} column={column} onSort={vi.fn()} />)
@@ -23,7 +23,7 @@ describe('Sort', () => {
   })
 
   it('should apply sort with input value and dir', () => {
-    let result
+    let result: number | undefined = undefined
     const sort = vi.fn().mockReturnValue(2)
     const onSort = vi.fn().mockImplementation((index, fn) => {
       result = fn('data1', 'data2')

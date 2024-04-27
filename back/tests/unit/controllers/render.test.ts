@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 import { render } from '../../../src/controllers/render'
 import { getMockReq, getMockRes } from '../../mocks'
 

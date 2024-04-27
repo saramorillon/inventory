@@ -1,6 +1,6 @@
 import { IconArrowsSort, IconSortAscending, IconSortDescending } from '@tabler/icons-react'
 import React, { useCallback, useEffect, useState } from 'react'
-import { IColumn } from './Table'
+import type { IColumn } from './Table'
 
 interface ISortIconsProps<T> {
   onSort: (index: number, fn: (data1: T, data2: T) => number) => void

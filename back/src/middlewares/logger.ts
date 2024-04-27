@@ -1,5 +1,5 @@
 import { Logger } from '@saramorillon/logger'
-import { NextFunction, Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import { settings } from '../settings'
 
 export function logger(req: Request, res: Response, next: NextFunction): void {

@@ -1,9 +1,9 @@
-import { Author, Book, User } from '@prisma/client'
+import type { Author, Book, User } from '@prisma/client'
 import { Logger } from '@saramorillon/logger'
-import { NextFunction, Request, Response } from 'express'
-import { Session } from 'express-session'
-import { IApiResult } from '../src/libs/apis/Api'
-import { ISession } from '../src/models/Session'
+import type { NextFunction, Request, Response } from 'express'
+import type { Session } from 'express-session'
+import type { IApiResult } from '../src/libs/apis/Api'
+import type { ISession } from '../src/models/Session'
 
 export function getMockReq(request: Partial<Request> = {}): Request {
   return {

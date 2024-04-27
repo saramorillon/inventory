@@ -1,11 +1,11 @@
 import { act } from 'react-dom/test-utils'
 import { useNavigate } from 'react-router-dom'
-import { Mock } from 'vitest'
+import type { Mock } from 'vitest'
 import { useRefresh } from '../src/hooks/useRefresh'
-import { IApp } from '../src/models/App'
-import { IAuthor } from '../src/models/Author'
-import { IBook } from '../src/models/Book'
-import { ISession } from '../src/models/Session'
+import type { IApp } from '../src/models/App'
+import type { IAuthor } from '../src/models/Author'
+import type { IBook } from '../src/models/Book'
+import type { ISession } from '../src/models/Session'
 
 export async function wait() {
   await act(() => new Promise((resolve) => setTimeout(resolve, 0)))

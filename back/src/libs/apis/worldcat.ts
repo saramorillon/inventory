@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { parseStringPromise } from 'xml2js'
-import { IApi, IApiResult, sanitize } from './Api'
+import { type IApi, type IApiResult, sanitize } from './Api'
 
 type Work = {
   $: {

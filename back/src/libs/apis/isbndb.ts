@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { ISession } from '../../models/Session'
-import { IApi, IApiResult, sanitize } from './Api'
+import type { ISession } from '../../models/Session'
+import { type IApi, type IApiResult, sanitize } from './Api'
 
 type Response = {
   book?: {

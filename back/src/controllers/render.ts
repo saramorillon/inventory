@@ -1,5 +1,5 @@
-import { join } from 'path'
-import { Request, Response } from 'express'
+import { join } from 'node:path'
+import type { Request, Response } from 'express'
 import { settings } from '../settings'
 
 export function render(req: Request, res: Response): void {

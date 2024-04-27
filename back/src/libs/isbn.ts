@@ -1,6 +1,6 @@
 import merge from 'lodash.merge'
-import { ISession } from '../models/Session'
-import { IApi, IApiResult } from './apis/Api'
+import type { ISession } from '../models/Session'
+import type { IApi, IApiResult } from './apis/Api'
 import { GoogleApi } from './apis/google'
 import { IsbnDbApi } from './apis/isbndb'
 import { OpenLibrary } from './apis/openlibrary'

@@ -1,7 +1,7 @@
-import { ILoggerOptions } from '@saramorillon/logger'
+import type { ILoggerOptions } from '@saramorillon/logger'
 import { url, bool, cleanEnv, num, str } from 'envalid'
-import session, { SessionOptions } from 'express-session'
-import { HelmetOptions } from 'helmet'
+import session, { type SessionOptions } from 'express-session'
+import type { HelmetOptions } from 'helmet'
 import filestore from 'session-file-store'
 import { name, version } from '../package.json'
 

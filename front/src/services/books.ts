@@ -1,4 +1,4 @@
-import { IBook } from '../models/Book'
+import type { IBook } from '../models/Book'
 import { Axios } from './Axios'
 
 export async function getBooks() {

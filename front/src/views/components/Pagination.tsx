@@ -1,5 +1,5 @@
-import { IPagination } from '@saramorillon/hooks'
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
+import type { IPagination } from '@saramorillon/hooks'
+import React, { type Dispatch, type SetStateAction, useEffect } from 'react'
 
 interface IPaginationProps {
   maxPage: number
