@@ -56,23 +56,32 @@ export async function postBook(req: Request, res: Response): Promise<void> {
       res.json(book)
     } else {
       const { serial } = body
+
       let book = await prisma.book.findUnique({ where: { serial } })
       if (book) {
         res.sendStatus(204)
         success()
         return
       }
+
       const result = await isbnSearch(serial, req.session.user)
       if (!result) {
         res.sendStatus(404)
         success()
         return
       }
+
       const { title, authors, source } = result
-      const author = await getAuthor(authors)
-      book = await prisma.book.create({
-        data: { serial, title: capitalize(title), source, authors: { connect: [{ id: author.id }] } },
-      })
+      book = await prisma.book.create({ data: { serial, title: capitalize(title), source } })
+
+      if (authors.length) {
+        const author = await getAuthor(authors)
+        book = await prisma.book.update({
+          where: { serial: book.serial },
+          data: { authors: { connect: [{ id: author.id }] } },
+        })
+      }
+
       res.status(201).json(book)
     }
     success()

@@ -38,6 +38,7 @@ describe('postBook', () => {
   beforeEach(() => {
     vi.spyOn(prisma.book, 'findUnique').mockResolvedValue(null)
     vi.spyOn(prisma.book, 'create').mockResolvedValue(mockBook())
+    vi.spyOn(prisma.book, 'update').mockResolvedValue(mockBook())
     vi.spyOn(prisma.author, 'findFirst').mockResolvedValue(mockAuthor())
     vi.spyOn(prisma.author, 'create').mockResolvedValue(mockAuthor())
     vi.mocked(isbnSearch).mockResolvedValue(mockApiResult())
@@ -105,6 +106,23 @@ describe('postBook', () => {
     expect(res.sendStatus).toHaveBeenCalledWith(404)
   })
 
+  it('should create book', async () => {
+    const req = getMockReq({ body: { serial: '9780123456789' } })
+    const { res } = getMockRes()
+    await postBook(req, res)
+    expect(prisma.book.create).toHaveBeenCalledWith({
+      data: { source: 'source', serial: '9780123456789', title: 'Title' },
+    })
+  })
+
+  it('should not find matching author if author is empty', async () => {
+    vi.mocked(isbnSearch).mockResolvedValue(mockApiResult({ authors: [] }))
+    const req = getMockReq({ body: { serial: '9780123456789' } })
+    const { res } = getMockRes()
+    await postBook(req, res)
+    expect(prisma.author.findFirst).not.toHaveBeenCalled()
+  })
+
   it('should find matching author', async () => {
     const req = getMockReq({ body: { serial: '9780123456789' } })
     const { res } = getMockRes()
@@ -122,12 +140,13 @@ describe('postBook', () => {
     expect(prisma.author.create).toHaveBeenCalledWith({ data: { lastName: 'author' } })
   })
 
-  it('should create book', async () => {
+  it('should update created book with matching author', async () => {
     const req = getMockReq({ body: { serial: '9780123456789' } })
     const { res } = getMockRes()
     await postBook(req, res)
-    expect(prisma.book.create).toHaveBeenCalledWith({
-      data: { authors: { connect: [{ id: 1 }] }, serial: '9780123456789', source: 'source', title: 'Title' },
+    expect(prisma.book.update).toHaveBeenCalledWith({
+      where: { serial: 'serial' },
+      data: { authors: { connect: [{ id: 1 }] } },
     })
   })
 
