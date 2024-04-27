@@ -31,10 +31,18 @@ const schema = {
 export async function getBooks(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('get_books')
   try {
+    if (!req.session.user) {
+      res.json([])
+      success()
+      return
+    }
+
     const books = await prisma.book.findMany({
+      where: { users: { some: { username: req.session.user.username } } },
       include: { authors: true },
       orderBy: { updatedAt: 'desc' },
     })
+
     res.json(books)
     success()
   } catch (e) {
@@ -47,39 +55,58 @@ export async function getBooks(req: Request, res: Response): Promise<void> {
 export async function postBook(req: Request, res: Response): Promise<void> {
   const { success, failure } = req.logger.start('post_book')
   try {
+    const { user } = req.session
     const body = schema.post.parse(req.body)
     if ('title' in body) {
       const { serial, title, source, authors } = body
       const book = await prisma.book.create({
         data: { serial, title: capitalize(title), source, authors: { connect: authors } },
       })
-      res.json(book)
+
+      if (user) {
+        await prisma.user.update({ where: { username: user.username }, data: { books: { connect: [book] } } })
+      }
+
+      res.status(201).json(book)
     } else {
       const { serial } = body
 
       let book = await prisma.book.findUnique({ where: { serial } })
       if (book) {
+        if (user) {
+          await prisma.user.update({ where: { username: user.username }, data: { books: { connect: [book] } } })
+        }
         res.sendStatus(204)
         success()
         return
       }
 
-      const result = await isbnSearch(serial, req.session.user)
+      const result = await isbnSearch(serial, user)
       if (!result) {
         res.sendStatus(404)
         success()
         return
       }
 
-      const { title, authors, source } = result
-      book = await prisma.book.create({ data: { serial, title: capitalize(title), source } })
+      const authors = []
+      if (result.authors.length) {
+        const firstNames = result.authors.map((author) => ({ firstName: author }))
+        const lastNames = result.authors.map((author) => ({ lastName: author }))
+        const author = await prisma.author.findFirst({ where: { AND: [{ OR: firstNames }, { OR: lastNames }] } })
+        if (author) {
+          authors.push(author)
+        } else {
+          authors.push(await prisma.author.create({ data: { lastName: result.authors.join(' ') } }))
+        }
+      }
 
-      if (authors.length) {
-        const author = await getAuthor(authors)
-        book = await prisma.book.update({
-          where: { serial: book.serial },
-          data: { authors: { connect: [{ id: author.id }] } },
-        })
+      const { title, source } = result
+      book = await prisma.book.create({
+        data: { serial, title: capitalize(title), source, authors: { connect: authors } },
+      })
+
+      if (user) {
+        await prisma.user.update({ where: { username: user.username }, data: { books: { connect: [book] } } })
       }
 
       res.status(201).json(book)
@@ -90,14 +117,6 @@ export async function postBook(req: Request, res: Response): Promise<void> {
     failure(error)
     res.status(500).json(error)
   }
-}
-
-async function getAuthor(authors: string[]) {
-  const firstNames = authors.map((author) => ({ firstName: author }))
-  const lastNames = authors.map((author) => ({ lastName: author }))
-  const author = await prisma.author.findFirst({ where: { AND: [{ OR: firstNames }, { OR: lastNames }] } })
-  if (author) return author
-  return prisma.author.create({ data: { lastName: authors.join(' ') } })
 }
 
 export async function getBook(req: Request, res: Response): Promise<void> {

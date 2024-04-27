@@ -1,7 +1,7 @@
 import { deleteBook, getBook, getBooks, postBook, putBook } from '../../../src/controllers/books'
 import { isbnSearch } from '../../../src/libs/isbn'
 import { prisma } from '../../../src/prisma'
-import { getMockReq, getMockRes, mockApiResult, mockAuthor, mockBook, mockSession } from '../../mocks'
+import { getMockReq, getMockRes, mockApiResult, mockAuthor, mockBook, mockSession, mockUser } from '../../mocks'
 
 vi.mock('../../../src/libs/isbn')
 
@@ -10,15 +10,28 @@ describe('getBooks', () => {
     vi.spyOn(prisma.book, 'findMany').mockResolvedValue([mockBook()])
   })
 
-  it('should get books', async () => {
+  it('should return empty array if no session', async () => {
     const req = getMockReq({ params: { id: '1' } })
     const { res } = getMockRes()
     await getBooks(req, res)
-    expect(prisma.book.findMany).toHaveBeenCalledWith({ include: { authors: true }, orderBy: { updatedAt: 'desc' } })
+    expect(res.json).toHaveBeenCalledWith([])
+  })
+
+  it('should get books', async () => {
+    const req = getMockReq({ params: { id: '1' } })
+    req.session.user = mockUser()
+    const { res } = getMockRes()
+    await getBooks(req, res)
+    expect(prisma.book.findMany).toHaveBeenCalledWith({
+      where: { users: { some: { username: 'username' } } },
+      include: { authors: true },
+      orderBy: { updatedAt: 'desc' },
+    })
   })
 
   it('should send books', async () => {
     const req = getMockReq({ params: { id: '1' } })
+    req.session.user = mockUser()
     const { res } = getMockRes()
     await getBooks(req, res)
     expect(res.json).toHaveBeenCalledWith([mockBook()])
@@ -27,6 +40,7 @@ describe('getBooks', () => {
   it('should send 500 status on error', async () => {
     vi.spyOn(prisma.book, 'findMany').mockRejectedValue(new Error('500'))
     const req = getMockReq({ params: { id: '1' } })
+    req.session.user = mockUser()
     const { res } = getMockRes()
     await getBooks(req, res)
     expect(res.status).toHaveBeenCalledWith(500)
@@ -41,6 +55,7 @@ describe('postBook', () => {
     vi.spyOn(prisma.book, 'update').mockResolvedValue(mockBook())
     vi.spyOn(prisma.author, 'findFirst').mockResolvedValue(mockAuthor())
     vi.spyOn(prisma.author, 'create').mockResolvedValue(mockAuthor())
+    vi.spyOn(prisma.user, 'update').mockResolvedValue(mockUser())
     vi.mocked(isbnSearch).mockResolvedValue(mockApiResult())
   })
 
@@ -65,6 +80,19 @@ describe('postBook', () => {
     })
   })
 
+  it('should link created book to current user', async () => {
+    const req = getMockReq({
+      body: { serial: '9780123456789', title: 'Title', source: 'manual', authors: [{ id: 1 }] },
+    })
+    req.session.user = mockSession()
+    const { res } = getMockRes()
+    await postBook(req, res)
+    expect(prisma.user.update).toHaveBeenCalledWith({
+      where: { username: 'username' },
+      data: { books: { connect: [mockBook()] } },
+    })
+  })
+
   it('should send created book', async () => {
     const req = getMockReq({
       body: { serial: '9780123456789', title: 'Title', source: 'manual', authors: [{ id: 1 }] },
@@ -80,6 +108,18 @@ describe('postBook', () => {
     const { res } = getMockRes()
     await postBook(req, res)
     expect(prisma.book.findUnique).toHaveBeenCalledWith({ where: { serial: '9780123456789' } })
+  })
+
+  it('should link existing book to current user', async () => {
+    vi.spyOn(prisma.book, 'findUnique').mockResolvedValue(mockBook())
+    const req = getMockReq({ body: { serial: '9780123456789' } })
+    req.session.user = mockSession()
+    const { res } = getMockRes()
+    await postBook(req, res)
+    expect(prisma.user.update).toHaveBeenCalledWith({
+      where: { username: 'username' },
+      data: { books: { connect: [mockBook()] } },
+    })
   })
 
   it('should send 204 status if book already exists', async () => {
@@ -106,21 +146,22 @@ describe('postBook', () => {
     expect(res.sendStatus).toHaveBeenCalledWith(404)
   })
 
-  it('should create book', async () => {
-    const req = getMockReq({ body: { serial: '9780123456789' } })
-    const { res } = getMockRes()
-    await postBook(req, res)
-    expect(prisma.book.create).toHaveBeenCalledWith({
-      data: { source: 'source', serial: '9780123456789', title: 'Title' },
-    })
-  })
-
   it('should not find matching author if author is empty', async () => {
     vi.mocked(isbnSearch).mockResolvedValue(mockApiResult({ authors: [] }))
     const req = getMockReq({ body: { serial: '9780123456789' } })
     const { res } = getMockRes()
     await postBook(req, res)
     expect(prisma.author.findFirst).not.toHaveBeenCalled()
+  })
+
+  it('should create book without author if author is empty', async () => {
+    vi.mocked(isbnSearch).mockResolvedValue(mockApiResult({ authors: [] }))
+    const req = getMockReq({ body: { serial: '9780123456789' } })
+    const { res } = getMockRes()
+    await postBook(req, res)
+    expect(prisma.book.create).toHaveBeenCalledWith({
+      data: { source: 'source', serial: '9780123456789', title: 'Title', authors: { connect: [] } },
+    })
   })
 
   it('should find matching author', async () => {
@@ -140,13 +181,23 @@ describe('postBook', () => {
     expect(prisma.author.create).toHaveBeenCalledWith({ data: { lastName: 'author' } })
   })
 
-  it('should update created book with matching author', async () => {
+  it('should create book with matching author', async () => {
     const req = getMockReq({ body: { serial: '9780123456789' } })
     const { res } = getMockRes()
     await postBook(req, res)
-    expect(prisma.book.update).toHaveBeenCalledWith({
-      where: { serial: 'serial' },
-      data: { authors: { connect: [{ id: 1 }] } },
+    expect(prisma.book.create).toHaveBeenCalledWith({
+      data: { source: 'source', serial: '9780123456789', title: 'Title', authors: { connect: [mockAuthor()] } },
+    })
+  })
+
+  it('should link scanned book to current user', async () => {
+    const req = getMockReq({ body: { serial: '9780123456789' } })
+    req.session.user = mockSession()
+    const { res } = getMockRes()
+    await postBook(req, res)
+    expect(prisma.user.update).toHaveBeenCalledWith({
+      where: { username: 'username' },
+      data: { books: { connect: [mockBook()] } },
     })
   })
 
