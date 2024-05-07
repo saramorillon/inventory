@@ -52,7 +52,7 @@ describe('Books', () => {
   it('should render book last update date', async () => {
     render(<Books />)
     await wait()
-    expect(screen.getByText('Jan 1, 2022, 12:00:00 AM')).toBeInTheDocument()
+    expect(screen.getByText('Jan 1, 2022')).toBeInTheDocument()
   })
 
   it('should refresh table when clicking on refresh button', async () => {

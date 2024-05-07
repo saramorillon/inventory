@@ -58,7 +58,7 @@ describe('Authors', () => {
   it('should render author last update date', async () => {
     render(<Authors />)
     await wait()
-    expect(screen.getByText('Jan 1, 2022, 12:00:00 AM')).toBeInTheDocument()
+    expect(screen.getByText('Jan 1, 2022')).toBeInTheDocument()
   })
 
   it('should navigate to author page when clicking on create button', async () => {

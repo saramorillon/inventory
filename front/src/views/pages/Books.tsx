@@ -4,7 +4,7 @@ import { format, parseISO } from 'date-fns'
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
-import { type IBook, authors } from '../../models/Book'
+import { authors, type IBook } from '../../models/Book'
 import { getBooks } from '../../services/books'
 import { Scanner } from '../components/Scanner'
 import { DataTable, type IColumn } from '../components/Table'
@@ -35,9 +35,10 @@ export const columns: IColumn<IBook>[] = [
   {
     id: 'lastUpdate',
     header: () => 'Last update',
-    cell: (book) => format(parseISO(book.updatedAt), 'PPpp'),
+    cell: (book) => format(parseISO(book.updatedAt), 'PP'),
     filter: (book, filter) => book.updatedAt.toLowerCase().includes(filter),
     sort: (book1, book2) => book1.updatedAt.localeCompare(book2.updatedAt),
+    props: { className: 'nowrap' },
   },
 ]
 
