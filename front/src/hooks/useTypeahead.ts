@@ -8,9 +8,9 @@ export function useTypeahead<T extends { id: number }>(options: T[], values: T[]
 
   const add = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      if (!(e.nativeEvent instanceof InputEvent)) {
-        const value = options.find((option) => option.id.toString() === e.target.value)
-        if (value) onChange([...values, value])
+      const value = options.find((option) => option.id.toString() === e.target.value)
+      if (value) {
+        onChange([...values, value])
         e.target.value = ''
       }
     },

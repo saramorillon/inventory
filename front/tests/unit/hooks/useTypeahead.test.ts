@@ -11,15 +11,6 @@ describe('useTypeahead', () => {
     expect(result.current.options).toEqual([{ id: 2 }])
   })
 
-  it('should not add an option if native event is input event', () => {
-    const onChange = vi.fn()
-    const { result } = renderHook(() => useTypeahead(options, values, onChange))
-    act(() => {
-      result.current.add({ nativeEvent: new InputEvent('type') } as never)
-    })
-    expect(onChange).not.toHaveBeenCalled()
-  })
-
   it('should add an option', () => {
     const onChange = vi.fn()
     const { result } = renderHook(() => useTypeahead(options, values, onChange))
