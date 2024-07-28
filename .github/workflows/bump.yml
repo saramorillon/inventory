@@ -4,7 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       bump_type:
-        type: string
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
         required: true
 
 jobs:
@@ -25,6 +29,7 @@ jobs:
           bump_type="${{ inputs.bump_type }}"
 
           version=$(jq -r .version package.json)
+          IFS='.' read -r major minor patch <<< "$version"
 
           case $bump_type in
               major)
@@ -48,18 +53,18 @@ jobs:
               ;;
           esac
 
-          new_version="$major.$minor.$patch"
-          echo "Bumping to $new_version"
+          version="$major.$minor.$patch"
+          echo "Bumping to $version"
 
-          files=$(find . -type f -name package.json' -prune)
+          files=$(find . -type f -name package.json -prune)
           for file in $files; do
-              echo "$(cat $file | jq ".version = \"$new_version\"" )" > $file
+              echo "$(cat $file | jq ".version = \"$version\"" )" > $file
           done
 
-          git config user.name 'Sara Morillon'
-          git config user.email 'sara.morillon.pro@gmail.com'
-          git commit -am "v$new_version"
-          git tag -a "v$new_version"
+          git config user.name "Sara Morillon"
+          git config user.email "sara.morillon.pro@gmail.com"
+          git commit -am "v$version"
+          git tag -a "v$version"
           git push --follow-tags
 
   send_discord_notification:
