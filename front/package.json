@@ -1,6 +1,6 @@
 {
   "name": "@inventory/front",
-  "version": "1.7.8",
+  "version": "1.7.9",
   "scripts": {
     "prebuild": "tsc -p tsconfig.build.json",
     "build": "vite build",
