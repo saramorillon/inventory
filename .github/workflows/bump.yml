@@ -64,7 +64,7 @@ jobs:
           git config user.name "Sara Morillon"
           git config user.email "sara.morillon.pro@gmail.com"
           git commit -am "v$version"
-          git tag -a "v$version"
+          git tag -a "v$version" -m "v$version"
           git push --follow-tags
 
   send_discord_notification:
