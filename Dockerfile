@@ -1,66 +1,46 @@
-FROM node:20-alpine as base
+FROM node:20-alpine AS base
 
-WORKDIR /app
+WORKDIR /usr/app
 
 RUN npm i -g pnpm
 
-####################
-####### BACK #######
-####################
+FROM base as build
 
-FROM base as back
+COPY package.json ./
+COPY pnpm-workspace.yaml ./
+COPY pnpm-lock.yaml ./
 
 COPY back/package.json back/
-COPY back/pnpm-lock.yaml back/
-COPY back/prisma back/prisma
+COPY front/package.json front/
 
-RUN pnpm -C back install
+RUN pnpm install --frozen-lockfile
 
 COPY back/tsconfig.json back/
 COPY back/tsconfig.build.json back/
 COPY back/src back/src
 
-RUN pnpm -C back build
-RUN pnpm -C back prune
-
-####################
-###### FRONT #######
-####################
-
-FROM base as front
-
-COPY front/package.json front/
-COPY front/pnpm-lock.yaml front/
-
-RUN pnpm -C front install
-
 COPY front/tsconfig.json front/
 COPY front/tsconfig.build.json front/
-COPY front/vite.config.ts front/
 COPY front/index.html front/
+COPY front/vite.config.ts front/
 COPY front/public front/public
 COPY front/src front/src
 
-RUN pnpm -C front build
+RUN pnpm run -r build
 
-####################
-##### Release ######
-####################
+RUN pnpm deploy --filter=@inventory/back --fail-if-no-match --prod /usr/app/pruned
+
+###### Release stage #####
 
 FROM base as release
 
-ENV PUBLIC_DIR=/app/dist/public
+ENV PUBLIC_DIR=/usr/app/public
 
-COPY --from=back --chown=node:node /app/back/package.json /app/package.json
-COPY --from=back --chown=node:node /app/back/prisma/ /app/prisma/
-COPY --from=back --chown=node:node /app/back/node_modules/ /app/node_modules/
-COPY --from=back --chown=node:node /app/back/dist/ /app/dist/
-COPY --from=front --chown=node:node /app/front/dist/ /app/dist/public
-
-# Create session directory
-RUN mkdir /app/sessions
-RUN chown -R node:node /app/sessions
+COPY --from=build --chown=node:node /usr/app/pruned/package.json /usr/app/package.json
+COPY --from=build --chown=node:node /usr/app/pruned/node_modules /usr/app/node_modules
+COPY --from=build --chown=node:node /usr/app/pruned/dist /usr/app/dist
+COPY --from=build --chown=node:node /usr/app/front/dist /usr/app/public
 
 USER node
 
-CMD ["pnpm", "run", "start"]
+CMD ["node", "/usr/app/dist/src/index.js"]
