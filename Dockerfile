@@ -29,6 +29,7 @@ COPY front/src front/src
 
 RUN pnpm --recursive run build
 RUN pnpm --filter=@inventory/back deploy --prod /usr/app/pruned
+RUN cd pruned && pnpm exec prisma generate
 
 ###### Release stage #####
 
@@ -41,6 +42,8 @@ COPY --from=build --chown=node:node /usr/app/pruned/node_modules /usr/app/node_m
 COPY --from=build --chown=node:node /usr/app/pruned/prisma /usr/app/prisma
 COPY --from=build --chown=node:node /usr/app/pruned/dist /usr/app/dist
 COPY --from=build --chown=node:node /usr/app/front/dist /usr/app/public
+
+RUN mkdir /usr/app/sessions && chown node:node /usr/app/sessions
 
 USER node
 
