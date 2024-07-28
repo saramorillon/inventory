@@ -81,7 +81,7 @@ export async function postBook(req: Request, res: Response): Promise<void> {
         return
       }
 
-      const result = await isbnSearch(serial, user)
+      const result = await isbnSearch(serial)
       if (!result) {
         res.sendStatus(404)
         success()

@@ -135,7 +135,7 @@ describe('postBook', () => {
     req.session.user = mockSession()
     const { res } = getMockRes()
     await postBook(req, res)
-    expect(isbnSearch).toHaveBeenCalledWith('9780123456789', mockSession())
+    expect(isbnSearch).toHaveBeenCalledWith('9780123456789')
   })
 
   it('should send 404 status if isbn is not found', async () => {

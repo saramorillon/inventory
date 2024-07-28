@@ -6,6 +6,7 @@ import type { IApp } from '../src/models/App'
 import type { IAuthor } from '../src/models/Author'
 import type { IBook } from '../src/models/Book'
 import type { ISession } from '../src/models/Session'
+import type { IColumn } from '../src/views/components/Table'
 
 export async function wait() {
   await act(() => new Promise((resolve) => setTimeout(resolve, 0)))
@@ -29,9 +30,17 @@ export function mockNavigate(): Mock {
 
 export function mockRefresh(): Mock {
   const refresh = vi.fn()
-  console.log(useRefresh)
   vi.mocked(useRefresh).mockReturnValue(refresh)
   return refresh
+}
+
+export function mockColumn<T>(column: Partial<IColumn<T>> = {}): IColumn<T> {
+  return {
+    id: 'id',
+    header: () => 'header',
+    cell: () => 'cell',
+    ...column,
+  }
 }
 
 export function mockSession(session: Partial<ISession> = {}): ISession {

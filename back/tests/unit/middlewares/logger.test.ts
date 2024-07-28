@@ -12,7 +12,7 @@ describe('logger', () => {
     expect(Logger).toHaveBeenCalledWith(
       { silent: true, colors: false },
       {
-        app: { host: 'http://app_host.io', name: 'inventory', port: 3000, version: expect.any(String) },
+        app: { host: 'http://app_host.io', name: '@inventory/back', port: 3000, version: expect.any(String) },
         req: { url: 'url', params: { param: 'value' }, query: { query: 'value' } },
       },
     )

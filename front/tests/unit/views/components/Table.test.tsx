@@ -1,20 +1,21 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { DataTable } from '../../../../src/views/components/Table'
+import { mockColumn } from '../../../mocks'
 
 describe('DataTable', () => {
   it('should render column headers', () => {
-    render(<DataTable columns={[{ header: () => 'header', cell: (row) => row }]} data={[]} />)
+    render(<DataTable columns={[mockColumn()]} data={[]} />)
     expect(screen.getByText('header')).toBeInTheDocument()
   })
 
   it('should render sort icon if sort function is provided', () => {
-    render(<DataTable columns={[{ header: () => 'header', cell: (row) => row, sort: () => 0 }]} data={['data']} />)
+    render(<DataTable columns={[mockColumn({ sort: () => 0 })]} data={['data']} />)
     expect(screen.getByLabelText('Sort asc')).toBeInTheDocument()
   })
 
   it('should render filter if filter function is provided', () => {
-    render(<DataTable columns={[{ header: () => 'header', cell: (row) => row, filter: () => true }]} data={['data']} />)
+    render(<DataTable columns={[mockColumn({ filter: () => true })]} data={['data']} />)
     expect(screen.getByRole('textbox')).toBeInTheDocument()
   })
 
@@ -34,7 +35,7 @@ describe('DataTable', () => {
   })
 
   it('should render data', () => {
-    render(<DataTable columns={[{ header: () => 'header', cell: (row) => row }]} data={['data']} />)
-    expect(screen.getByText('data')).toBeInTheDocument()
+    render(<DataTable columns={[mockColumn()]} data={['data']} />)
+    expect(screen.getByText('cell')).toBeInTheDocument()
   })
 })
