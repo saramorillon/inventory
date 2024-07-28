@@ -38,9 +38,10 @@ ENV PUBLIC_DIR=/usr/app/public
 
 COPY --from=build --chown=node:node /usr/app/pruned/package.json /usr/app/package.json
 COPY --from=build --chown=node:node /usr/app/pruned/node_modules /usr/app/node_modules
+COPY --from=build --chown=node:node /usr/app/pruned/prisma /usr/app/prisma
 COPY --from=build --chown=node:node /usr/app/pruned/dist /usr/app/dist
 COPY --from=build --chown=node:node /usr/app/front/dist /usr/app/public
 
 USER node
 
-CMD ["node", "/usr/app/dist/src/index.js"]
+CMD ["pnpm", "start"]
