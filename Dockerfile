@@ -18,6 +18,7 @@ RUN pnpm install --frozen-lockfile
 COPY back/tsconfig.json back/
 COPY back/tsconfig.build.json back/
 COPY back/src back/src
+COPY back/prisma back/prisma
 
 COPY front/tsconfig.json front/
 COPY front/tsconfig.build.json front/
@@ -26,7 +27,6 @@ COPY front/vite.config.ts front/
 COPY front/public front/public
 COPY front/src front/src
 
-RUN pnpm --filter=@inventory/back exec prisma generate
 RUN pnpm --recursive run build
 RUN pnpm --filter=@inventory/back deploy --prod /usr/app/pruned
 
