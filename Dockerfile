@@ -26,9 +26,9 @@ COPY front/vite.config.ts front/
 COPY front/public front/public
 COPY front/src front/src
 
-RUN pnpm -f=@inventory/back exec prisma generate
-RUN pnpm -r run build
-RUN pnpm -f=@inventory/back deploy --prod /usr/app/pruned
+RUN pnpm --filter=@inventory/back exec prisma generate
+RUN pnpm --recursive run build
+RUN pnpm --filter=@inventory/back deploy --prod /usr/app/pruned
 
 ###### Release stage #####
 
