@@ -1,6 +1,6 @@
 {
-  "name": "front",
-  "private": true,
+  "name": "@inventory/front",
+  "version": "1.6.0",
   "scripts": {
     "prebuild": "tsc -p tsconfig.build.json",
     "build": "vite build",
@@ -8,7 +8,6 @@
     "fix": "biome check --apply ."
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.7.1",
     "@testing-library/jest-dom": "^6.0.1",
     "@testing-library/react": "^14.0.0",
     "@types/babel__core": "^7.20.1",

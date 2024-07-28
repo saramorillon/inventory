@@ -4,7 +4,7 @@ import { format, parseISO } from 'date-fns'
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useHeader } from '../../hooks/useHeader'
-import { fullName, type IAuthor } from '../../models/Author'
+import { type IAuthor, fullName } from '../../models/Author'
 import { getAuthors } from '../../services/authors'
 import { DataTable, type IColumn } from '../components/Table'
 

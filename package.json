@@ -1,0 +1,16 @@
+{
+  "name": "inventory",
+  "version": "1.6.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Sara Morillon",
+    "url": "https://saramorillon.com/"
+  },
+  "repository": {
+    "url": "https://github.com/saramorillon/inventory"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.2"
+  }
+}
